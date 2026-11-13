@@ -373,6 +373,9 @@ pub(crate) fn launch_app(
 }
 
 #[cfg(test)]
+#[path = "launch_lease_tests.rs"]
+mod lease_tests;
+#[cfg(test)]
 #[path = "launch_tests.rs"]
 mod tests;
 #[cfg(test)]
