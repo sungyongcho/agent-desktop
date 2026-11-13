@@ -117,11 +117,13 @@ pub use response::retry_disposition::RetryDisposition;
 pub use sandbox::exec_passthrough::ExecPassthrough;
 pub use sandbox::provider_script_output::ProviderScriptOutput;
 pub use sandbox::provider_script_request::ProviderScriptRequest;
-pub use session::interaction_lease::InteractionLease;
 #[cfg(unix)]
 pub use session::interaction_lease::{
     INTERACTION_LEASE_FD_ENV, acquire_unix_interaction_lease,
     adopt_inherited_unix_interaction_lease,
+};
+pub use session::interaction_lease::{
+    INTERACTION_LEASE_PURPOSE, InteractionLease, interaction_lease_timeout,
 };
 pub use session::process_lease_guard::ProcessLeaseGuard;
 pub use session::session_affinity::SessionAffinity;

@@ -44,16 +44,11 @@ impl Drop for ProcessLeaseGuard {
 }
 
 fn timeout(deadline: Deadline, contention_count: u64) -> AdapterError {
-    AdapterError::timeout(format!(
-        "Another agent-desktop command in this process held the desktop interaction lease for the whole {}ms wait",
-        deadline.timeout_ms()
-    ))
-    .with_suggestion("Retry the command, or wait for the other agent-desktop command to finish")
-    .with_details(serde_json::json!({
-        "kind": "interaction_process_lock_timeout",
-        "contention_count": contention_count,
-        "timeout_ms": deadline.timeout_ms(),
-        "elapsed_ms": deadline.elapsed().as_millis(),
-    }))
-    .with_disposition(crate::DeliverySemantics::not_delivered())
+    crate::session::interaction_lease::interaction_lease_timeout(
+        deadline,
+        serde_json::json!({
+            "kind": "interaction_process_lock_timeout",
+            "contention_count": contention_count,
+        }),
+    )
 }
