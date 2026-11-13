@@ -53,16 +53,15 @@ mod imp {
             }
         }
         if allow_toggle && disclosed_state(element, deadline)? == Some(!expanded) {
-            prepare(element, deadline)?;
-            if crate::actions::ax_helpers::try_ax_action_or_err(element, "AXPress", deadline)? {
-                let outcome =
-                    verify_disclosure(element, expanded, deadline).map_err(after_delivery)?;
+            let outcome = press_and_verify(element, element, expanded, deadline)?;
+            if let Some(delivered) = stop_if_delivered(outcome) {
+                return Ok(delivered);
+            }
+            if let Some(triangle) = disclosure_triangle(element, deadline)? {
+                let outcome = press_and_verify(&triangle, element, expanded, deadline)?;
                 if let Some(delivered) = stop_if_delivered(outcome) {
                     return Ok(delivered);
                 }
-            }
-            if let Some(triangle) = disclosure_triangle(element, deadline)? {
-                return press_triangle(element, &triangle, expanded, deadline);
             }
         }
         Ok(DeliveryOutcome::NotDelivered)
@@ -101,25 +100,26 @@ mod imp {
         Ok(None)
     }
 
-    /// The triangle answers -25205 to a press that expands the row (M-W0-8,
-    /// 5/5), so the row's own state decides delivery, not the return code.
-    fn press_triangle(
-        row: &AXElement,
-        triangle: &AXElement,
+    /// A triangle, or an outline row used as one, answers -25205 to a press
+    /// that changes the state (M-W0-8, 5/5), so the disclosure state read
+    /// back from `disclosed` decides delivery, not the return code.
+    fn press_and_verify(
+        pressed: &AXElement,
+        disclosed: &AXElement,
         expanded: bool,
         deadline: Deadline,
     ) -> Result<DeliveryOutcome, AdapterError> {
         use core_foundation::{base::TCFType, string::CFString};
-        prepare(triangle, deadline)?;
+        prepare(pressed, deadline)?;
         let action = CFString::new("AXPress");
         let error = crate::tree::properties::ax_ipc::perform_action(
-            triangle,
+            pressed,
             action.as_concrete_TypeRef(),
             deadline,
         )?;
         triangle_outcome(
             crate::actions::ax_mutation::classify_perform("AXPress", error),
-            || verify_disclosure(row, expanded, deadline),
+            || verify_disclosure(disclosed, expanded, deadline),
             error,
         )
     }
