@@ -92,7 +92,7 @@ impl SystemOps for LinuxAdapter {
         &self,
         id: &str,
         options: &LaunchOptions,
-        lease: &InteractionLease,
+        lease: InteractionLease,
     ) -> Result<LaunchResult, AdapterError> {
         launch::launch_app(self.bus(), id, options, lease)
     }

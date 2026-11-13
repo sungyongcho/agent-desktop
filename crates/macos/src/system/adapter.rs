@@ -104,7 +104,7 @@ impl SystemOps for MacOSAdapter {
         &self,
         id: &str,
         options: &agent_desktop_core::system::launch_options::LaunchOptions,
-        lease: &InteractionLease,
+        lease: InteractionLease,
     ) -> Result<agent_desktop_core::system::launch_result::LaunchResult, AdapterError> {
         crate::system::launch::launch_app_impl(id, options, lease.deadline())
     }

@@ -180,7 +180,7 @@ impl SystemOps for WindowsAdapter {
         &self,
         id: &str,
         options: &LaunchOptions,
-        lease: &InteractionLease,
+        lease: InteractionLease,
     ) -> Result<agent_desktop_core::system::launch_result::LaunchResult, AdapterError> {
         crate::system::launch::launch_app_impl(id, options, lease.deadline())
     }
