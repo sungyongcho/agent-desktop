@@ -7,7 +7,7 @@ use std::time::{Duration, Instant};
 
 use agent_desktop_core::{Deadline, ProcessIdentity};
 
-use super::launch_observe::POLL_INTERVAL;
+use crate::system::launch::launch_observe::POLL_INTERVAL;
 use crate::system::process::process_facts;
 use crate::system::x11::control::activate::{ACTIVATION_GRACE, active_window_within};
 use crate::system::x11::control::control_send::activate_window;
@@ -19,7 +19,7 @@ const APPEARED_GRACE: Duration = Duration::from_millis(500);
 const ACTIVE_READ: Duration = Duration::from_millis(500);
 
 /// The window that had the focus before the spawn, and every window open then.
-pub(super) struct Prior {
+pub(crate) struct Prior {
     client: u32,
     owner: ProcessIdentity,
     known: HashSet<u32>,
@@ -32,7 +32,7 @@ enum Look {
     Nothing,
 }
 
-pub(super) fn read_prior(deadline: Deadline) -> Option<Prior> {
+pub(crate) fn read_prior(deadline: Deadline) -> Option<Prior> {
     let X11State::Ready {
         active: Some(active),
         clients,
@@ -69,7 +69,7 @@ fn judge(prior: &Prior, state: &X11State, belongs: &impl Fn(u32) -> bool) -> Loo
 }
 
 /// Process group of `pid`, read from `/proc/<pid>/stat`.
-pub(super) fn process_group(pid: u32) -> Option<u32> {
+pub(crate) fn process_group(pid: u32) -> Option<u32> {
     let text = std::fs::read_to_string(format!("/proc/{pid}/stat")).ok()?;
     let rest = &text[text.rfind(')')? + 1..];
     rest.split_whitespace().nth(2)?.parse().ok()
@@ -78,7 +78,7 @@ pub(super) fn process_group(pid: u32) -> Option<u32> {
 /// Waits for the launched application's window and, when it took the focus,
 /// asks the window manager to return it to the window that had it. True only
 /// when the display server names that window active afterwards.
-pub(super) fn give_back(prior: &Prior, belongs: impl Fn(u32) -> bool, deadline: Deadline) -> bool {
+pub(crate) fn give_back(prior: &Prior, belongs: impl Fn(u32) -> bool, deadline: Deadline) -> bool {
     let wait = deadline.capped(FOCUS_WAIT);
     let mut appeared: Option<Instant> = None;
     loop {
@@ -116,5 +116,5 @@ fn restore(prior: &Prior, deadline: Deadline) -> bool {
 }
 
 #[cfg(test)]
-#[path = "launch_focus_tests.rs"]
+#[path = "focus_return_tests.rs"]
 mod tests;

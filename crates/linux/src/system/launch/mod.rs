@@ -17,6 +17,7 @@ use self::launch_spawn::{before_spawn, spawn, validate};
 use self::launch_target::{Plan, resolve};
 use super::SharedBus;
 use crate::system::app::app_alias::current_index;
+use crate::system::focus::focus_return;
 use crate::system::focus::focus_window::focus_window;
 use crate::system::process::liveness::{Liveness, liveness};
 use crate::system::process::process_facts;
@@ -269,7 +270,7 @@ impl Launch<'_> {
         let before = baseline::prepare(self.bus, &plan.identity, running, self.deadline);
         self.deadline.ensure_remaining().map_err(before_spawn)?;
         let prior = (!self.options.activate)
-            .then(|| launch_focus::read_prior(self.deadline))
+            .then(|| focus_return::read_prior(self.deadline))
             .flatten();
         let mut spawned = spawn(self.id, plan, self.options)?;
         let focus_returned = self.return_focus(prior.as_ref(), spawned.pid, &before);
@@ -306,7 +307,7 @@ impl Launch<'_> {
     /// launch that was asked to activate keeps the lease to the end.
     fn return_focus(
         &mut self,
-        prior: Option<&launch_focus::Prior>,
+        prior: Option<&focus_return::Prior>,
         spawned: u32,
         before: &baseline::Baseline,
     ) -> bool {
@@ -317,10 +318,10 @@ impl Launch<'_> {
         let belongs = |pid: u32| {
             pid == spawned
                 || residents.contains(&pid)
-                || launch_focus::process_group(pid) == Some(spawned)
+                || focus_return::process_group(pid) == Some(spawned)
         };
         let returned =
-            prior.is_some_and(|prior| launch_focus::give_back(prior, belongs, self.deadline));
+            prior.is_some_and(|prior| focus_return::give_back(prior, belongs, self.deadline));
         self.lease = None;
         returned
     }
@@ -387,7 +388,6 @@ pub(super) mod indexed_entry;
 mod launch_arrival;
 pub(super) mod launch_attach;
 mod launch_conclude;
-mod launch_focus;
 mod launch_handoff;
 pub(super) mod launch_observe;
 pub(crate) mod launch_sample;
