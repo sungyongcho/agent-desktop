@@ -1,6 +1,6 @@
 use agent_desktop_core::{AdapterError, Deadline, DeliverySemantics, ErrorCode};
 
-use super::hit_guard::admits;
+use super::hit_guard::{admits, has_no_geometry};
 use super::hit_verdict::Landing;
 use crate::tree::{AtspiElement, Extents};
 
@@ -11,6 +11,8 @@ pub(crate) use bus_nodes::BusNodes;
 /// How many `GetAccessibleAtPoint` levels one descent follows, and how many
 /// `Parent` steps one climb takes.
 pub(crate) const DEPTH_CAP: usize = 50;
+
+const MAX_BRANCH_NODES: usize = 1_000;
 
 /// What `GetAccessibleAtPoint` answered.
 #[derive(Debug, Clone)]
@@ -151,30 +153,49 @@ fn unproven(reason: &str) -> AdapterError {
     .with_disposition(DeliverySemantics::not_delivered())
 }
 
+fn children_of<S: NodeSource>(
+    source: &mut S,
+    node: &AtspiElement,
+) -> Result<Vec<AtspiElement>, AdapterError> {
+    source
+        .children(node)?
+        .ok_or_else(|| unproven("ancestry_unknown"))
+}
+
 /// Native point queries and child order do not establish sibling stacking.
 /// Follows live child lists, since `Parent` can disagree with the walked tree.
-/// The target must be on the unique child branch containing the point.
+/// The target must be on the unique child branch containing the point. A
+/// child that reports no geometry is a grouping node: its children stand in
+/// for it, and the result says whether the walk crossed one: a point query
+/// cannot see through such a node.
 pub(crate) fn require_unambiguous_branch<S: NodeSource>(
     source: &mut S,
     probe: &Probe,
     deadline: Deadline,
-) -> Result<(), AdapterError> {
+) -> Result<bool, AdapterError> {
     let mut at = probe.frame.clone();
+    let mut bridged = false;
     for _ in 0..DEPTH_CAP {
         deadline.ensure_remaining()?;
         if same(&at, probe.target) {
-            return Ok(());
+            return Ok(bridged);
         }
-        let Some(children) = source.children(&at)? else {
-            return Err(unproven("ancestry_unknown"));
-        };
+        let mut pending = children_of(source, &at)?;
         let mut next = None;
-        for child in children {
+        let mut visited = 0;
+        while let Some(child) = pending.pop() {
             deadline.ensure_remaining()?;
+            visited += 1;
+            if visited > MAX_BRANCH_NODES {
+                return Err(unproven("ancestry_limit"));
+            }
             let Some(extents) = source.describe(&child)?.window_extents else {
                 return Err(unproven("child_bounds_unknown"));
             };
-            if admits(extents, probe.window_point) {
+            if has_no_geometry(extents) {
+                bridged = true;
+                pending.extend(children_of(source, &child)?);
+            } else if admits(extents, probe.window_point) {
                 if next.is_some() {
                     return Err(unproven("sibling_overlap"));
                 }

@@ -50,6 +50,7 @@ use a private session and runtime directory for isolated work.
   dependent handlers ran. Wait for each effect before another click.
 - Wayland refuses headed pointer input; window operations can use a mapped
   Xwayland client, but native Wayland windows lack that route.
+- Authorized physical `type` sends a newline as `Return` on X11 too. It refuses a tab and other control characters.
 - Authorized physical `type` on Wayland sends a newline as `Return` and a tab as
   `Tab`, which can submit a form or move focus instead of inserting literal text.
 - Wayland per-window screenshots are unsupported; display capture uses a portal
