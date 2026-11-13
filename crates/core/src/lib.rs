@@ -151,6 +151,8 @@ pub use system::process_identity::ProcessIdentity;
 pub use system::screenshot_target::ScreenshotTarget;
 pub use system::surface_info::SurfaceInfo;
 pub use system::window_filter::WindowFilter;
+pub use system::window_frame_memory::WindowFrameMemory;
+pub use system::window_frame_record::WindowFrameRecord;
 pub use system::window_info::WindowInfo;
 pub use system::window_op::WindowOp;
 pub use system::window_readback::WindowReadback;

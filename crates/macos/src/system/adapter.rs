@@ -248,10 +248,7 @@ impl SystemOps for MacOSAdapter {
         op: WindowOp,
         lease: &InteractionLease,
     ) -> Result<OperationReport, AdapterError> {
-        let readback = crate::system::window::window_report::window_readback(&op);
-        let dispatched =
-            crate::system::window::window_ops::execute(win, op.clone(), lease.deadline());
-        OperationReport::from_window_dispatch(win, &op, readback, dispatched)
+        crate::system::window::window_frame::window_op(win, op, lease.deadline())
     }
 
     fn list_notifications(
