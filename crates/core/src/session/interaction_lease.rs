@@ -105,12 +105,22 @@ impl InteractionLease {
 }
 
 #[cfg(unix)]
+fn never_delivered(error: AdapterError) -> AdapterError {
+    if error.code == ErrorCode::Timeout {
+        error.with_disposition(crate::DeliverySemantics::not_delivered())
+    } else {
+        error
+    }
+}
+
+#[cfg(unix)]
 pub fn acquire_unix_interaction_lease(
     deadline: Deadline,
 ) -> Result<InteractionLease, AdapterError> {
     let process_guard = crate::session::process_lease_guard::ProcessLeaseGuard::acquire(deadline)?;
     let path = interaction_lock_path_at(std::path::Path::new("/tmp"))?;
-    let lock = FileLock::acquire(&path, deadline, "desktop interaction lease")?;
+    let lock =
+        FileLock::acquire(&path, deadline, "desktop interaction lease").map_err(never_delivered)?;
     Ok(InteractionLease::from_file_lock(
         deadline,
         lock,
@@ -141,7 +151,8 @@ fn acquire_unix_interaction_lease_at(
 ) -> Result<InteractionLease, AdapterError> {
     let process_guard = crate::session::process_lease_guard::ProcessLeaseGuard::acquire(deadline)?;
     let path = interaction_lock_path_at(root)?;
-    let lock = FileLock::acquire(&path, deadline, "test desktop interaction lease")?;
+    let lock = FileLock::acquire(&path, deadline, "test desktop interaction lease")
+        .map_err(never_delivered)?;
     Ok(InteractionLease::from_file_lock(
         deadline,
         lock,
@@ -165,7 +176,8 @@ fn adopt_inherited_unix_interaction_lease_at(
         &path,
         deadline,
         "inherited desktop interaction lease",
-    )?;
+    )
+    .map_err(never_delivered)?;
     Ok(InteractionLease::from_file_lock(
         deadline,
         lock,

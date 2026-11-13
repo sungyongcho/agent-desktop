@@ -138,11 +138,18 @@ fn lock_timeout(
     path: &Path,
     contention_count: u64,
 ) -> AdapterError {
-    deadline.timeout_error().with_details(serde_json::json!({
+    AdapterError::timeout(format!(
+        "Another agent-desktop command held the {purpose} for the whole {}ms wait",
+        deadline.timeout_ms()
+    ))
+    .with_suggestion("Retry the command, or wait for the other agent-desktop command to finish")
+    .with_details(serde_json::json!({
         "kind": "lock_timeout",
         "purpose": purpose,
         "path": path.file_name().map(|name| name.to_string_lossy().into_owned()),
         "contention_count": contention_count,
+        "timeout_ms": deadline.timeout_ms(),
+        "elapsed_ms": deadline.elapsed().as_millis(),
     }))
 }
 
