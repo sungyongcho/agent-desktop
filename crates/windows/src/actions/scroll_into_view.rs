@@ -6,13 +6,16 @@
 //! invoke leaves geometry unchanged, a scrollable ancestor runs the
 //! ScrollPattern ladder (A19-7); without one the unsupported / not-delivered
 //! arms stay unchanged. The client sets `AutoSetFocus` to false, so neither
-//! route takes the foreground (A31-1, A31-2, A31-4). Provider rects are
+//! route takes the foreground (A31-1, A31-2), with one measured exception:
+//! `ScrollIntoView` on a Win32 tree view item activates its window with
+//! either client setting (A31-4), so a policy without focus steal sends that
+//! item to the ladder. Provider rects are
 //! unclipped (A18-2), so verified visibility needs viewport intersection.
 //! Invoke failures keep tagged `UiaFailure`; completed observation
 //! disposition outranks the classifier (A18).
 
 use agent_desktop_core::{
-    AdapterError, Deadline, DeliverySemantics, ErrorCode, InteractionLease, Rect,
+    AdapterError, Deadline, DeliverySemantics, ErrorCode, InteractionLease, InteractionPolicy, Rect,
 };
 
 use agent_desktop_core::DeliveryOutcome;
@@ -21,9 +24,11 @@ use agent_desktop_core::DeliveryOutcome;
 mod imp {
     use super::{
         AdapterError, Deadline, DeliveryOutcome, DeliverySemantics, ErrorCode, InteractionLease,
-        Rect,
+        InteractionPolicy, Rect,
     };
-    use crate::actions::chain::{ALREADY_LABEL, after_delivery, poll_until};
+    use crate::actions::chain::{
+        ALREADY_LABEL, after_delivery, foreground_route_allowed, poll_until,
+    };
     use crate::actions::mutation::classify_mutation;
     use crate::actions::scroll::known_bounds;
     use crate::actions::scroll_ladder::{
@@ -41,6 +46,7 @@ mod imp {
     use std::time::{Duration, Instant};
     use uiautomation::core::UITreeWalker;
     use uiautomation::patterns::UIScrollItemPattern;
+    use uiautomation::types::ControlType;
 
     const VERIFY_WINDOW: Duration = Duration::from_millis(800);
     const POLL_SLICE: Duration = Duration::from_millis(20);
@@ -64,16 +70,18 @@ mod imp {
     pub(crate) fn scroll_into_view_outcome(
         handle: &NativeHandle,
         lease: &InteractionLease,
+        policy: InteractionPolicy,
     ) -> Result<ScrollIntoViewDone, AdapterError> {
         let element = uia_element(handle)?;
         let deadline = lease.deadline();
         deadline.ensure_remaining()?;
         corroborate_verified_process(element)?;
-        scroll_into_view_element(element, deadline)
+        scroll_into_view_element(element, policy, deadline)
     }
 
     fn scroll_into_view_element(
         element: &UIAElement,
+        policy: InteractionPolicy,
         deadline: Deadline,
     ) -> Result<ScrollIntoViewDone, AdapterError> {
         let client = automation_client()?;
@@ -109,6 +117,12 @@ mod imp {
         let ladder = |fallback: AdapterError| ladder_from_terminal(fallback, element, deadline);
         if !scroll_item_available(element) {
             return ladder(unsupported_error());
+        }
+        if scroll_item_activates(element) && !foreground_route_allowed(policy) {
+            return ladder(agent_desktop_core::mechanisms_denied(
+                &[SCROLL_INTO_VIEW_API],
+                policy,
+            ));
         }
         let before = known_bounds(element);
         let invoke_failure = match invoke_scroll_into_view(element) {
@@ -296,6 +310,22 @@ mod imp {
         bounds.filter(rect_has_area)
     }
 
+    /// `ScrollIntoView` activates the window of a Win32 tree view item with
+    /// either client `AutoSetFocus` setting; no other measured provider does
+    /// (A31-4).
+    pub(crate) fn scroll_into_view_activates(framework: &str, control_type: ControlType) -> bool {
+        framework == "Win32" && control_type == ControlType::TreeItem
+    }
+
+    fn scroll_item_activates(element: &UIAElement) -> bool {
+        match (element.0.get_framework_id(), element.0.get_control_type()) {
+            (Ok(framework), Ok(control_type)) => {
+                scroll_into_view_activates(&framework, control_type)
+            }
+            _ => true,
+        }
+    }
+
     fn scroll_item_available(element: &UIAElement) -> bool {
         read_one(element, TreeProperty::ScrollItemAvailable).flag() == Some(true)
     }
@@ -331,6 +361,7 @@ mod imp {
     pub(crate) fn scroll_into_view_outcome(
         _handle: &NativeHandle,
         _lease: &InteractionLease,
+        _policy: super::InteractionPolicy,
     ) -> Result<ScrollIntoViewDone, AdapterError> {
         Err(AdapterError::not_supported("scroll_into_view"))
     }
@@ -343,7 +374,8 @@ pub(crate) use crate::actions::scroll_ladder::{VisibilitySample, visibility_veri
 
 #[cfg(all(test, target_os = "windows"))]
 pub(crate) use imp::{
-    finish_observation, scroll_effect_observed, scroll_into_view_judged_for, unsupported_error,
+    finish_observation, scroll_effect_observed, scroll_into_view_activates,
+    scroll_into_view_judged_for, unsupported_error,
 };
 
 #[cfg(all(test, target_os = "windows"))]

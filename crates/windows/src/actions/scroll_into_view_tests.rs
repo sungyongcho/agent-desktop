@@ -1,6 +1,6 @@
 use super::{
-    VisibilitySample, finish_observation, scroll_effect_observed, scroll_into_view_judged_for,
-    unsupported_error, visibility_verified,
+    VisibilitySample, finish_observation, scroll_effect_observed, scroll_into_view_activates,
+    scroll_into_view_judged_for, unsupported_error, visibility_verified,
 };
 use crate::system::runtime::hresult::{
     E_ACCESSDENIED, RPC_E_DISCONNECTED, UIA_E_ELEMENTNOTAVAILABLE, com_hresult_detail,
@@ -39,6 +39,19 @@ fn hidden_sample(bounds: Rect) -> VisibilitySample {
 
 fn invoke_hr(hresult: i32) -> Option<UiaFailure> {
     Some(UiaFailure::Hresult(hresult))
+}
+
+#[test]
+fn only_a_win32_tree_item_is_a_foreground_scroll_into_view() {
+    use uiautomation::types::ControlType;
+
+    assert!(scroll_into_view_activates("Win32", ControlType::TreeItem));
+    assert!(!scroll_into_view_activates("Win32", ControlType::ListItem));
+    assert!(!scroll_into_view_activates("WPF", ControlType::TreeItem));
+    assert!(!scroll_into_view_activates(
+        "DirectUI",
+        ControlType::ListItem
+    ));
 }
 
 #[test]
