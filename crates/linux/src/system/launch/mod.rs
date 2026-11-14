@@ -273,8 +273,8 @@ impl Launch<'_> {
             .then(|| focus_return::read_prior(self.deadline))
             .flatten();
         let mut spawned = spawn(self.id, plan, self.options)?;
-        let focus_returned = self.return_focus(prior.as_ref(), spawned.pid, &before);
-        match find_owner(self.bus, &mut spawned, plan, &before, self.deadline)? {
+        let focus_returned = self.return_focus(prior.as_ref(), &mut spawned, &before);
+        let mut result = match find_owner(self.bus, &mut spawned, plan, &before, self.deadline)? {
             Some(owner) => {
                 let known = before
                     .residents
@@ -289,16 +289,12 @@ impl Launch<'_> {
                     owner.pid == spawned.pid,
                     !before.processes.contains(&owner.identity()),
                 );
-                let mut result = self.conclude_with(&owner, window, arrival);
-                result.guidance.focus_returned = focus_returned;
-                Ok(result)
+                self.conclude_with(&owner, window, arrival)
             }
-            None => {
-                let mut result = self.report_unlisted(&spawned);
-                result.guidance.focus_returned = focus_returned;
-                Ok(result)
-            }
-        }
+            None => self.report_unlisted(&spawned),
+        };
+        result.guidance.focus_returned = focus_returned;
+        Ok(result)
     }
 
     /// Gives the focus back to the window that had it when the launched
@@ -308,20 +304,22 @@ impl Launch<'_> {
     fn return_focus(
         &mut self,
         prior: Option<&focus_return::Prior>,
-        spawned: u32,
+        spawned: &mut Spawned,
         before: &baseline::Baseline,
     ) -> bool {
         if self.options.activate {
             return false;
         }
-        let residents: HashSet<u32> = before.residents.iter().map(|r| r.owner.pid).collect();
-        let belongs = |pid: u32| {
-            pid == spawned
-                || residents.contains(&pid)
-                || focus_return::process_group(pid) == Some(spawned)
-        };
-        let returned =
-            prior.is_some_and(|prior| focus_return::give_back(prior, belongs, self.deadline));
+        let residents = before.residents.iter().map(|r| r.owner.pid).collect();
+        let belongs = focus_return::belongs_to(spawned.pid, residents);
+        let returned = prior.is_some_and(|prior| {
+            focus_return::give_back(
+                prior,
+                belongs,
+                || !spawned.exited_in_failure(),
+                self.deadline,
+            )
+        });
         self.lease = None;
         returned
     }

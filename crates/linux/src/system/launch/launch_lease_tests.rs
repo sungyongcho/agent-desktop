@@ -8,6 +8,11 @@ fn empty_baseline() -> Baseline {
     }
 }
 
+fn spawned() -> Spawned {
+    let child = std::process::Command::new("/bin/true").spawn().unwrap();
+    Spawned::new(child, "true")
+}
+
 fn launch_with<'a>(
     bus: &'a SharedBus,
     options: &'a LaunchOptions,
@@ -27,7 +32,7 @@ fn a_background_launch_releases_the_lease_once_the_focus_step_ends() {
     let bus = SharedBus::default();
     let options = LaunchOptions::default();
     let mut launch = launch_with(&bus, &options, Deadline::after(1_000).unwrap());
-    assert!(!launch.return_focus(None, 1, &empty_baseline()));
+    assert!(!launch.return_focus(None, &mut spawned(), &empty_baseline()));
     assert!(launch.lease.is_none());
 }
 
@@ -39,6 +44,6 @@ fn an_activating_launch_keeps_the_lease_for_its_focus_request() {
         ..LaunchOptions::default()
     };
     let mut launch = launch_with(&bus, &options, Deadline::after(1_000).unwrap());
-    assert!(!launch.return_focus(None, 1, &empty_baseline()));
+    assert!(!launch.return_focus(None, &mut spawned(), &empty_baseline()));
     assert!(launch.lease.is_some());
 }
