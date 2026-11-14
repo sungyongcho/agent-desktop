@@ -3,7 +3,10 @@ use std::sync::{Arc, Mutex, OnceLock};
 
 use crate::{
     ElementIdentifier, IdentityMatch, RefEntry, RefEntryIdentity,
-    locator::live_locator::{LocatorEvidence, LocatorField, ObservationSource, ObservedTree},
+    locator::LocatorQuery,
+    locator::live_locator::{
+        LocatorEvidence, LocatorField, ObservationSource, ObservedTree, materialize_ref_entry,
+    },
     refs::ref_full_predicate::{DESCRIPTION, FullPredicate, NAME, NATIVE_ID},
     refs::ref_identity::stable_name,
     refs::ref_live_predicate::LivePredicate,
@@ -113,7 +116,7 @@ impl<'a> CaptureProof<'a> {
                 if !self.proves_in(Some(scope), predicate, index) {
                     return None;
                 }
-                let mut chain = vec![identity_of(&self.observed.nodes[scope].evidence)?];
+                let mut chain = vec![self.identity_of(scope)?];
                 chain.extend(outer);
                 return Some(chain);
             }
@@ -126,7 +129,7 @@ impl<'a> CaptureProof<'a> {
         if let Some(known) = self.scoped.lock().ok()?.get(&index) {
             return known.clone();
         }
-        let identity = identity_of(&self.observed.nodes[index].evidence)?;
+        let identity = self.identity_of(index)?;
         let predicate = FullPredicate::of_identity(&identity);
         let chain = if self.proves_in(None, &predicate, index) {
             Some(Vec::new())
@@ -135,6 +138,21 @@ impl<'a> CaptureProof<'a> {
         };
         self.scoped.lock().ok()?.insert(index, chain.clone());
         chain
+    }
+
+    /// What a chain records of one ancestor: the identity its own ref would
+    /// publish, with the name reduced to the stable one a resolution compares.
+    fn identity_of(&self, index: usize) -> Option<RefEntryIdentity> {
+        let node = &self.observed.nodes[index];
+        let role = non_blank(node.evidence.role.known().map(String::as_str))?;
+        let own =
+            materialize_ref_entry(node, &self.observed.source, &LocatorQuery::default()).identity;
+        Some(RefEntryIdentity {
+            name: stable_name(role, own.name.as_deref(), own.value.as_deref()).map(str::to_string),
+            retained_object: None,
+            value: None,
+            ..own
+        })
     }
 
     fn parent_of(&self, index: usize) -> Option<usize> {
@@ -203,25 +221,6 @@ impl<'a> CaptureProof<'a> {
             ))
         }))
     }
-}
-
-/// What a chain records of one ancestor: its role, stable name, description and
-/// first identifier, read from the same evidence a resolution compares.
-fn identity_of(evidence: &LocatorEvidence) -> Option<RefEntryIdentity> {
-    let role = non_blank(evidence.role.known().map(String::as_str))?;
-    Some(RefEntryIdentity {
-        role: role.to_string(),
-        name: stable_name(
-            role,
-            evidence.name.known().map(String::as_str),
-            evidence.value.known().map(String::as_str),
-        )
-        .map(str::to_string),
-        description: non_blank(evidence.description.known().map(String::as_str))
-            .map(str::to_string),
-        native_id: evidence.identifiers.identifiers().first().cloned(),
-        ..RefEntryIdentity::default()
-    })
 }
 
 /// The node indices each full predicate of this field subset matched, as a
