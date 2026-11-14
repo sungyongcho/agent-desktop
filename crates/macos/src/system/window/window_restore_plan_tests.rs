@@ -18,15 +18,37 @@ fn record() -> WindowFrameRecord {
     }
 }
 
+fn no_work_area(_: Rect) -> Result<Rect, AdapterError> {
+    panic!("work area must not be read")
+}
+
+fn fills(current: Rect) -> Result<Rect, AdapterError> {
+    Ok(current)
+}
+
+fn elsewhere_work_area(_: Rect) -> Result<Rect, AdapterError> {
+    Ok(frame(0.0, 1496.0))
+}
+
 #[test]
 fn a_minimized_window_is_unminimized_whatever_was_recorded() {
-    let plan = WindowRestorePlan::decide(Some(true), Some(&record()), || Ok(frame(0.0, 1496.0)));
+    let plan = WindowRestorePlan::decide(
+        Some(true),
+        Some(&record()),
+        || panic!("frame must not be read"),
+        no_work_area,
+    );
     assert_eq!(plan.ok(), Some(WindowRestorePlan::Unminimize));
 }
 
 #[test]
 fn a_window_still_at_its_maximized_frame_goes_back_to_the_recorded_frame() {
-    let plan = WindowRestorePlan::decide(Some(false), Some(&record()), || Ok(frame(1.0, 1495.0)));
+    let plan = WindowRestorePlan::decide(
+        Some(false),
+        Some(&record()),
+        || Ok(frame(1.0, 1495.0)),
+        no_work_area,
+    );
     assert_eq!(
         plan.ok(),
         Some(WindowRestorePlan::SetFrame(frame(100.0, 400.0)))
@@ -34,32 +56,76 @@ fn a_window_still_at_its_maximized_frame_goes_back_to_the_recorded_frame() {
 }
 
 #[test]
-fn a_window_moved_since_or_without_a_record_has_nothing_to_undo() {
-    let moved =
-        WindowRestorePlan::decide(Some(false), Some(&record()), || Ok(frame(300.0, 1496.0)));
-    let unrecorded = WindowRestorePlan::decide(Some(false), None, || Ok(frame(0.0, 1496.0)));
-    assert_eq!(moved.ok(), Some(WindowRestorePlan::AlreadyNormal));
-    assert_eq!(unrecorded.ok(), Some(WindowRestorePlan::AlreadyNormal));
+fn a_half_applied_maximize_goes_back_to_the_recorded_frame() {
+    let plan = WindowRestorePlan::decide(
+        Some(false),
+        Some(&record()),
+        || Ok(frame(0.0, 400.0)),
+        no_work_area,
+    );
+    assert_eq!(
+        plan.ok(),
+        Some(WindowRestorePlan::SetFrame(frame(100.0, 400.0)))
+    );
+}
+
+#[test]
+fn a_window_at_its_recorded_frame_is_already_normal() {
+    let plan = WindowRestorePlan::decide(
+        Some(false),
+        Some(&record()),
+        || Ok(frame(100.0, 400.0)),
+        no_work_area,
+    );
+    assert_eq!(plan.ok(), Some(WindowRestorePlan::AlreadyNormal));
+}
+
+#[test]
+fn a_maximized_window_without_a_record_is_unrecorded() {
+    let plan = WindowRestorePlan::decide(Some(false), None, || Ok(frame(0.0, 1496.0)), fills);
+    assert_eq!(plan.ok(), Some(WindowRestorePlan::Unrecorded));
+}
+
+#[test]
+fn an_ordinary_window_without_a_record_is_already_normal() {
+    let plan = WindowRestorePlan::decide(
+        Some(false),
+        None,
+        || Ok(frame(300.0, 400.0)),
+        elsewhere_work_area,
+    );
+    assert_eq!(plan.ok(), Some(WindowRestorePlan::AlreadyNormal));
+}
+
+#[test]
+fn a_stale_record_on_a_maximized_window_is_unrecorded() {
+    let plan = WindowRestorePlan::decide(
+        Some(false),
+        Some(&record()),
+        || Ok(frame(300.0, 1496.0)),
+        fills,
+    );
+    assert_eq!(plan.ok(), Some(WindowRestorePlan::Unrecorded));
 }
 
 #[test]
 fn an_unreadable_frame_is_an_error_so_the_record_is_kept() {
-    let plan = WindowRestorePlan::decide(Some(false), Some(&record()), || {
-        Err(AdapterError::internal("window frame is unreadable"))
-    });
+    let plan = WindowRestorePlan::decide(
+        Some(false),
+        Some(&record()),
+        || Err(AdapterError::internal("window frame is unreadable")),
+        no_work_area,
+    );
     assert!(plan.is_err());
 }
 
 #[test]
-fn a_minimized_window_is_unminimized_without_reading_its_frame() {
-    let plan = WindowRestorePlan::decide(Some(true), Some(&record()), || {
-        panic!("frame must not be read")
-    });
-    assert_eq!(plan.ok(), Some(WindowRestorePlan::Unminimize));
-}
-
-#[test]
-fn an_unminimized_window_without_a_record_is_not_read() {
-    let plan = WindowRestorePlan::decide(Some(false), None, || panic!("frame must not be read"));
-    assert_eq!(plan.ok(), Some(WindowRestorePlan::AlreadyNormal));
+fn an_unreadable_work_area_is_an_error() {
+    let plan = WindowRestorePlan::decide(
+        Some(false),
+        None,
+        || Ok(frame(0.0, 1496.0)),
+        |_| Err(AdapterError::internal("work area is unreadable")),
+    );
+    assert!(plan.is_err());
 }

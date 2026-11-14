@@ -420,6 +420,6 @@ On Linux, `restore` has no single read-back across its cases, so a successful re
 }
 ```
 
-On macOS, `restore` un-minimizes a minimized window and verifies the minimized state. For a window that `maximize` moved, and that still has the maximized frame, it sets the recorded frame back and verifies the size (`details.verification_scope: "window_size"`). A window that was moved since, or never maximized, is already normal: the report is `not_delivered` and nothing is written.
+On macOS, `restore` un-minimizes a minimized window and verifies the minimized state. For a window that `maximize` moved, it sets the recorded frame back and verifies the size (`details.verification_scope: "window_size"`). This also undoes a maximize or a restore that only half landed, such as a move on a window that cannot be resized. A window that someone moved or resized since is already normal: the report is `not_delivered` and nothing is written. A window that fills its display with no recorded frame fails with `ACTION_FAILED` (`details.cause: "no_recorded_frame"`); set its frame with `resize-window` and `move-window`.
 
 Check the window with `list-windows` afterward. Platform limits are the same as `resize-window`.

@@ -1,48 +1,40 @@
 use agent_desktop_core::{AdapterError, Rect, WindowFrameRecord};
 
-use crate::system::window::window_postcondition::TOLERANCE;
+use crate::system::window::window_frame_place::{FramePlace, same_frame};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub(crate) enum WindowRestorePlan {
     Unminimize,
     SetFrame(Rect),
     AlreadyNormal,
+    Unrecorded,
 }
 
 impl WindowRestorePlan {
-    /// A window that is minimized, or whose state cannot be read, is
-    /// un-minimized. A window that is not minimized has something to undo
-    /// only while it still holds the frame its maximize produced, and a frame
-    /// that cannot be read is an error, so the record is kept for a retry.
+    /// Decides the restore state from the window's minimized flag, its record and
+    /// its frame. Nothing is read for a window that is not known to be visible.
     pub(crate) fn decide(
         minimized: Option<bool>,
         record: Option<&WindowFrameRecord>,
         current: impl FnOnce() -> Result<Rect, AdapterError>,
+        work_area: impl FnOnce(Rect) -> Result<Rect, AdapterError>,
     ) -> Result<Self, AdapterError> {
         if minimized != Some(false) {
             return Ok(Self::Unminimize);
         }
-        let Some(record) = record else {
-            return Ok(Self::AlreadyNormal);
-        };
-        Ok(if is_maximized_at(record, current()?) {
-            Self::SetFrame(record.before)
-        } else {
-            Self::AlreadyNormal
-        })
+        let frame = current()?;
+        match record.map(|record| (record, FramePlace::of(record, frame))) {
+            Some((record, FramePlace::Ours)) => Ok(Self::SetFrame(record.before)),
+            Some((_, FramePlace::Before)) => Ok(Self::AlreadyNormal),
+            Some((_, FramePlace::Elsewhere)) | None => {
+                if same_frame(frame, work_area(frame)?) {
+                    Ok(Self::Unrecorded)
+                } else {
+                    Ok(Self::AlreadyNormal)
+                }
+            }
+        }
     }
-}
-
-pub(crate) fn is_maximized_at(record: &WindowFrameRecord, frame: Rect) -> bool {
-    let held = record.maximized;
-    [
-        (frame.x, held.x),
-        (frame.y, held.y),
-        (frame.width, held.width),
-        (frame.height, held.height),
-    ]
-    .into_iter()
-    .all(|(left, right)| (left - right).abs() <= TOLERANCE)
 }
 
 #[cfg(test)]

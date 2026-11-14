@@ -2,16 +2,21 @@
 //! kept in the state root and `restore` puts it back.
 
 use agent_desktop_core::{
-    AdapterError, Deadline, OperationReport, ProcessIdentity, Rect, WindowFrameMemory,
-    WindowFrameRecord, WindowInfo, WindowOp, WindowReadback,
+    AdapterError, Deadline, DeliverySemantics, ErrorCode, OperationReport, ProcessIdentity, Rect,
+    WindowFrameMemory, WindowFrameRecord, WindowInfo, WindowOp, WindowReadback,
 };
+use serde_json::json;
 
+use crate::system::display_work_area;
 use crate::system::window::{
+    window_frame_place::{FramePlace, same_frame},
     window_ops,
     window_postcondition::TOLERANCE,
     window_report, window_resolve,
-    window_restore_plan::{WindowRestorePlan, is_maximized_at},
+    window_restore_plan::WindowRestorePlan,
 };
+
+const FRAME_READ_MS: u64 = 1_000;
 
 pub(crate) fn window_op(
     win: &WindowInfo,
@@ -36,19 +41,22 @@ fn dispatch(
 }
 
 fn maximize(win: &WindowInfo, deadline: Deadline) -> Result<OperationReport, AdapterError> {
+    if let Err(error) = record_before_maximize(win, deadline) {
+        tracing::debug!(%error, "window frame was not recorded");
+    }
     let report = dispatch(
         win,
         &WindowOp::Maximize,
         window_report::window_readback(&WindowOp::Maximize),
         deadline,
-    )?;
-    if let Err(error) = remember_frame(win, deadline) {
-        tracing::debug!(%error, "window frame was not recorded");
+    );
+    if let Err(error) = refresh_maximized_frame(win) {
+        tracing::debug!(%error, "maximized window frame was not recorded");
     }
-    Ok(report)
+    report
 }
 
-fn remember_frame(win: &WindowInfo, deadline: Deadline) -> Result<(), AdapterError> {
+fn record_before_maximize(win: &WindowInfo, deadline: Deadline) -> Result<(), AdapterError> {
     let (Some(before), Some(process)) = (win.bounds, process_of(win)) else {
         return Ok(());
     };
@@ -56,11 +64,14 @@ fn remember_frame(win: &WindowInfo, deadline: Deadline) -> Result<(), AdapterErr
     let key = window_key(win);
     if memory
         .recall(&key)?
-        .is_some_and(|held| is_maximized_at(&held, before))
+        .is_some_and(|held| FramePlace::of(&held, before) == FramePlace::Ours)
     {
         return Ok(());
     }
-    let maximized = current_frame(win, deadline)?;
+    let maximized = display_work_area::for_window(win.bounds, deadline)?;
+    if same_frame(before, maximized) {
+        return Ok(());
+    }
     memory.remember(
         &key,
         WindowFrameRecord {
@@ -72,15 +83,42 @@ fn remember_frame(win: &WindowInfo, deadline: Deadline) -> Result<(), AdapterErr
     )
 }
 
-fn restore(win: &WindowInfo, deadline: Deadline) -> Result<OperationReport, AdapterError> {
-    let memory = WindowFrameMemory::open().ok();
+/// Runs after the dispatch whatever it returned, so it reads the frame on a
+/// deadline of its own: a maximize that waited out its deadline still records.
+fn refresh_maximized_frame(win: &WindowInfo) -> Result<(), AdapterError> {
+    let memory = WindowFrameMemory::open()?;
     let key = window_key(win);
-    let record = memory
-        .as_ref()
-        .and_then(|memory| memory.recall(&key).ok().flatten());
-    let plan = WindowRestorePlan::decide(win.state.minimized, record.as_ref(), || {
-        current_frame(win, deadline)
-    })?;
+    let Some(record) = memory.recall(&key)? else {
+        return Ok(());
+    };
+    let current = current_frame(win, Deadline::detached_after(FRAME_READ_MS)?)?;
+    if same_frame(current, record.maximized)
+        || FramePlace::of(&record, current) == FramePlace::Before
+    {
+        return Ok(());
+    }
+    memory.remember(
+        &key,
+        WindowFrameRecord {
+            maximized: current,
+            ..record
+        },
+        process_alive,
+    )
+}
+
+fn restore(win: &WindowInfo, deadline: Deadline) -> Result<OperationReport, AdapterError> {
+    let key = window_key(win);
+    let record = match win.state.minimized {
+        Some(false) => WindowFrameMemory::open()?.recall(&key)?,
+        _ => None,
+    };
+    let plan = WindowRestorePlan::decide(
+        win.state.minimized,
+        record.as_ref(),
+        || current_frame(win, deadline),
+        |frame| display_work_area::for_window(Some(frame), deadline),
+    )?;
     match plan {
         WindowRestorePlan::Unminimize => dispatch(
             win,
@@ -89,19 +127,19 @@ fn restore(win: &WindowInfo, deadline: Deadline) -> Result<OperationReport, Adap
             deadline,
         ),
         WindowRestorePlan::AlreadyNormal => {
-            if let (Some(memory), Some(_)) = (&memory, &record) {
-                memory.forget(&key)?;
-            }
+            forget_record(&key, record.as_ref())?;
             Ok(OperationReport::window_already_satisfied(
                 win,
                 &WindowOp::Restore,
             ))
         }
+        WindowRestorePlan::Unrecorded => {
+            forget_record(&key, record.as_ref())?;
+            Err(unrecorded_error())
+        }
         WindowRestorePlan::SetFrame(frame) => {
             set_frame(win, frame, deadline)?;
-            if let Some(memory) = &memory {
-                memory.forget(&key)?;
-            }
+            forget_record(&key, record.as_ref())?;
             let size = WindowOp::Resize {
                 width: frame.width,
                 height: frame.height,
@@ -110,6 +148,25 @@ fn restore(win: &WindowInfo, deadline: Deadline) -> Result<OperationReport, Adap
             OperationReport::from_window_dispatch(win, &WindowOp::Restore, Some(readback), Ok(()))
         }
     }
+}
+
+fn forget_record(key: &str, record: Option<&WindowFrameRecord>) -> Result<(), AdapterError> {
+    if record.is_some() {
+        WindowFrameMemory::open()?.forget(key)?;
+    }
+    Ok(())
+}
+
+fn unrecorded_error() -> AdapterError {
+    AdapterError::new(
+        ErrorCode::ActionFailed,
+        "The window fills its display and no earlier frame was recorded, so there is nothing to restore it to",
+    )
+    .with_suggestion(
+        "Set the window size with resize-window and its position with move-window",
+    )
+    .with_details(json!({ "cause": "no_recorded_frame" }))
+    .with_disposition(DeliverySemantics::not_delivered())
 }
 
 fn set_frame(win: &WindowInfo, frame: Rect, deadline: Deadline) -> Result<(), AdapterError> {
