@@ -251,7 +251,9 @@ fn verification_error(
     if let Some(observed) = observed {
         details.insert("post_state".into(), serde_json::json!(observed.state));
     }
-    if error.suggestion.is_none() {
+    let replaced_after_delivery = error.code == crate::ErrorCode::StaleRef
+        && disposition != DeliverySemantics::not_delivered();
+    if error.suggestion.is_none() || replaced_after_delivery {
         error.suggestion = Some(
             "Inspect the returned state before deciding whether another action is needed.".into(),
         );
