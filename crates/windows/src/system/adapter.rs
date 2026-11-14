@@ -201,6 +201,7 @@ impl SystemOps for WindowsAdapter {
         app: &AppInfo,
         force: bool,
         lease: &InteractionLease,
+        _policy: agent_desktop_core::InteractionPolicy,
     ) -> Result<OperationReport, AdapterError> {
         let dispatched = crate::system::close::close_app_impl(app, force, lease.deadline())
             .map(|outcome| outcome == CloseOutcome::Exited);

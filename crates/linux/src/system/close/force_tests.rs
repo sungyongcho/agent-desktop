@@ -14,6 +14,7 @@ fn request() -> Request<'static> {
         pid: 42,
         instance: Some("t"),
         force: true,
+        restore_focus: true,
     }
 }
 

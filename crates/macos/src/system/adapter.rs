@@ -163,6 +163,7 @@ impl SystemOps for MacOSAdapter {
         app: &agent_desktop_core::AppInfo,
         force: bool,
         lease: &InteractionLease,
+        _policy: agent_desktop_core::InteractionPolicy,
     ) -> Result<OperationReport, AdapterError> {
         let dispatched = crate::system::app::app_ops::close_app_impl(app, force, lease.deadline())
             .map(|outcome| outcome == CloseOutcome::Exited);

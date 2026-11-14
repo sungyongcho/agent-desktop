@@ -12,6 +12,7 @@ fn request() -> Request<'static> {
         pid: 42,
         instance: Some("t"),
         force: false,
+        restore_focus: true,
     }
 }
 
@@ -160,4 +161,50 @@ fn a_process_that_left_while_a_dialog_was_read_is_ok() {
     world.windows = ControlRead::Ready(vec![window(1), dialog(2)]);
     world.state_after_toplevels = Some(Liveness::Gone);
     close(&world, &request()).expect("it left meanwhile");
+}
+
+#[test]
+fn a_prompt_that_took_the_focus_has_it_given_back_and_says_so() {
+    let mut world = Fake::new(Liveness::Alive);
+    world.dialog_after = Some(std::time::Duration::from_millis(100));
+    let error = close(&world, &request()).expect_err("the save prompt appeared");
+    assert_eq!(error.details.expect("details")["focus_returned"], true);
+    assert_eq!(world.count("prior"), 1);
+    assert_eq!(world.count("watch_focus"), 1);
+}
+
+#[test]
+fn a_prompt_that_did_not_take_the_focus_reports_no_focus_return() {
+    let mut world = Fake::new(Liveness::Alive);
+    world.dialog_after = Some(std::time::Duration::from_millis(100));
+    world.gives_back = false;
+    let error = close(&world, &request()).expect_err("the save prompt appeared");
+    assert!(
+        error
+            .details
+            .expect("details")
+            .get("focus_returned")
+            .is_none()
+    );
+}
+
+#[test]
+fn a_headed_close_never_reads_or_gives_back_the_focus() {
+    let mut world = Fake::new(Liveness::Alive);
+    world.dialog_after = Some(std::time::Duration::from_millis(100));
+    let headed = Request {
+        restore_focus: false,
+        ..request()
+    };
+    close(&world, &headed).expect_err("the save prompt appeared");
+    assert_eq!(world.count("prior"), 0);
+    assert_eq!(world.count("watch_focus"), 0);
+}
+
+#[test]
+fn a_clean_close_is_ok_and_the_watch_never_blocks_it() {
+    let mut world = Fake::new(Liveness::Alive);
+    world.exits_on_close = true;
+    assert!(close(&world, &request()).expect("closes"));
+    assert_eq!(world.count("watch_focus"), 1);
 }

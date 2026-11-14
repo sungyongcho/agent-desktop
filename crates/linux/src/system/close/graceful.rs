@@ -109,7 +109,7 @@ fn request_close(world: &impl World, request: &Request<'_>) -> Result<bool, Adap
         Err(error) => return unless_gone(world, error.unsent()),
     };
     if standing.has_dialog() {
-        return Err(refusal::dialog_pending(request, &standing, false));
+        return Err(refusal::dialog_pending(request, &standing, false, false));
     }
     if standing.dialogs_unknown() {
         return Err(refusal::dialogs_unknown(request));
@@ -190,7 +190,9 @@ pub(super) fn close(world: &impl World, request: &Request<'_>) -> Result<bool, A
         Liveness::Stopped => return Err(AdapterError::app_unresponsive(request.name)),
         Liveness::Alive => {}
     }
+    let prior = request.restore_focus.then(|| world.read_prior()).flatten();
     let sent = request_close(world, request)?;
+    let returned = sent && prior.as_ref().is_some_and(|prior| world.watch_focus(prior));
     if !sent && world.liveness() == Liveness::Gone {
         return Ok(false);
     }
@@ -198,7 +200,7 @@ pub(super) fn close(world: &impl World, request: &Request<'_>) -> Result<bool, A
         Waited::Gone => return Ok(sent),
         Waited::Dialog(first) => {
             return match settled(world, first) {
-                Some(standing) => Err(refusal::dialog_pending(request, &standing, true)),
+                Some(standing) => Err(refusal::dialog_pending(request, &standing, true, returned)),
                 None => Ok(sent),
             };
         }

@@ -21,6 +21,7 @@ struct Request<'a> {
     pid: u32,
     instance: Option<&'a str>,
     force: bool,
+    restore_focus: bool,
 }
 
 fn refuse_if_protected(world: &impl World, request: &Request<'_>) -> Result<(), AdapterError> {
@@ -55,12 +56,14 @@ fn run_report(
     world: &impl World,
     app: &AppInfo,
     force: bool,
+    restore_focus: bool,
 ) -> Result<OperationReport, AdapterError> {
     let request = Request {
         name: &app.name,
         pid: app.pid.get(),
         instance: app.process_instance.as_deref(),
         force,
+        restore_focus,
     };
     OperationReport::from_close_dispatch(app, run(world, &request))
 }
@@ -70,6 +73,7 @@ pub(crate) fn close_app(
     app: &AppInfo,
     force: bool,
     lease: &InteractionLease,
+    policy: agent_desktop_core::InteractionPolicy,
 ) -> Result<OperationReport, AdapterError> {
     let pid = app.pid.get();
     let live = Live {
@@ -79,7 +83,7 @@ pub(crate) fn close_app(
         deadline: lease.deadline(),
         started: Instant::now(),
     };
-    run_report(&live, app, force)
+    run_report(&live, app, force, !policy.allow_focus_steal)
 }
 
 #[cfg(test)]

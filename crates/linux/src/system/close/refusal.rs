@@ -134,6 +134,7 @@ pub(super) fn dialog_pending(
     request: &Request<'_>,
     standing: &Standing,
     sent: bool,
+    focus_returned: bool,
 ) -> AdapterError {
     let titles: Vec<&str> = standing
         .windows
@@ -148,6 +149,18 @@ pub(super) fn dialog_pending(
     } else {
         DeliverySemantics::not_delivered()
     };
+    let mut details = json!({
+        "cause": "dialog_pending",
+        "app": request.name,
+        "pid": request.pid,
+        "windows_remaining": standing.windows.len() - dialogs_in(&standing.windows),
+        "dialogs": dialogs,
+        "dialog_titles": titles,
+        "dialog": titles.first(),
+    });
+    if focus_returned {
+        details["focus_returned"] = json!(true);
+    }
     AdapterError::new(
         ErrorCode::ActionFailed,
         format!(
@@ -156,15 +169,7 @@ pub(super) fn dialog_pending(
         ),
     )
     .with_suggestion(PROMPT)
-    .with_details(json!({
-        "cause": "dialog_pending",
-        "app": request.name,
-        "pid": request.pid,
-        "windows_remaining": standing.windows.len() - dialogs_in(&standing.windows),
-        "dialogs": dialogs,
-        "dialog_titles": titles,
-        "dialog": titles.first(),
-    }))
+    .with_details(details)
     .with_disposition(delivery)
 }
 

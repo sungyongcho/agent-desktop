@@ -67,7 +67,7 @@ agent-desktop click '@s8f3k2p9:e12' --wait-for "<role>:<text>"   # act, then ret
 agent-desktop set-value '@s8f3k2p9:e4' "<text>"  # replaces the whole value; the headless route
 agent-desktop type '@s8f3k2p9:e4' "<text>"       # inserts text at the caret and keeps the rest
 agent-desktop get '@s8f3k2p9:e4' --property value
-agent-desktop close-app "<app>"                # headless graceful close can be refused; see --force below
+agent-desktop close-app "<app>"                # a save prompt keeps the app open; see --force below
 ```
 
 If an action reports `data.surfaces`, inspect the overlay before acting on the
