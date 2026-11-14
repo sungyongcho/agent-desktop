@@ -1,4 +1,4 @@
-use agent_desktop_core::{Rect, WindowFrameRecord};
+use agent_desktop_core::{AdapterError, Rect, WindowFrameRecord};
 
 use crate::system::window::window_postcondition::TOLERANCE;
 
@@ -12,22 +12,24 @@ pub(crate) enum WindowRestorePlan {
 impl WindowRestorePlan {
     /// A window that is minimized, or whose state cannot be read, is
     /// un-minimized. A window that is not minimized has something to undo
-    /// only while it still holds the frame its maximize produced; one moved
-    /// since is already in its normal state.
+    /// only while it still holds the frame its maximize produced, and a frame
+    /// that cannot be read is an error, so the record is kept for a retry.
     pub(crate) fn decide(
         minimized: Option<bool>,
-        current: Option<Rect>,
         record: Option<&WindowFrameRecord>,
-    ) -> Self {
+        current: impl FnOnce() -> Result<Rect, AdapterError>,
+    ) -> Result<Self, AdapterError> {
         if minimized != Some(false) {
-            return Self::Unminimize;
+            return Ok(Self::Unminimize);
         }
-        match (current, record) {
-            (Some(current), Some(record)) if is_maximized_at(record, current) => {
-                Self::SetFrame(record.before)
-            }
-            _ => Self::AlreadyNormal,
-        }
+        let Some(record) = record else {
+            return Ok(Self::AlreadyNormal);
+        };
+        Ok(if is_maximized_at(record, current()?) {
+            Self::SetFrame(record.before)
+        } else {
+            Self::AlreadyNormal
+        })
     }
 }
 

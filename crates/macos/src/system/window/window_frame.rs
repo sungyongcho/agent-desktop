@@ -78,8 +78,9 @@ fn restore(win: &WindowInfo, deadline: Deadline) -> Result<OperationReport, Adap
     let record = memory
         .as_ref()
         .and_then(|memory| memory.recall(&key).ok().flatten());
-    let current = current_frame(win, deadline).ok();
-    let plan = WindowRestorePlan::decide(win.state.minimized, current, record.as_ref());
+    let plan = WindowRestorePlan::decide(win.state.minimized, record.as_ref(), || {
+        current_frame(win, deadline)
+    })?;
     match plan {
         WindowRestorePlan::Unminimize => dispatch(
             win,
