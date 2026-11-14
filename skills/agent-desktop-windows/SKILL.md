@@ -34,10 +34,11 @@ Use `$env:NAME = 'value'` for environment variables.
 - UIPI (User Interface Privilege Isolation) blocks input into a higher-integrity
   process. Ask the user to run the CLI at the target's integrity level when needed;
   a working observation does not establish input permission.
-- Headless routes use foreground-safe legacy accessibility and native control
-  messages. UIA patterns that activate the target are refused. `agent-desktop scroll`,
-  `agent-desktop type`, `agent-desktop right-click`, and `agent-desktop focus` need headed mode; a semantic value write may
-  work instead when it matches the user's task. Never retry a refusal headed.
+- Headless routes use UIA patterns, legacy accessibility and native control
+  messages; none takes the foreground. `agent-desktop type`, `agent-desktop right-click`,
+  `agent-desktop focus`, an expand that opens a popup (combo box, menu) and physical input need
+  headed mode; a semantic value write may work instead when it matches the user's task.
+  Never retry a refusal headed.
 - Refs require whole-window uniqueness at capture and resolution. A root drill
   cannot make identical twins unique. Choose a distinct control.
 - `agent-desktop launch` takes an absolute executable path or a bare program name in the

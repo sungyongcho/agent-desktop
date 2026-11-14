@@ -6,7 +6,8 @@
 //! change on SysTreeView32, WinForms, WPF and DirectUI items (C8). Every
 //! other element is pressed through its LegacyIAccessible default action,
 //! which changes no foreground state on Win32, WinForms, WPF and the Ribbon
-//! (W-W0-6). InvokePattern activates the window and is the headed rung.
+//! (W-W0-6). InvokePattern takes no foreground either (A31-5), so every
+//! policy runs it.
 
 use agent_desktop_core::{ActionStep, AdapterError, Deadline, InteractionPolicy};
 use std::time::Duration;
@@ -71,7 +72,7 @@ mod imp {
                     false,
                     &mut press,
                 ),
-                rung(INVOKE_LABEL, invoke_available(element), true, &mut invoke),
+                rung(INVOKE_LABEL, invoke_available(element), false, &mut invoke),
             ]),
             policy,
             deadline,

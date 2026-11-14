@@ -247,11 +247,10 @@ impl ActionOps for WindowsAdapter {
     fn scroll_into_view(
         &self,
         handle: &NativeHandle,
-        policy: agent_desktop_core::InteractionPolicy,
+        _policy: agent_desktop_core::InteractionPolicy,
         lease: &InteractionLease,
     ) -> Result<(), AdapterError> {
-        crate::actions::scroll_into_view::scroll_into_view_outcome(handle, lease, policy)
-            .map(|_| ())
+        crate::actions::scroll_into_view::scroll_into_view_outcome(handle, lease).map(|_| ())
     }
 }
 impl InputOps for WindowsAdapter {

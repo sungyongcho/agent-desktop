@@ -99,8 +99,8 @@ mod imp {
         };
         agent_desktop_core::execute_chain(
             &mut offered([
-                rung(VALUE_LABEL, text_ok, true, &mut text),
-                rung(RANGE_LABEL, range_ok, true, &mut range),
+                rung(VALUE_LABEL, text_ok, false, &mut text),
+                rung(RANGE_LABEL, range_ok, false, &mut range),
                 rung(LEGACY_VALUE_LABEL, text_ok || range_ok, false, &mut legacy),
             ]),
             policy,

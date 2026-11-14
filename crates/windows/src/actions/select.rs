@@ -5,8 +5,8 @@
 //! misses, falls through to the route below. Any other target selects a named item, itself or one of
 //! its realized descendants: LegacyIAccessible `Select(SELFLAG_TAKESELECTION)`
 //! has no foreground effect on SysTreeView32, WinForms, WPF and DirectUI items
-//! (C8), SelectionItemPattern is the headed rung, and the item's IsSelected
-//! verifies either one. A target that is itself the named item selects
+//! (C8), SelectionItemPattern takes none either (A31-5), and the item's
+//! IsSelected verifies either one. A target that is itself the named item selects
 //! itself before anything else, so a collapsed tree item never expands. A collapsed container that is not a native combo box
 //! (a WPF or Ribbon combo) shows its items only after it expands, and every
 //! route there puts the popup over the user's window (C5, C6): the expand runs
@@ -93,7 +93,7 @@ mod imp {
     use crate::actions::click::SELECT_ITEM_LABEL;
     use crate::actions::disclosure::ExpandKind;
     use crate::actions::mutation::{classify_success, classify_write};
-    use crate::actions::scroll::{SCROLL_LABEL, vertical_scroll};
+    use crate::actions::scroll::vertical_scroll;
     use crate::actions::select_combo::{COMBO_SELECT_LABEL, native_combo, select_native_combo};
     use crate::actions::select_container::realize_named_item;
     use crate::actions::select_locate::{ItemSource, Located, RealizeScrollStep, locate};
@@ -128,7 +128,7 @@ mod imp {
             let mut expand = || expand_container(element);
             run_expand(&mut expand, policy, deadline)?;
         }
-        let selected = find_item(element, value, policy, deadline).and_then(|(item, realized)| {
+        let selected = find_item(element, value, deadline).and_then(|(item, realized)| {
             select_item(&item, policy, deadline).map_err(|error| match realized {
                 true => after_delivery(error),
                 false => error,
@@ -173,10 +173,6 @@ mod imp {
             find_named_selection_item(self.element, self.value, self.deadline, prior)
         }
 
-        fn hides_items_behind_a_scroll(&self) -> bool {
-            self.scroll.is_some()
-        }
-
         fn position(&self) -> Option<f64> {
             self.scroll
                 .as_ref()
@@ -202,21 +198,16 @@ mod imp {
         }
     }
 
-    /// Locates the named selection item inside `element`, allowing scroll
-    /// realization when `policy` permits focus steal.
+    /// Locates the named selection item inside `element`, scrolling to
+    /// realize it when the container hides items.
     fn find_item(
         element: &UIAElement,
         value: &str,
-        policy: InteractionPolicy,
         deadline: Deadline,
     ) -> Result<(UIAElement, bool), AdapterError> {
         let mut items = ContainerItems::new(element, value, deadline);
-        match locate(&mut items, policy.allow_focus_steal)? {
+        match locate(&mut items)? {
             Located::Found { item, realized } => Ok((item, realized)),
-            Located::ScrollDenied => Err(agent_desktop_core::mechanisms_denied(
-                &[SCROLL_LABEL],
-                policy,
-            )),
             Located::Absent => Err(AdapterError::new(
                 ErrorCode::ElementNotFound,
                 format!(
@@ -250,7 +241,7 @@ mod imp {
                 rung(
                     SELECT_LABEL,
                     selection_item_available(item),
-                    true,
+                    false,
                     &mut pattern,
                 ),
                 rung(SELECT_ITEM_LABEL, true, false, &mut legacy),
