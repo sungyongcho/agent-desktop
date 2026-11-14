@@ -37,8 +37,9 @@ use a private session and runtime directory for isolated work.
   accessibility bus does not establish pointer, window-control, capture, shell,
   notification, or tray capability.
 - GTK refs can retain native element addresses and ancestry.
-  Chromium, Qt, and unknown-toolkit refs need whole-window uniqueness. Take fresh refs
-  after list changes; a narrower drill does not disambiguate identical twins.
+  Chromium, Qt, and unknown-toolkit refs must be unique in the window or inside
+  their nearest unique ancestor. Take fresh refs after list changes; a narrower
+  drill does not disambiguate identical twins.
 - GTK4 list-backed dropdowns stay in the window tree. Use `wait --text` and
   `snapshot --root` to read their contents, not a menu-surface wait.
   Menu-role popups use the menu surface instead.

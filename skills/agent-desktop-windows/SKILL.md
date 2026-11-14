@@ -36,11 +36,12 @@ Use `$env:NAME = 'value'` for environment variables.
   a working observation does not establish input permission.
 - Headless routes use UIA patterns, legacy accessibility and native control
   messages; none takes the foreground. `agent-desktop type`, `agent-desktop right-click`,
-  `agent-desktop focus`, an expand that opens a popup (combo box, menu) and physical input need
-  headed mode; a semantic value write may work instead when it matches the user's task.
+  `agent-desktop focus`, an expand that opens a popup (combo box, menu), `agent-desktop scroll-to`
+  on an item of a Win32 tree view and physical input need headed mode; a semantic value write may work instead when it matches the user's task.
   Never retry a refusal headed.
-- Refs require whole-window uniqueness at capture and resolution. A root drill
-  cannot make identical twins unique. Choose a distinct control.
+- A ref must be unique in its window, or inside its nearest unique ancestor (a
+  cell inside its row), at capture and resolution. A root drill cannot make
+  identical twins unique. Choose a distinct control.
 - `agent-desktop launch` takes an absolute executable path or a bare program name in the
   Windows or System32 directory, not an arbitrary display name or a PATH search.
   Without `--activate` the process starts with a show-window hint that asks for no

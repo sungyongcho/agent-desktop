@@ -22,7 +22,7 @@ Windows has no grant dialog for UI Automation; access is controlled by integrity
 
 ## What works headless
 
-Headless ref actions never move the user's foreground. The client turns off `AutoSetFocus`, so a UI Automation control pattern call does not activate the target's window. A route that sets focus or opens a popup over the user's window, such as `focus` or an `expand` on a combo box or menu, returns `POLICY_DENIED` with `details.foreground_effect: true` headless; rerun it with `--headed`. See [Headed mode](/desktop/guides/headed-mode).
+Headless ref actions never move the user's foreground. The client turns off `AutoSetFocus`, so a UI Automation control pattern call does not activate the target's window. A route that sets focus or opens a popup over the user's window, such as `focus`, an `expand` on a combo box or menu, or `scroll-to` on an item of a Win32 tree view, returns `POLICY_DENIED` with `details.foreground_effect: true` headless; rerun it with `--headed`. See [Headed mode](/desktop/guides/headed-mode).
 
 <table>
   <thead>
