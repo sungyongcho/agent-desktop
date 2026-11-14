@@ -145,6 +145,15 @@ fn a_failed_scroll_ends_the_sweep_without_another_scan() {
 }
 
 #[test]
+fn a_search_that_finds_nothing_leaves_the_list_where_it_was() {
+    let mut fake = Fake::new(vec![vec![1], vec![2], vec![3]], vec![9]);
+    let located = locate(&mut fake).unwrap();
+    assert_eq!(found(located), None);
+    assert_eq!(fake.at, 0);
+    assert_eq!(fake.log.last().map(String::as_str), Some("scroll_to(0)"));
+}
+
+#[test]
 fn a_second_item_in_a_later_window_is_ambiguous() {
     let mut fake = Fake::new(vec![vec![1], vec![2]], vec![1, 2]);
     let err = locate(&mut fake).err().unwrap();

@@ -91,6 +91,7 @@ fn sweep<S: ItemSource>(
     source: &mut S,
     mut sighting: Option<Sighting<S::Item>>,
 ) -> Result<Phase<S::Item>, AdapterError> {
+    let start = source.position();
     let mut scrolled = false;
     for _ in 0..MAX_REALIZE_SCROLLS {
         match source.scroll_step()? {
@@ -116,7 +117,12 @@ fn sweep<S: ItemSource>(
             item: seen.item,
             realized: false,
         }),
-        None => Phase::Done(Located::Absent),
+        None => {
+            if let (true, Some(position)) = (scrolled, start) {
+                source.scroll_to(position)?;
+            }
+            Phase::Done(Located::Absent)
+        }
     })
 }
 
