@@ -70,8 +70,14 @@ impl ObservationOps for MacOSAdapter {
     fn resolve_locator_anchor(
         &self,
         entry: &RefEntry,
+        base: Option<&NativeHandle>,
         deadline: Deadline,
     ) -> Result<NativeHandle, AdapterError> {
+        if base.is_some() {
+            return Err(AdapterError::not_supported(
+                "resolve_locator_anchor from a base element",
+            ));
+        }
         crate::tree::resolve::resolve_locator_anchor_with_deadline(entry, deadline)
     }
 

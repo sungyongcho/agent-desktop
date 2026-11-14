@@ -53,6 +53,7 @@ pub(super) fn entry(
             root_ref: root_ref.map(String::from),
             path_is_absolute: false,
             path: smallvec::smallvec![0, 1],
+            chain: Vec::new(),
         },
     }
 }

@@ -37,6 +37,7 @@ fn minimal_entry(role: &str) -> RefEntry {
             root_ref: None,
             path_is_absolute: false,
             path: smallvec::SmallVec::new(),
+            chain: Vec::new(),
         },
     }
 }
@@ -215,6 +216,7 @@ fn ref_entry_full_roundtrip_preserves_all_fields() {
             root_ref: Some("@e5".into()),
             path_is_absolute: true,
             path: smallvec::SmallVec::from_slice(&[2, 0, 1]),
+            chain: Vec::new(),
         },
     };
     let json = serde_json::to_string(&original).unwrap();

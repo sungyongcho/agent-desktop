@@ -233,6 +233,7 @@ mod tests {
                     root_ref: None,
                     path_is_absolute: true,
                     path: agent_desktop_core::refs::RefPath::default(),
+                    chain: Vec::new(),
                 },
             }));
         let handle: &'static agent_desktop_core::NativeHandle =

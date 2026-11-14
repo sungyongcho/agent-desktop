@@ -376,6 +376,7 @@ pub(crate) mod ref_process;
 pub(crate) mod ref_resolve_deadline;
 pub(crate) mod ref_root_read;
 pub(crate) mod ref_scope;
+pub(crate) mod ref_scope_resolve;
 pub(crate) mod ref_skeleton_anchors;
 pub(crate) mod ref_source;
 pub(crate) mod ref_token;
@@ -392,9 +393,8 @@ pub mod resolve_saved_ref;
 #[path = "refs_serde_tests.rs"]
 mod serde_tests;
 #[cfg(test)]
-#[path = "refs_tests.rs"]
-mod tests;
-
-#[cfg(test)]
 #[path = "refs_size_tests.rs"]
 mod size_tests;
+#[cfg(test)]
+#[path = "refs_tests.rs"]
+mod tests;
