@@ -1,0 +1,5236 @@
+[
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 11
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 2.380952380952381,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 25
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 2.380952380952381,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 25
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 10
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 52.38095238095238,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 25
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 52.38095238095238,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 25
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 52.38095238095238,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 52.38095238095238,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "12786",
+   "class": "SysListView32",
+   "control_type": "List",
+   "framework_id": "Win32"
+  },
+  "session": 1,
+  "toolkit": "win32"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 11
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 2.380952380952381,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 25
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 2.380952380952381,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 25
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 10
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 52.38095238095238,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 25
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 52.38095238095238,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 25
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 52.38095238095238,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 52.38095238095238,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "12786",
+   "class": "SysListView32",
+   "control_type": "List",
+   "framework_id": "Win32"
+  },
+  "session": 2,
+  "toolkit": "win32"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 1,
+    "t_above_f": 1,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 3,
+     "minimize": 0,
+     "object_focus": 6
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 1.0460251046025104,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 20
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 1.0460251046025104,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 21
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 8
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 51.04602510460251,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 20
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 51.04602510460251,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 20
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 4
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 51.04602510460251,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 10
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 51.04602510460251,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 10
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "lstRows",
+   "class": "WindowsForms10.LISTBOX.app.0.34f5582_r8_ad1",
+   "control_type": "List",
+   "framework_id": "WinForm"
+  },
+  "session": 1,
+  "toolkit": "winforms"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 1,
+    "t_above_f": 1,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 3,
+     "minimize": 0,
+     "object_focus": 6
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 1.0460251046025104,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 20
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 1.0460251046025104,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 20
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 8
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 51.04602510460251,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 20
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 51.04602510460251,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 20
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 4
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 51.04602510460251,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 10
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 51.04602510460251,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 10
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "lstRows",
+   "class": "WindowsForms10.LISTBOX.app.0.34f5582_r8_ad1",
+   "control_type": "List",
+   "framework_id": "WinForm"
+  },
+  "session": 2,
+  "toolkit": "winforms"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 1,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 1,
+     "minimize": 0,
+     "object_focus": 1
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 1.02880658436214,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 1.02880658436214,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "A4_Realize",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 69.1358024691358,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 69.1358024691358,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 69.1358024691358,
+    "percent_last": 70.16460905349794,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 70.16460905349794,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "A4_Realize",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "0x80131509": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 69.1358024691358,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 69.1358024691358,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 69.1358024691358,
+    "percent_last": 70.16460905349794,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 70.16460905349794,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A4_Realize",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   }
+  ],
+  "element": {
+   "automation_id": "lstRows",
+   "class": "ListBox",
+   "control_type": "List",
+   "framework_id": "WPF"
+  },
+  "session": 1,
+  "toolkit": "wpf"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 1,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 1,
+     "minimize": 0,
+     "object_focus": 1
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 1.02880658436214,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 1.02880658436214,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "A4_Realize",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 69.1358024691358,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 69.1358024691358,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 69.1358024691358,
+    "percent_last": 70.16460905349794,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 70.16460905349794,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "A4_Realize",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "0x80131509": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 69.1358024691358,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 69.1358024691358,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 69.1358024691358,
+    "percent_last": 70.16460905349794,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 70.16460905349794,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A4_Realize",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 69.1358024691358,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   }
+  ],
+  "element": {
+   "automation_id": "lstRows",
+   "class": "ListBox",
+   "control_type": "List",
+   "framework_id": "WPF"
+  },
+  "session": 2,
+  "toolkit": "wpf"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 1,
+    "t_above_f": 1,
+    "t_thread": 1,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 1,
+     "minimize": 0,
+     "object_focus": 1
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 1.426150804857385,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 1.426150804857385,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A4_Realize",
+    "skipped": "the lookup returned no item",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 51.55323354984468,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 51.55323354984468,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A4_Realize",
+    "skipped": "the lookup returned no item",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A4_Realize",
+    "skipped": "the lookup returned no item",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "",
+   "class": "UIItemsView",
+   "control_type": "List",
+   "framework_id": "DirectUI"
+  },
+  "session": 1,
+  "toolkit": "directui"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 1.4256978508663585,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 1.4256978508663585,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 49.9982355224618,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A4_Realize",
+    "skipped": "the lookup returned no item",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 49.9982355224618,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 49.9982355224618,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 49.9982355224618,
+    "percent_last": 51.536859935773016,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 51.536859935773016,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 49.9982355224618,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A4_Realize",
+    "skipped": "the lookup returned no item",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 49.9982355224618,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 49.9982355224618,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 49.9982355224618,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 49.9982355224618,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 49.9982355224618,
+    "percent_last": 49.9982355224618,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A4_Realize",
+    "skipped": "the lookup returned no item",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "",
+   "class": "UIItemsView",
+   "control_type": "List",
+   "framework_id": "DirectUI"
+  },
+  "session": 2,
+  "toolkit": "directui"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 1,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 1,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 13.490725126475548,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 13.490725126475548,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 4
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 63.490725126475546,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 63.490725126475546,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 14
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": null,
+    "percent_last": null,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "0x80040201": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": null,
+    "percent_last": null,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "0x80040201": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": null,
+    "percent_last": null,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "0x80040201": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": null,
+    "percent_last": null,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "ItemsControlScrollViewer",
+   "class": "ScrollViewer",
+   "control_type": "Pane",
+   "framework_id": "XAML"
+  },
+  "session": 1,
+  "toolkit": "xaml"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 1,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 1,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 13.490725126475548,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 13.490725126475548,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 14
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 4
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 63.490725126475546,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 13
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 63.490725126475546,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": null,
+    "percent_last": null,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "0x80040201": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": null,
+    "percent_last": null,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "0x80040201": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": null,
+    "percent_last": null,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "0x80040201": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": null,
+    "percent_last": null,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no element under the target offers ItemContainerPattern",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "ItemsControlScrollViewer",
+   "class": "ScrollViewer",
+   "control_type": "Pane",
+   "framework_id": "XAML"
+  },
+  "session": 2,
+  "toolkit": "xaml"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 4
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 2.2408963585434174,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 2.2408963585434174,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 6
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.00560224089636,
+    "percent_last": 52.246498599439775,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 52.246498599439775,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 2,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.90196078431372,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.90196078431372,
+    "percent_last": 80.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "RootWebArea",
+   "class": "",
+   "control_type": "Document",
+   "framework_id": "Chrome"
+  },
+  "session": 1,
+  "toolkit": "chromium"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 4
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 2.2408963585434174,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 2.2408963585434174,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 6
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.00560224089636,
+    "percent_last": 52.246498599439775,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 52.246498599439775,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.00560224089636,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 2,
+    "percent_first": 50.00560224089636,
+    "percent_last": 50.90196078431372,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.90196078431372,
+    "percent_last": 80.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "RootWebArea",
+   "class": "",
+   "control_type": "Document",
+   "framework_id": "Chrome"
+  },
+  "session": 2,
+  "toolkit": "chromium"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 4.444444444444445,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 4.444444444444445,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 6
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 54.44444444444444,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 54.44444444444444,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "tall",
+   "class": "",
+   "control_type": "List",
+   "framework_id": "Chrome"
+  },
+  "session": 1,
+  "toolkit": "chromium-div"
+ },
+ {
+  "auto_set_focus": null,
+  "cells": [
+   {
+    "any_outside": 2,
+    "arrangement": "beside",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "beside",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 0.0,
+    "percent_last": 0.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 0.0,
+    "percent_last": 4.444444444444445,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "beside",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 4.444444444444445,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "beside",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "covered",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 2,
+    "t_above_f": 2,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 4,
+     "minimize": 0,
+     "object_focus": 6
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "covered",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 50.0,
+    "percent_last": 54.44444444444444,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "covered",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 5,
+    "percent_first": 54.44444444444444,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 5,
+    "t_above_f": 5,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 10,
+     "minimize": 0,
+     "object_focus": 15
+    }
+   },
+   {
+    "arrangement": "covered",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   },
+   {
+    "any_outside": 2,
+    "arrangement": "minimized",
+    "call": "positive_control_SetFocus",
+    "capped_at_2s": 0,
+    "focus_hwnd": 2,
+    "foreground": 2,
+    "hresult": {
+     "S_OK": 2
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 2,
+    "trials": 2,
+    "uia_focus": 2,
+    "winevents": {
+     "foreground": 2,
+     "minimize": 0,
+     "object_focus": 2
+    }
+   },
+   {
+    "any_outside": 0,
+    "arrangement": "minimized",
+    "call": "negative_control_CurrentName",
+    "capped_at_2s": 0,
+    "focus_hwnd": 0,
+    "foreground": 0,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 0,
+    "trials": 5,
+    "uia_focus": 0,
+    "winevents": {
+     "foreground": 0,
+     "minimize": 0,
+     "object_focus": 0
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A1_Scroll",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "any_outside": 5,
+    "arrangement": "minimized",
+    "call": "A2_SetScrollPercent",
+    "capped_at_2s": 0,
+    "focus_hwnd": 5,
+    "foreground": 5,
+    "hresult": {
+     "S_OK": 5
+    },
+    "iconic": 0,
+    "moved": 0,
+    "percent_first": 50.0,
+    "percent_last": 50.0,
+    "precondition_failed": 0,
+    "raised": 0,
+    "t_above_f": 0,
+    "t_thread": 5,
+    "trials": 5,
+    "uia_focus": 5,
+    "winevents": {
+     "foreground": 5,
+     "minimize": 0,
+     "object_focus": 5
+    }
+   },
+   {
+    "arrangement": "minimized",
+    "call": "A3_FindItemByProperty",
+    "skipped": "no item names were given",
+    "trials": 0
+   }
+  ],
+  "element": {
+   "automation_id": "tall",
+   "class": "",
+   "control_type": "List",
+   "framework_id": "Chrome"
+  },
+  "session": 2,
+  "toolkit": "chromium-div"
+ }
+]

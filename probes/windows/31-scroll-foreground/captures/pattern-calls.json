@@ -1,0 +1,930 @@
+[
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btn",
+   "class": "",
+   "control_type": "Button",
+   "framework_id": "Chrome"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "chromium-invoke-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btn",
+   "class": "",
+   "control_type": "Button",
+   "framework_id": "Chrome"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "chromium-invoke-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 4,
+  "element": {
+   "automation_id": "txt",
+   "class": "",
+   "control_type": "Edit",
+   "framework_id": "Chrome"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "chromium-setvalue-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 4,
+  "element": {
+   "automation_id": "txt",
+   "class": "",
+   "control_type": "Edit",
+   "framework_id": "Chrome"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "chromium-setvalue-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "chk",
+   "class": "",
+   "control_type": "CheckBox",
+   "framework_id": "Chrome"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "chromium-toggle-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "chk",
+   "class": "",
+   "control_type": "CheckBox",
+   "framework_id": "Chrome"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "chromium-toggle-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "not_run": "no element matches --aid / --name",
+  "run": "directui-expand-default"
+ },
+ {
+  "not_run": "no element matches --aid / --name",
+  "run": "directui-expand-off"
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "4",
+   "class": "UIItem",
+   "control_type": "ListItem",
+   "framework_id": "DirectUI"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "directui-select-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "4",
+   "class": "UIItem",
+   "control_type": "ListItem",
+   "framework_id": "DirectUI"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "directui-select-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "103",
+   "class": "Button",
+   "control_type": "Button",
+   "framework_id": "Win32"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32dialog-invoke-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "103",
+   "class": "Button",
+   "control_type": "Button",
+   "framework_id": "Win32"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32dialog-invoke-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": true,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "103",
+   "class": "Button",
+   "control_type": "Button",
+   "framework_id": "Win32"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32dialog-legacy_default-default",
+  "trials": 5,
+  "winevents_foreground": 1
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "103",
+   "class": "Button",
+   "control_type": "Button",
+   "framework_id": "Win32"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32dialog-legacy_default-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "ListViewItem-194",
+   "class": "",
+   "control_type": "ListItem",
+   "framework_id": "Win32"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32list-select-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "ListViewItem-194",
+   "class": "",
+   "control_type": "ListItem",
+   "framework_id": "Win32"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32list-select-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "TreeItem",
+   "framework_id": "Win32"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32tree-expand-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "TreeItem",
+   "framework_id": "Win32"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32tree-expand-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "TreeItem",
+   "framework_id": "Win32"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32tree-select-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "TreeItem",
+   "framework_id": "Win32"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "win32tree-select-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "TreeItem",
+   "framework_id": "WinForm"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-expand-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "TreeItem",
+   "framework_id": "WinForm"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-expand-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btnInc",
+   "class": "WindowsForms10.BUTTON.app.0.34f5582_r8_ad1",
+   "control_type": "Button",
+   "framework_id": "WinForm"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-invoke-default",
+  "trials": 5,
+  "winevents_foreground": 9
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btnInc",
+   "class": "WindowsForms10.BUTTON.app.0.34f5582_r8_ad1",
+   "control_type": "Button",
+   "framework_id": "WinForm"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-invoke-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": true,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btnInc",
+   "class": "WindowsForms10.BUTTON.app.0.34f5582_r8_ad1",
+   "control_type": "Button",
+   "framework_id": "WinForm"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-legacy_default-default",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btnInc",
+   "class": "WindowsForms10.BUTTON.app.0.34f5582_r8_ad1",
+   "control_type": "Button",
+   "framework_id": "WinForm"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-legacy_default-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": true,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "trkLevel",
+   "class": "WindowsForms10.msctls_trackbar32.app.0.34f5582_r8_ad1",
+   "control_type": "Slider",
+   "framework_id": "WinForm"
+  },
+  "foreground": 0,
+  "hresult": {
+   "none": 5
+  },
+  "ok": 0,
+  "run": "winforms-range-default",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "trkLevel",
+   "class": "WindowsForms10.msctls_trackbar32.app.0.34f5582_r8_ad1",
+   "control_type": "Slider",
+   "framework_id": "WinForm"
+  },
+  "foreground": 0,
+  "hresult": {
+   "none": 5
+  },
+  "ok": 0,
+  "run": "winforms-range-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": true,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "ListItem",
+   "framework_id": ""
+  },
+  "foreground": 0,
+  "hresult": {
+   "none": 5
+  },
+  "ok": 0,
+  "run": "winforms-scrollitem-default",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "ListItem",
+   "framework_id": ""
+  },
+  "foreground": 0,
+  "hresult": {
+   "none": 5
+  },
+  "ok": 0,
+  "run": "winforms-scrollitem-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "ListItem",
+   "framework_id": ""
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-select-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "",
+   "class": "",
+   "control_type": "ListItem",
+   "framework_id": ""
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-select-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 4,
+  "element": {
+   "automation_id": "txtName",
+   "class": "WindowsForms10.EDIT.app.0.34f5582_r8_ad1",
+   "control_type": "Edit",
+   "framework_id": "WinForm"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-setvalue-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 4,
+  "element": {
+   "automation_id": "txtName",
+   "class": "WindowsForms10.EDIT.app.0.34f5582_r8_ad1",
+   "control_type": "Edit",
+   "framework_id": "WinForm"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-setvalue-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "chkOpt",
+   "class": "WindowsForms10.BUTTON.app.0.34f5582_r8_ad1",
+   "control_type": "CheckBox",
+   "framework_id": "WinForm"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-toggle-default",
+  "trials": 5,
+  "winevents_foreground": 10
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "chkOpt",
+   "class": "WindowsForms10.BUTTON.app.0.34f5582_r8_ad1",
+   "control_type": "CheckBox",
+   "framework_id": "WinForm"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "winforms-toggle-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "",
+   "class": "TreeViewItem",
+   "control_type": "TreeItem",
+   "framework_id": "WPF"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-expand-default",
+  "trials": 5,
+  "winevents_foreground": 5
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "",
+   "class": "TreeViewItem",
+   "control_type": "TreeItem",
+   "framework_id": "WPF"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-expand-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btnInc",
+   "class": "Button",
+   "control_type": "Button",
+   "framework_id": "WPF"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-invoke-default",
+  "trials": 5,
+  "winevents_foreground": 4
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btnInc",
+   "class": "Button",
+   "control_type": "Button",
+   "framework_id": "WPF"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-invoke-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": true,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btnInc",
+   "class": "Button",
+   "control_type": "Button",
+   "framework_id": "WPF"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-legacy_default-default",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 0,
+  "element": {
+   "automation_id": "btnInc",
+   "class": "Button",
+   "control_type": "Button",
+   "framework_id": "WPF"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-legacy_default-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "sldLevel",
+   "class": "Slider",
+   "control_type": "Slider",
+   "framework_id": "WPF"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-range-default",
+  "trials": 5,
+  "winevents_foreground": 5
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "sldLevel",
+   "class": "Slider",
+   "control_type": "Slider",
+   "framework_id": "WPF"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-range-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "not_run": "no element matches --aid / --name",
+  "run": "wpf-scrollitem-default"
+ },
+ {
+  "not_run": "no element matches --aid / --name",
+  "run": "wpf-scrollitem-off"
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "",
+   "class": "ListBoxItem",
+   "control_type": "ListItem",
+   "framework_id": "WPF"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-select-default",
+  "trials": 5,
+  "winevents_foreground": 5
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 1,
+  "element": {
+   "automation_id": "",
+   "class": "ListBoxItem",
+   "control_type": "ListItem",
+   "framework_id": "WPF"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-select-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 4,
+  "element": {
+   "automation_id": "txtName",
+   "class": "TextBox",
+   "control_type": "Edit",
+   "framework_id": "WPF"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-setvalue-default",
+  "trials": 5,
+  "winevents_foreground": 5
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 4,
+  "element": {
+   "automation_id": "txtName",
+   "class": "TextBox",
+   "control_type": "Edit",
+   "framework_id": "WPF"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-setvalue-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ },
+ {
+  "any_outside": 5,
+  "auto_set_focus": true,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "chkOpt",
+   "class": "CheckBox",
+   "control_type": "CheckBox",
+   "framework_id": "WPF"
+  },
+  "foreground": 5,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-toggle-default",
+  "trials": 5,
+  "winevents_foreground": 5
+ },
+ {
+  "any_outside": 0,
+  "auto_set_focus": false,
+  "effect_changed": 5,
+  "element": {
+   "automation_id": "chkOpt",
+   "class": "CheckBox",
+   "control_type": "CheckBox",
+   "framework_id": "WPF"
+  },
+  "foreground": 0,
+  "hresult": {
+   "S_OK": 5
+  },
+  "ok": 5,
+  "run": "wpf-toggle-off",
+  "trials": 5,
+  "winevents_foreground": 0
+ }
+]
