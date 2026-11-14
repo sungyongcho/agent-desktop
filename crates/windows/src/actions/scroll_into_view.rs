@@ -155,11 +155,18 @@ mod imp {
         }
     }
 
+    /// The ancestor ladder steers by the target's rectangle. A provider that
+    /// reports an item outside its view as a rectangle without area, such as
+    /// a Win32 tree item (A31-10), gives it nothing to steer by, so the
+    /// caller's own answer stands and nothing is scrolled.
     fn ladder_from_terminal(
         fallback: AdapterError,
         element: &UIAElement,
         deadline: Deadline,
     ) -> Result<ScrollIntoViewDone, AdapterError> {
+        if completed_bounds(known_bounds(element)).is_none() {
+            return Err(fallback);
+        }
         apply_ladder_seam(fallback, ancestor_ladder(element, deadline)).map(|outcome| {
             ScrollIntoViewDone {
                 label: LADDER_SCROLL_LABEL,

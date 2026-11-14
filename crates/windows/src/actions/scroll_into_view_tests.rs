@@ -264,3 +264,18 @@ fn zero_verify_window_unchanged_reaches_not_delivered() {
     .expect_err("unchanged after zero window");
     assert_eq!(error.disposition, DeliverySemantics::not_delivered());
 }
+
+/// A Win32 tree item outside its view reports a rectangle without area at the
+/// screen origin (A31-10). Read as a position it sends every scroll upward,
+/// away from an item that is below the view.
+#[test]
+fn a_rectangle_without_area_names_no_scroll_direction() {
+    let sample = VisibilitySample {
+        bounds: Some(rect(0.0, 0.0, 0.0, 0.0)),
+        offscreen: Some(true),
+        viewport: Some(rect(40.0, 120.0, 640.0, 400.0)),
+    };
+    let error = crate::actions::scroll_ladder::direction_after_visibility_miss(&sample)
+        .expect_err("a rectangle without area is not a position");
+    assert_eq!(error.disposition, DeliverySemantics::not_delivered());
+}

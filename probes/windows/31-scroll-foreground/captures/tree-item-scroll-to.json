@@ -1,0 +1,155 @@
+{
+ "target": "Device Manager, SysTreeView32 expanded so that it scrolls",
+ "item_geometry_and_old_ladder": [
+  {
+   "item": "off view, above the viewport",
+   "bounds": {
+    "x": 0.0,
+    "y": 0.0,
+    "width": 0.0,
+    "height": 0.0
+   },
+   "states": [
+    "offscreen"
+   ],
+   "count_read": 3
+  },
+  {
+   "item": "in view",
+   "bounds": "real rectangles, for example 212 x 18 at (160, 181)",
+   "states": [],
+   "count_read": 2
+  },
+  {
+   "build": "AutoSetFocus off, ladder reads the rectangle as a position",
+   "command": "scroll-to off-view item headless",
+   "ok": false,
+   "code": "ACTION_FAILED",
+   "delivery": "delivered_unverified",
+   "message": "Semantic ancestor scrolling did not bring the target into view",
+   "foreground_changed": false
+  }
+ ],
+ "final_build": [
+  {
+   "trial": 1,
+   "command": "scroll-to off-view item headless",
+   "ok": false,
+   "code": "POLICY_DENIED",
+   "delivery": "not_delivered",
+   "step": null,
+   "foreground_changed": false,
+   "foreground_effect": true
+  },
+  {
+   "trial": 1,
+   "command": "scroll-to the same item --headed",
+   "ok": true,
+   "code": null,
+   "delivery": "delivered_verified",
+   "step": "ScrollItemPattern.ScrollIntoView:succeeded",
+   "foreground_changed": true,
+   "foreground_effect": null
+  },
+  {
+   "trial": 1,
+   "command": "scroll the tree down headless",
+   "ok": true,
+   "code": null,
+   "delivery": "delivered_verified",
+   "step": "ScrollPattern.Scroll:succeeded",
+   "foreground_changed": false,
+   "foreground_effect": null
+  },
+  {
+   "trial": 1,
+   "command": "scroll the tree up headless",
+   "ok": true,
+   "code": null,
+   "delivery": "delivered_verified",
+   "step": "ScrollPattern.Scroll:succeeded",
+   "foreground_changed": false,
+   "foreground_effect": null
+  },
+  {
+   "trial": 2,
+   "command": "scroll-to off-view item headless",
+   "ok": false,
+   "code": "POLICY_DENIED",
+   "delivery": "not_delivered",
+   "step": null,
+   "foreground_changed": false,
+   "foreground_effect": true
+  },
+  {
+   "trial": 2,
+   "command": "scroll-to the same item --headed",
+   "ok": true,
+   "code": null,
+   "delivery": "delivered_verified",
+   "step": "ScrollItemPattern.ScrollIntoView:succeeded",
+   "foreground_changed": true,
+   "foreground_effect": null
+  },
+  {
+   "trial": 2,
+   "command": "scroll the tree down headless",
+   "ok": true,
+   "code": null,
+   "delivery": "delivered_verified",
+   "step": "ScrollPattern.Scroll:succeeded",
+   "foreground_changed": false,
+   "foreground_effect": null
+  },
+  {
+   "trial": 2,
+   "command": "scroll the tree up headless",
+   "ok": true,
+   "code": null,
+   "delivery": "delivered_verified",
+   "step": "ScrollPattern.Scroll:succeeded",
+   "foreground_changed": false,
+   "foreground_effect": null
+  },
+  {
+   "trial": 3,
+   "command": "scroll-to off-view item headless",
+   "ok": false,
+   "code": "POLICY_DENIED",
+   "delivery": "not_delivered",
+   "step": null,
+   "foreground_changed": false,
+   "foreground_effect": true
+  },
+  {
+   "trial": 3,
+   "command": "scroll-to the same item --headed",
+   "ok": true,
+   "code": null,
+   "delivery": "delivered_verified",
+   "step": "ScrollItemPattern.ScrollIntoView:succeeded",
+   "foreground_changed": true,
+   "foreground_effect": null
+  },
+  {
+   "trial": 3,
+   "command": "scroll the tree down headless",
+   "ok": true,
+   "code": null,
+   "delivery": "delivered_verified",
+   "step": "ScrollPattern.Scroll:succeeded",
+   "foreground_changed": false,
+   "foreground_effect": null
+  },
+  {
+   "trial": 3,
+   "command": "scroll the tree up headless",
+   "ok": true,
+   "code": null,
+   "delivery": "delivered_verified",
+   "step": "ScrollPattern.Scroll:succeeded",
+   "foreground_changed": false,
+   "foreground_effect": null
+  }
+ ]
+}
