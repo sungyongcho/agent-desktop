@@ -182,7 +182,7 @@ impl SystemOps for WindowsAdapter {
         options: &LaunchOptions,
         lease: InteractionLease,
     ) -> Result<agent_desktop_core::system::launch_result::LaunchResult, AdapterError> {
-        crate::system::launch::launch_app_impl(id, options, lease.deadline())
+        crate::system::launch::launch_app_impl(id, options, lease)
     }
 
     fn process_owns_tcp_listener(

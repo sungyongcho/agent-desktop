@@ -194,9 +194,6 @@ fn absolute_cwd_returns_an_absolute_path_unchanged() {
 }
 
 #[cfg(target_os = "windows")]
-use crate::system::test_support::test_time::deadline;
-
-#[cfg(target_os = "windows")]
 fn matching_pids(image: &str) -> Vec<ProcessId> {
     matching_processes(image)
         .expect("snapshot")
