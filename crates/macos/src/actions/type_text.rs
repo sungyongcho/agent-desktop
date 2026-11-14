@@ -19,9 +19,19 @@ pub(crate) fn execute_type(
     }
     if policy.is_headed() {
         crate::actions::physical_keyboard::type_text(element, text, policy, deadline)?;
-        return Ok(ActionStep::succeeded("PIDTargetedUnicodeText")
-            .with_mechanism(StepMechanism::PhysicalSynthetic)
-            .with_verified(false));
+        return Ok(
+            ActionStep::succeeded(crate::actions::cell_editor::TYPE_LABEL)
+                .with_mechanism(StepMechanism::PhysicalSynthetic)
+                .with_verified(false),
+        );
+    }
+    if crate::actions::cell_editor::holds_focus(element, deadline)? {
+        crate::actions::background_keyboard::type_text(element, text, deadline)?;
+        return Ok(
+            ActionStep::succeeded(crate::actions::cell_editor::TYPE_LABEL)
+                .with_mechanism(StepMechanism::PhysicalSynthetic)
+                .with_verified(false),
+        );
     }
     insert_selected_text(element, text, deadline)?;
     Ok(ActionStep::succeeded("AXSelectedText")

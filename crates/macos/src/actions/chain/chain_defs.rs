@@ -7,7 +7,7 @@ use crate::actions::chain::{
     ChainContext, activate_descendant, chain_disclosure_steps, chain_menu_steps, chain_value_write,
     press_selection,
 };
-use crate::actions::{ax_helpers, scroll_into_view, select::container_select};
+use crate::actions::{ax_helpers, cell_editor, scroll_into_view, select::container_select};
 use crate::tree::AXElement;
 
 const PHYSICAL_CLICK: &str = "CGClick";
@@ -111,6 +111,7 @@ pub(crate) fn set_value_rungs<'a>(
     let value = ctx.dynamic_value;
     let deadline = ctx.deadline;
     vec![
+        cell_editor_rung(element, ctx),
         value_rung(element, ctx),
         semantic("IncrementToDynamic", move || match value {
             Some(value) => chain_value_write::increment_to_value(element, value, deadline),
@@ -126,6 +127,7 @@ pub(crate) fn clear_rungs<'a>(
     let policy = ctx.policy;
     let deadline = ctx.deadline;
     vec![
+        cell_editor_rung(element, ctx),
         physical("FocusThenClearByKeyboard", KEYBOARD_EFFECTS, move || {
             crate::actions::physical_keyboard::press_sequence(
                 element,
@@ -254,6 +256,17 @@ fn value_rung<'a>(element: &'a AXElement, ctx: &ChainContext<'a>) -> ChainRung<'
             return Ok(DeliveryOutcome::NotDelivered);
         }
         chain_value_write::set_dynamic_verified(element, "AXValue", value, deadline)
+    })
+}
+
+/// The whole-text write for the editor of a table cell: key events to the
+/// process, which takes no foreground, so no effect is declared.
+fn cell_editor_rung<'a>(element: &'a AXElement, ctx: &ChainContext<'a>) -> ChainRung<'a> {
+    let value = ctx.dynamic_value;
+    let deadline = ctx.deadline;
+    physical(cell_editor::REPLACE_LABEL, &[], move || match value {
+        Some(value) => cell_editor::replace(element, value, deadline),
+        None => Ok(DeliveryOutcome::NotDelivered),
     })
 }
 

@@ -22,6 +22,14 @@ fn labels(rungs: &[ChainRung<'_>]) -> Vec<&'static str> {
     rungs.iter().map(|rung| rung.label).collect()
 }
 
+/// Key events to the process of an element that already holds the keyboard
+/// focus of its application: synthetic input that declares no effect, so it
+/// runs under a policy that permits no focus change.
+fn assert_background_keys(rung: &ChainRung<'_>) {
+    assert!(rung.effects.is_empty(), "{} declares an effect", rung.label);
+    assert_eq!(rung.mechanism, StepMechanism::PhysicalSynthetic);
+}
+
 fn assert_semantic(rungs: &[ChainRung<'_>]) {
     for rung in rungs {
         assert!(rung.effects.is_empty(), "{} declares an effect", rung.label);
@@ -97,9 +105,32 @@ fn clearing_by_keyboard_takes_focus_and_never_the_pointer() {
 
     let rungs = clear_rungs(&element, &ctx);
 
-    assert_eq!(labels(&rungs), ["FocusThenClearByKeyboard", "AXValue"]);
-    assert_eq!(rungs[0].effects, [Effect::FocusSteal]);
-    assert_eq!(rungs[0].mechanism, StepMechanism::PhysicalSynthetic);
+    assert_eq!(
+        labels(&rungs),
+        [
+            "PIDTargetedReplaceText",
+            "FocusThenClearByKeyboard",
+            "AXValue"
+        ]
+    );
+    assert_background_keys(&rungs[0]);
+    assert_eq!(rungs[1].effects, [Effect::FocusSteal]);
+    assert_eq!(rungs[1].mechanism, StepMechanism::PhysicalSynthetic);
+    assert_semantic(&rungs[2..]);
+}
+
+#[test]
+fn a_value_write_tries_the_cell_editor_keys_first_and_they_take_no_foreground() {
+    let element = AXElement(std::ptr::null_mut());
+    let ctx = context();
+
+    let rungs = set_value_rungs(&element, &ctx);
+
+    assert_eq!(
+        labels(&rungs),
+        ["PIDTargetedReplaceText", "AXValue", "IncrementToDynamic"]
+    );
+    assert_background_keys(&rungs[0]);
     assert_semantic(&rungs[1..]);
 }
 
@@ -111,7 +142,6 @@ fn every_other_chain_holds_only_semantic_rungs() {
     for rungs in [
         expand_rungs(&element, &ctx),
         collapse_rungs(&element, &ctx),
-        set_value_rungs(&element, &ctx),
         semantic_click_rungs(&element, &ctx),
         focus_rungs(&element, &ctx),
         scroll_to_rungs(&element, &ctx),
