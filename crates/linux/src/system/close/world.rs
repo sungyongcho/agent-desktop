@@ -4,6 +4,7 @@ use agent_desktop_core::{AdapterError, Deadline};
 
 use crate::system::display::display_server::{DisplayServer, session_server};
 use crate::system::focus::focus_return;
+use crate::system::focus::prior_focus::PriorFocus;
 use crate::system::menu::nested_dialogs::NestedDialogs;
 use crate::system::menu::surfaces;
 use crate::system::process::liveness::{self, Liveness};
@@ -42,7 +43,7 @@ pub(super) trait World {
     fn signal(&self, signal: Signal) -> Result<Sent, AdapterError>;
     fn timeout_error(&self) -> AdapterError;
     fn on_wayland(&self) -> bool;
-    fn read_prior(&self) -> Option<Self::Prior>;
+    fn read_prior(&self) -> PriorFocus<Self::Prior>;
     fn watch_focus(&self, prior: &Self::Prior) -> bool;
 }
 
@@ -113,7 +114,7 @@ impl World for Live<'_> {
         matches!(session_server(), DisplayServer::Wayland)
     }
 
-    fn read_prior(&self) -> Option<Self::Prior> {
+    fn read_prior(&self) -> PriorFocus<Self::Prior> {
         focus_return::read_prior(self.deadline)
     }
 

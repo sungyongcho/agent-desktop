@@ -5,6 +5,7 @@ use std::time::Duration;
 use agent_desktop_core::AdapterError;
 
 use super::world::World;
+use crate::system::focus::prior_focus::PriorFocus;
 use crate::system::menu::nested_dialogs::NestedDialogs;
 use crate::system::process::liveness::Liveness;
 use crate::system::process::process_facts::ProcessFacts;
@@ -69,7 +70,7 @@ pub(super) struct Fake {
     pub(super) nested_complete: bool,
     pub(super) nested_times_out: bool,
     pub(super) gone_after: Option<Duration>,
-    pub(super) has_prior: bool,
+    pub(super) prior: PriorFocus<()>,
     pub(super) gives_back: bool,
 }
 
@@ -99,7 +100,7 @@ impl Fake {
             nested_complete: true,
             nested_times_out: false,
             gone_after: None,
-            has_prior: true,
+            prior: PriorFocus::Held(()),
             gives_back: true,
         }
     }
@@ -239,9 +240,9 @@ impl World for Fake {
         self.wayland
     }
 
-    fn read_prior(&self) -> Option<()> {
+    fn read_prior(&self) -> PriorFocus<()> {
         self.note("prior");
-        self.has_prior.then_some(())
+        self.prior
     }
 
     fn watch_focus(&self, _prior: &()) -> bool {

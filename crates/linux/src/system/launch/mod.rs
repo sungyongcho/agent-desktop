@@ -19,6 +19,7 @@ use super::SharedBus;
 use crate::system::app::app_alias::current_index;
 use crate::system::focus::focus_return;
 use crate::system::focus::focus_window::focus_window;
+use crate::system::focus::prior_focus::PriorFocus;
 use crate::system::process::liveness::{Liveness, liveness};
 use crate::system::process::process_facts;
 use crate::system::process::running_app::Running;
@@ -271,7 +272,7 @@ impl Launch<'_> {
         self.deadline.ensure_remaining().map_err(before_spawn)?;
         let prior = (!self.options.activate)
             .then(|| focus_return::read_prior(self.deadline))
-            .flatten();
+            .and_then(PriorFocus::held);
         let mut spawned = spawn(self.id, plan, self.options)?;
         let focus_returned = self.return_focus(prior.as_ref(), &mut spawned, &before);
         let mut result = match find_owner(self.bus, &mut spawned, plan, &before, self.deadline)? {

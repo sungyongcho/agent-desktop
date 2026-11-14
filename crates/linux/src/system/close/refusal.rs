@@ -118,6 +118,21 @@ pub(super) fn dialogs_unknown(request: &Request<'_>) -> AdapterError {
     }))
 }
 
+/// The window that has the focus could not be read, so a save prompt the
+/// close request opens could not be made to give the focus back.
+pub(super) fn focus_unreadable(request: &Request<'_>) -> AdapterError {
+    agent_desktop_core::foreground_denied(
+        "The window that has the focus could not be read, so a save prompt opened by the close request could keep the focus, which the interaction policy does not allow",
+        "focus_unreadable",
+        "close-app",
+        request.policy,
+    )
+    .with_suggestion(format!(
+        "{} A headless alternative is --force to end the app without a prompt; it discards unsaved work.",
+        agent_desktop_core::headed_mode_suggestion("may show a save prompt over the user's window")
+    ))
+}
+
 pub(super) fn is_dialog(window: &Toplevel) -> bool {
     window.kind == WindowKind::Dialog || window.transient
 }

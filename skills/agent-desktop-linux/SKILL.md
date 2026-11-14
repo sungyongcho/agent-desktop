@@ -46,6 +46,7 @@ use a private session and runtime directory for isolated work.
 - Popup and dialog openers can take the foreground and refuse headless.
   Qt combo selection may need pointer input to commit rather than highlight a row.
   Stop on a headed-only refusal instead of changing mode.
+- A headless graceful `close-app` reads which window has the focus first. When it cannot (a Wayland session, or an owner it cannot identify), it fails with `POLICY_DENIED` (`details.kind: focus_unreadable`) before any close request is sent. Report it to the user, or use `--force`, which discards unsaved work.
 - A window can precede its content. Wait for the application's observable
   result; an accepted AT-SPI call or a changed selected value is not proof that
   dependent handlers ran. Wait for each effect before another click.

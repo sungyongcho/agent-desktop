@@ -36,4 +36,5 @@ pub(crate) mod focus_return;
 pub(crate) mod focus_window;
 pub(super) mod focus_world;
 pub(super) mod key_dispatch;
+pub(crate) mod prior_focus;
 pub(super) mod restore_minimized;

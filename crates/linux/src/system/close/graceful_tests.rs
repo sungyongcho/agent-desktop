@@ -1,4 +1,4 @@
-use agent_desktop_core::{DeliverySemantics, ErrorCode, RetryDisposition};
+use agent_desktop_core::{DeliverySemantics, ErrorCode, InteractionPolicy, RetryDisposition};
 
 use super::super::Request;
 use super::super::fake::{Fake, dialog, window};
@@ -13,7 +13,7 @@ fn request() -> Request<'static> {
         pid: 42,
         instance: Some("t"),
         force: false,
-        restore_focus: true,
+        policy: InteractionPolicy::headless(),
     }
 }
 

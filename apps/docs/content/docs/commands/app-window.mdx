@@ -136,7 +136,7 @@ agent-desktop close-app <APP> [--force]
 - `APP_NOT_FOUND` when no running app matches, `AMBIGUOUS_TARGET` when several instances share the name.
 - `INVALID_ARGS` for a protected system process, with or without `--force`.
 - A save prompt keeps the app open. Read it with `snapshot --surface sheet`, answer it, then close again.
-- On Linux a headless graceful close runs. If the app answers with a save prompt, the command fails with `ACTION_FAILED` (`details.cause: dialog_pending`), the app stays open, and the focus goes back to the window that had it (`details.focus_returned: true`). With `--headed` the focus is left where the prompt put it. Answer the prompt, or use `--force` (it discards unsaved work).
+- On Linux a headless graceful close runs. Where the focused window cannot be read (a Wayland session, or a focused window whose owner cannot be identified), it fails with `POLICY_DENIED` (`details.kind: focus_unreadable`) before any close request is sent. Report it to the user, or use `--force` (it discards unsaved work). If the app answers with a save prompt, the command fails with `ACTION_FAILED` (`details.cause: dialog_pending`), the app stays open, and the focus goes back to the window that had it (`details.focus_returned: true`). With `--headed` the focus is left where the prompt put it. Answer the prompt, or use `--force` (it discards unsaved work).
 
 Platform limits: graceful close needs an X11 client on Linux, and the protected processes differ by OS. See [macOS](/desktop/platforms/macos), [Windows](/desktop/platforms/windows), and [Linux](/desktop/platforms/linux).
 

@@ -7,6 +7,7 @@ use std::time::{Duration, Instant};
 
 use agent_desktop_core::{Deadline, ProcessIdentity};
 
+use crate::system::focus::prior_focus::PriorFocus;
 use crate::system::launch::launch_observe::POLL_INTERVAL;
 use crate::system::process::process_facts;
 use crate::system::x11::control::activate::{ACTIVATION_GRACE, active_window_within};
@@ -34,21 +35,28 @@ enum Look {
     Nothing,
 }
 
-pub(crate) fn read_prior(deadline: Deadline) -> Option<Prior> {
-    let X11State::Ready {
-        active: Some(active),
-        clients,
-    } = DisplayReader.clients_within(deadline)
-    else {
-        return None;
+pub(crate) fn read_prior(deadline: Deadline) -> PriorFocus<Prior> {
+    let X11State::Ready { active, clients } = DisplayReader.clients_within(deadline) else {
+        return PriorFocus::Unreadable;
     };
-    let pid = clients.iter().find(|c| c.id == active)?.pid?;
-    let facts = process_facts::read(pid)?;
-    Some(Prior {
-        client: active,
-        owner: ProcessIdentity::new(pid, facts.instance),
-        known: clients.iter().map(|c| c.id).collect(),
-    })
+    let Some(active) = active else {
+        return PriorFocus::Nobody;
+    };
+    let owner = clients
+        .iter()
+        .find(|client| client.id == active)
+        .and_then(|client| client.pid)
+        .and_then(|pid| {
+            process_facts::read(pid).map(|facts| ProcessIdentity::new(pid, facts.instance))
+        });
+    match owner {
+        Some(owner) => PriorFocus::Held(Prior {
+            client: active,
+            owner,
+            known: clients.iter().map(|c| c.id).collect(),
+        }),
+        None => PriorFocus::Unreadable,
+    }
 }
 
 fn judge(prior: &Prior, state: &X11State, belongs: &impl Fn(u32) -> bool) -> Look {
