@@ -83,6 +83,31 @@ pub(crate) fn belongs_to(spawned: u32, residents: HashSet<u32>) -> impl Fn(u32) 
     move |pid| pid == spawned || residents.contains(&pid) || process_group(pid) == Some(spawned)
 }
 
+/// What the focus return reads and writes, so its decisions can be driven by
+/// a fixed desktop.
+trait Desktop {
+    fn state(&self, deadline: Deadline) -> X11State;
+    fn activate(&self, prior: &Prior, deadline: Deadline) -> bool;
+    fn active(&self) -> Option<u32>;
+}
+
+struct Live;
+
+impl Desktop for Live {
+    fn state(&self, deadline: Deadline) -> X11State {
+        DisplayReader.clients_within(deadline)
+    }
+
+    fn activate(&self, prior: &Prior, deadline: Deadline) -> bool {
+        let sent = deadline.capped(ACTIVATION_GRACE);
+        activate_window(prior.client, &prior.owner, sent, true).is_ok()
+    }
+
+    fn active(&self) -> Option<u32> {
+        active_window_within(ACTIVE_READ)
+    }
+}
+
 /// Waits for the launched application's window and, when it took the focus,
 /// asks the window manager to return it to the window that had it. True only
 /// when the display server names that window active afterwards. The wait ends
@@ -90,14 +115,24 @@ pub(crate) fn belongs_to(spawned: u32, residents: HashSet<u32>) -> impl Fn(u32) 
 pub(crate) fn give_back(
     prior: &Prior,
     belongs: impl Fn(u32) -> bool,
+    keeps_waiting: impl FnMut() -> bool,
+    deadline: Deadline,
+) -> bool {
+    give_back_in(&Live, prior, &belongs, keeps_waiting, deadline)
+}
+
+fn give_back_in(
+    desktop: &impl Desktop,
+    prior: &Prior,
+    belongs: &impl Fn(u32) -> bool,
     mut keeps_waiting: impl FnMut() -> bool,
     deadline: Deadline,
 ) -> bool {
     let wait = deadline.capped(FOCUS_WAIT);
     let mut appeared: Option<Instant> = None;
     loop {
-        match judge(prior, &DisplayReader.clients_within(wait), &belongs) {
-            Look::Stolen => return restore(prior, &belongs, deadline),
+        match judge(prior, &desktop.state(wait), belongs) {
+            Look::Stolen => return restore(desktop, prior, belongs, deadline),
             Look::Appeared => {
                 if appeared.get_or_insert_with(Instant::now).elapsed() >= APPEARED_GRACE {
                     return false;
@@ -114,20 +149,24 @@ pub(crate) fn give_back(
 
 /// Asks again while the launched window keeps the focus: an application can
 /// request its own activation after the first return and win the race.
-fn restore(prior: &Prior, belongs: &impl Fn(u32) -> bool, deadline: Deadline) -> bool {
+fn restore(
+    desktop: &impl Desktop,
+    prior: &Prior,
+    belongs: &impl Fn(u32) -> bool,
+    deadline: Deadline,
+) -> bool {
     for _ in 0..RESTORE_ATTEMPTS {
-        let sent = deadline.capped(ACTIVATION_GRACE);
-        if activate_window(prior.client, &prior.owner, sent, true).is_err() {
+        if !desktop.activate(prior, deadline) {
             return false;
         }
         let confirm = deadline.capped(CONFIRM_WAIT);
         while !confirm.is_expired() {
-            if active_window_within(ACTIVE_READ) == Some(prior.client) {
+            if desktop.active() == Some(prior.client) {
                 return true;
             }
             std::thread::sleep(POLL_INTERVAL.min(confirm.remaining()));
         }
-        if judge(prior, &DisplayReader.clients_within(deadline), belongs) != Look::Stolen {
+        if judge(prior, &desktop.state(deadline), belongs) != Look::Stolen {
             return false;
         }
     }
