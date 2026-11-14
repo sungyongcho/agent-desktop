@@ -51,3 +51,13 @@ fn a_forgotten_record_is_not_recalled() {
     memory.forget("w").unwrap();
     assert_eq!(memory.recall("w").unwrap(), None);
 }
+
+#[test]
+fn bookkeeping_after_an_expired_command_deadline_still_writes() {
+    let memory = memory();
+    let expired = crate::Deadline::detached_after(0).unwrap();
+    let _scope = crate::wait::deadline::enter_scope(Some(expired));
+    memory.remember("w", record(2), |_| true).unwrap();
+    assert_eq!(memory.recall("w").unwrap(), Some(record(2)));
+    memory.forget("w").unwrap();
+}

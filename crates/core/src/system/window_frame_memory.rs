@@ -54,7 +54,7 @@ impl WindowFrameMemory {
     }
 
     fn update(&self, change: impl FnOnce(&mut Records)) -> Result<(), AdapterError> {
-        let deadline = Deadline::after(LOCK_TIMEOUT_MS)?;
+        let deadline = Deadline::detached_after(LOCK_TIMEOUT_MS)?;
         let _lock = FileLock::acquire(&self.root.join(LOCK_NAME), deadline, "window frame lock")?;
         let mut records = self.read()?;
         change(&mut records);
