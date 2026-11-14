@@ -161,16 +161,21 @@ pub(super) fn dialog_pending(
     if focus_returned {
         details["focus_returned"] = json!(true);
     }
-    AdapterError::new(
-        ErrorCode::ActionFailed,
+    let message = if sent {
+        format!(
+            "Process {} answered the close request with {dialogs} open dialog(s), which were left open",
+            request.pid
+        )
+    } else {
         format!(
             "Process {} has {dialogs} open dialog(s), so no close request was sent to them",
             request.pid
-        ),
-    )
-    .with_suggestion(PROMPT)
-    .with_details(details)
-    .with_disposition(delivery)
+        )
+    };
+    AdapterError::new(ErrorCode::ActionFailed, message)
+        .with_suggestion(PROMPT)
+        .with_details(details)
+        .with_disposition(delivery)
 }
 
 pub(super) fn waited_out(
