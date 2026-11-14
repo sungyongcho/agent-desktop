@@ -23,17 +23,11 @@ fn the_index_is_the_position_only_when_the_control_agrees_with_the_tree() {
 }
 
 #[test]
-fn the_selection_is_verified_only_when_the_control_reports_the_index() {
+fn a_selection_that_did_not_follow_the_focus_is_handed_back_to_the_caller() {
     assert_eq!(
         selection_outcome(3, 3),
-        DeliveryOutcome::Delivered(DeliveryObservation::Verified)
+        Some(DeliveryOutcome::Delivered(DeliveryObservation::Verified))
     );
-    assert_eq!(
-        selection_outcome(1, 3),
-        DeliveryOutcome::Delivered(DeliveryObservation::Unverified)
-    );
-    assert_eq!(
-        selection_outcome(-1, 0),
-        DeliveryOutcome::Delivered(DeliveryObservation::Unverified)
-    );
+    assert_eq!(selection_outcome(1, 3), None);
+    assert_eq!(selection_outcome(-1, 0), None);
 }

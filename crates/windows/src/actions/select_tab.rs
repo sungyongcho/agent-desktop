@@ -7,8 +7,9 @@
 //! the page changes with no foreground event on a window in the background
 //! (A31-6). A tab control is a window of class `SysTabControl32` or a
 //! superclass of it (WinForms). The item's index is its position among the
-//! tab items of that control, and a control whose item count disagrees with
-//! the tree hands the selection back to the caller's own route.
+//! tab items of that control. A control whose item count disagrees with the
+//! tree, or whose selection did not follow the focus, hands the selection
+//! back to the caller's own route.
 
 use agent_desktop_core::DeliveryOutcome;
 
@@ -25,9 +26,12 @@ pub(crate) fn tab_index(position: usize, siblings: usize, item_count: isize) -> 
     (usize::try_from(item_count).ok()? == siblings && position < siblings).then_some(position)
 }
 
-/// Delivered, and verified when the control's current selection is `index`.
-pub(crate) fn selection_outcome(current: isize, index: usize) -> DeliveryOutcome {
-    DeliveryOutcome::from_delivery(true, usize::try_from(current).ok() == Some(index))
+/// Verified delivery when the control's current selection is `index`. `None`
+/// when the focus moved without the selection, as under `TCS_BUTTONS`, so the
+/// caller's own route runs.
+pub(crate) fn selection_outcome(current: isize, index: usize) -> Option<DeliveryOutcome> {
+    (usize::try_from(current).ok() == Some(index))
+        .then(|| DeliveryOutcome::from_delivery(true, true))
 }
 
 #[cfg(target_os = "windows")]
@@ -101,7 +105,7 @@ mod imp {
         };
         send(&tab, TCM_SETCURFOCUS, index, 0, deadline)?;
         let current = send(&tab, TCM_GETCURSEL, 0, 0, deadline)?;
-        Ok(Some(selection_outcome(current, index)))
+        Ok(selection_outcome(current, index))
     }
 }
 
