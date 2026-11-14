@@ -180,10 +180,13 @@ pub(crate) fn require_unambiguous_branch<S: NodeSource>(
         if same(&at, probe.target) {
             return Ok(bridged);
         }
-        let mut pending = children_of(source, &at)?;
-        let mut next = None;
+        let mut pending: Vec<(AtspiElement, bool)> = children_of(source, &at)?
+            .into_iter()
+            .map(|child| (child, false))
+            .collect();
+        let mut next: Option<(AtspiElement, bool)> = None;
         let mut visited = 0;
-        while let Some(child) = pending.pop() {
+        while let Some((child, behind_group)) = pending.pop() {
             deadline.ensure_remaining()?;
             visited += 1;
             if visited > MAX_BRANCH_NODES {
@@ -193,16 +196,21 @@ pub(crate) fn require_unambiguous_branch<S: NodeSource>(
                 return Err(unproven("child_bounds_unknown"));
             };
             if has_no_geometry(extents) {
-                bridged = true;
-                pending.extend(children_of(source, &child)?);
+                pending.extend(
+                    children_of(source, &child)?
+                        .into_iter()
+                        .map(|grandchild| (grandchild, true)),
+                );
             } else if admits(extents, probe.window_point) {
                 if next.is_some() {
                     return Err(unproven("sibling_overlap"));
                 }
-                next = Some(child);
+                next = Some((child, behind_group));
             }
         }
-        at = next.ok_or_else(|| unproven("ancestry_unknown"))?;
+        let (chosen, behind_group) = next.ok_or_else(|| unproven("ancestry_unknown"))?;
+        bridged |= behind_group;
+        at = chosen;
     }
     Err(unproven("ancestry_limit"))
 }
