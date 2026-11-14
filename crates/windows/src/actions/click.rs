@@ -1,6 +1,7 @@
 //! Click.
 //!
-//! A list or tree item is clicked by selecting it: its LegacyIAccessible
+//! A tab item of a native tab control is clicked through `TCM_SETCURFOCUS`
+//! (`select_tab`). A list or tree item is clicked by selecting it: its LegacyIAccessible
 //! default action is "Double Click" or "Expand", not a single press, and
 //! Legacy `Select(SELFLAG_TAKESELECTION)` selects it with no foreground
 //! change on SysTreeView32, WinForms, WPF and DirectUI items (C8). Every
@@ -31,6 +32,7 @@ mod imp {
         legacy_default_action, legacy_default_action_available, legacy_select, offered, poll_until,
         rung,
     };
+    use crate::actions::select_tab::{TAB_SELECT_LABEL, is_tab_item, select_native_tab};
     use crate::tree::properties::property_ids::TreeProperty;
     use crate::tree::properties::read_one;
     use agent_desktop_core::DeliveryOutcome;
@@ -51,6 +53,8 @@ mod imp {
             });
             Ok(DeliveryOutcome::from_delivery(true, selected))
         };
+        let mut tab =
+            || Ok(select_native_tab(element, deadline)?.unwrap_or(DeliveryOutcome::NotDelivered));
         let mut press = || {
             Ok(DeliveryOutcome::from_delivery(
                 legacy_default_action(element)?,
@@ -65,6 +69,7 @@ mod imp {
         };
         agent_desktop_core::execute_chain(
             &mut offered([
+                rung(TAB_SELECT_LABEL, is_tab_item(element), false, &mut tab),
                 rung(SELECT_ITEM_LABEL, item, false, &mut select),
                 rung(
                     LEGACY_LABEL,

@@ -2,7 +2,10 @@
 //!
 //! A native combo box that stores item names selects by name through its own
 //! window messages (`select_combo`); an owner-drawn one, or a name its search
-//! misses, falls through to the route below. Any other target selects a named item, itself or one of
+//! misses, falls through to the route below. A tab item of a native tab
+//! control selects through `TCM_SETCURFOCUS` (`select_tab`), because the
+//! accessibility select route changes the index without the notification
+//! that swaps the page. Any other target selects a named item, itself or one of
 //! its realized descendants: LegacyIAccessible `Select(SELFLAG_TAKESELECTION)`
 //! has no foreground effect on SysTreeView32, WinForms, WPF and DirectUI items
 //! (C8), SelectionItemPattern takes none either (A31-5), and the item's
@@ -101,6 +104,7 @@ mod imp {
         find_named_selection_item, name_matches, realize_scroll_step, scroll_to_position,
         selection_item_available,
     };
+    use crate::actions::select_tab::{TAB_SELECT_LABEL, select_native_tab};
     use crate::tree::properties::property_ids::TreeProperty;
     use crate::tree::properties::read_one;
     use agent_desktop_core::DeliverySemantics;
@@ -119,6 +123,11 @@ mod imp {
             if let Some(outcome) = select_native_combo(combo, value, deadline)? {
                 return Ok(vec![outcome.step(COMBO_SELECT_LABEL)]);
             }
+        }
+        if name_matches(element, value)
+            && let Some(outcome) = select_native_tab(element, deadline)?
+        {
+            return Ok(vec![outcome.step(TAB_SELECT_LABEL)]);
         }
         if selection_item_available(element) && name_matches(element, value) {
             return select_item(element, policy, deadline);
