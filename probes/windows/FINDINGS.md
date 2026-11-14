@@ -599,8 +599,8 @@ that basis. This area measures the calls on the product's own client with the
 option on and off, in three window arrangements, with a positive and a
 negative control in each. State is read before the call and every 20 ms after
 it until it holds for 500 ms. The probe is `31-scroll-foreground/` (Rust,
-built against the product's Windows crate by `build-probe.ps1`); captures
-carry counts, classes and HRESULTs only.
+built against the product's Windows crate by `build-probe.ps1`). Its output is
+not kept here: `reduce.py` turns a run into the counts in the rows below.
 
 | id | script | stack | scope | phases.md expectation | observed | verdict | action |
 | --- | --- | --- | --- | --- | --- | --- | --- |
