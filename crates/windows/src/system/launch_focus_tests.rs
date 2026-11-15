@@ -6,28 +6,79 @@ const USER: Foreground = Foreground {
 };
 const LAUNCHED: u32 = 200;
 
+fn row(pid: u32, parent: u32) -> ProcessRow {
+    ProcessRow {
+        pid: ProcessId::from(pid),
+        name: "app.exe".into(),
+        parent,
+    }
+}
+
 #[test]
 fn a_foreground_window_of_the_launched_process_is_stolen_focus() {
     let now = Foreground {
         handle: 20,
         pid: LAUNCHED,
     };
-    assert_eq!(judge(USER, Some(now), LAUNCHED), Look::Stolen);
+    assert_eq!(judge(USER, Some(now), |pid| pid == LAUNCHED), Look::Stolen);
 }
 
 #[test]
 fn the_unchanged_foreground_keeps_waiting() {
-    assert_eq!(judge(USER, Some(USER), LAUNCHED), Look::Waiting);
+    assert_eq!(judge(USER, Some(USER), |_| true), Look::Waiting);
 }
 
 #[test]
-fn a_window_of_another_process_is_never_touched() {
-    let switched = Foreground {
-        handle: 30,
+fn a_window_of_a_process_the_launch_started_is_stolen_focus() {
+    let rows = [row(300, LAUNCHED), row(400, 300), row(500, 1)];
+    let owns = |pid| started_by(LAUNCHED, pid, &rows, |_| true);
+    let child = Foreground {
+        handle: 20,
         pid: 300,
     };
-    assert_eq!(judge(USER, Some(switched), LAUNCHED), Look::Elsewhere);
-    assert_eq!(judge(USER, None, LAUNCHED), Look::Elsewhere);
+    let grandchild = Foreground {
+        handle: 21,
+        pid: 400,
+    };
+    assert_eq!(judge(USER, Some(child), owns), Look::Stolen);
+    assert_eq!(judge(USER, Some(grandchild), owns), Look::Stolen);
+}
+
+#[test]
+fn a_window_of_an_unrelated_process_is_never_touched() {
+    let rows = [row(300, LAUNCHED), row(500, 1)];
+    let unrelated = Foreground {
+        handle: 30,
+        pid: 500,
+    };
+    let owns = |pid| started_by(LAUNCHED, pid, &rows, |_| true);
+    assert_eq!(judge(USER, Some(unrelated), owns), Look::Elsewhere);
+    assert_eq!(judge(USER, None, owns), Look::Elsewhere);
+}
+
+#[test]
+fn a_chain_through_a_process_older_than_the_launch_is_not_counted() {
+    let rows = [row(300, LAUNCHED), row(400, 300)];
+    let child_of_an_older_process = Foreground {
+        handle: 22,
+        pid: 400,
+    };
+    let owns = |pid| started_by(LAUNCHED, pid, &rows, |pid| pid != 300);
+    assert_eq!(
+        judge(USER, Some(child_of_an_older_process), owns),
+        Look::Elsewhere
+    );
+}
+
+#[test]
+fn a_parent_cycle_ends_without_claiming_the_launch() {
+    let rows = [row(300, 400), row(400, 300)];
+    let now = Foreground {
+        handle: 20,
+        pid: 300,
+    };
+    let owns = |pid| started_by(LAUNCHED, pid, &rows, |_| true);
+    assert_eq!(judge(USER, Some(now), owns), Look::Elsewhere);
 }
 
 #[test]

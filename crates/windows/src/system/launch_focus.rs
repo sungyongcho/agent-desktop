@@ -4,13 +4,16 @@
 //! Two lines of defence. The process starts with a show-window hint that asks
 //! for no activation; an application that ignores the hint and activates
 //! itself is then given the foreground back, but only when the foreground
-//! window belongs to the launched process and the window that had it before
-//! the spawn is still open. A window the user switched to is never touched.
+//! window belongs to the launched process or to a process it started, and the
+//! window that had it before the spawn is still open. A window the user
+//! switched to is never touched.
 
 use std::time::{Duration, Instant};
 
 use agent_desktop_core::{Deadline, InteractionLease, ProcessId, WindowFilter};
 
+use super::app_ops::{ProcessRow, process_snapshot};
+use super::process_identity::ProcessIdentity;
 use super::window::window_activate::focus_window;
 use super::window::window_ops::{list_windows_live, window_id};
 
@@ -52,12 +55,58 @@ pub(super) fn startup_show(activate: bool) -> StartupShow {
     }
 }
 
-fn judge(prior: Foreground, now: Option<Foreground>, launched: u32) -> Look {
+fn judge(prior: Foreground, now: Option<Foreground>, belongs: impl Fn(u32) -> bool) -> Look {
     match now {
-        Some(now) if now.pid == launched && now.handle != prior.handle => Look::Stolen,
         Some(now) if now.handle == prior.handle => Look::Waiting,
+        Some(now) if belongs(now.pid) => Look::Stolen,
         _ => Look::Elsewhere,
     }
+}
+
+/// True when `pid` is `launched` or was started by it, directly or through
+/// other processes that all pass `not_older`. Follows at most `rows.len() + 1`
+/// links, so a parent cycle left by reused pids ends with false.
+fn started_by(
+    launched: u32,
+    pid: u32,
+    rows: &[ProcessRow],
+    not_older: impl Fn(u32) -> bool,
+) -> bool {
+    let mut current = pid;
+    for _ in 0..=rows.len() {
+        if current == launched {
+            return true;
+        }
+        let Some(row) = rows.iter().find(|row| row.pid.get() == current) else {
+            return false;
+        };
+        if !not_older(current) {
+            return false;
+        }
+        current = row.parent;
+    }
+    false
+}
+
+/// Whether `pid` belongs to the launch: the launched process, or a process it
+/// started through processes that are all no older than it. A parent pid
+/// outlives its process, so an older process whose parent's pid the launch
+/// reused is never counted, and neither is one whose start time cannot be
+/// read. `launch` is none when the launched process had already exited.
+fn launch_owns(launched: ProcessId, launch: Option<ProcessIdentity>, pid: u32) -> bool {
+    if pid == launched.get() {
+        return true;
+    }
+    let Some(launch) = launch else {
+        return false;
+    };
+    let rows = process_snapshot().unwrap_or_default();
+    started_by(launched.get(), pid, &rows, |pid| {
+        ProcessIdentity::capture(ProcessId::new(pid))
+            .ok()
+            .flatten()
+            .is_some_and(|process| !process.started_before(launch))
+    })
 }
 
 /// Waits for the launched process to take the foreground and, when it does,
@@ -72,9 +121,12 @@ pub(super) fn give_back(
     window_is_open: impl Fn() -> bool,
 ) -> bool {
     let wait = lease.deadline().capped(FOCUS_WAIT);
+    let launch = ProcessIdentity::capture(launched).ok().flatten();
     let mut opened: Option<Instant> = None;
     loop {
-        match judge(prior, read_foreground(), launched.get()) {
+        match judge(prior, read_foreground(), |pid| {
+            launch_owns(launched, launch, pid)
+        }) {
             Look::Stolen => return restore(prior, lease),
             Look::Elsewhere => return false,
             Look::Waiting => {}

@@ -38,10 +38,12 @@ fn ambiguous_launch_target_suggestion_names_pids_instead_of_a_ref_retry() {
         ProcessRow {
             pid: ProcessId::from(111),
             name: "Cursor.exe".into(),
+            parent: 0,
         },
         ProcessRow {
             pid: ProcessId::from(222),
             name: "Cursor.exe".into(),
+            parent: 0,
         },
     ];
 
@@ -71,10 +73,12 @@ fn shared_ambiguous_target_pins_the_windows_envelope() {
         ProcessRow {
             pid: ProcessId::from(10),
             name: "Cursor.exe".into(),
+            parent: 0,
         },
         ProcessRow {
             pid: ProcessId::from(11),
             name: "Cursor.exe".into(),
+            parent: 0,
         },
     ];
 
