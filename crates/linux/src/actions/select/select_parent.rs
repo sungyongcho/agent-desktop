@@ -56,14 +56,14 @@ pub(super) fn selection_parent(
     }
     let is_cell = read_node_view(reader.bus, &handle_of(node), reader.deadline)
         .is_ok_and(|view| view.role() == Some(TABLE_CELL));
-    let present = if is_cell {
-        is_child_at_own_index(reader.bus, &parent, node, reader.deadline)?
-    } else {
-        reader
-            .children(&parent)?
-            .iter()
-            .any(|sibling| sibling.bus_name() == node.bus_name() && sibling.path() == node.path())
-    };
+    let present =
+        if is_cell {
+            is_child_at_own_index(reader.bus, &parent, node, reader.deadline)?
+        } else {
+            reader.children(&parent)?.0.iter().any(|sibling| {
+                sibling.bus_name() == node.bus_name() && sibling.path() == node.path()
+            })
+        };
     Ok(present.then_some(Container { node: parent }))
 }
 

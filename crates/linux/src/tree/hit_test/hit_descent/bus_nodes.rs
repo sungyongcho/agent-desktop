@@ -116,7 +116,7 @@ impl NodeSource for BusNodes<'_> {
                 return Ok(None);
             };
             let listed = presented_children(self.connection, &parent).await;
-            Ok(listed.ok().and_then(|children| {
+            Ok(listed.ok().and_then(|(children, _)| {
                 children
                     .iter()
                     .any(|(bus, path)| bus == node.bus_name() && path == node.path())
@@ -130,7 +130,7 @@ impl NodeSource for BusNodes<'_> {
             Ok(presented_children(self.connection, node)
                 .await
                 .ok()
-                .map(|children| {
+                .map(|(children, _)| {
                     children
                         .into_iter()
                         .map(|(bus, path)| AtspiElement::new(bus, path, node.pid()))

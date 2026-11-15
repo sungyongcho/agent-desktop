@@ -58,7 +58,7 @@ impl ItemReader for BusReader<'_> {
         })
     }
 
-    fn children(&mut self, node: &AtspiElement) -> Result<Vec<AtspiElement>, AdapterError> {
+    fn children(&mut self, node: &AtspiElement) -> Result<(Vec<AtspiElement>, bool), AdapterError> {
         children_of(self.bus, node, self.inspected_role, self.deadline)
     }
 }
@@ -82,19 +82,20 @@ pub(super) fn children_of(
     node: &AtspiElement,
     role: Option<u32>,
     deadline: Deadline,
-) -> Result<Vec<AtspiElement>, AdapterError> {
+) -> Result<(Vec<AtspiElement>, bool), AdapterError> {
     let connection = bus.get(deadline)?;
-    let children = within(deadline, async {
+    let (children, whole) = within(deadline, async {
         crate::tree::presented_children(connection.inner(), node).await
     })?;
-    Ok(children
+    let children = children
         .into_iter()
         .map(|(name, path)| {
             let mut child = AtspiElement::new(name, path, node.pid());
             child.set_ancestry(ancestry::child(node, role));
             child
         })
-        .collect())
+        .collect();
+    Ok((children, whole))
 }
 
 pub(super) fn parent_of(

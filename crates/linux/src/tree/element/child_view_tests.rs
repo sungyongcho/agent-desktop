@@ -127,7 +127,9 @@ fn a_table_without_component_falls_back_to_the_leading_children_and_is_cut() {
 #[test]
 fn the_hit_test_sees_the_cells_in_view_of_a_large_table_and_never_lists_it() {
     let (client, element, calls, _server) = grid(1_000_000, 10, 6);
-    let children = zbus::block_on(presented_children(&client, &element)).expect("children read");
+    let (children, whole) =
+        zbus::block_on(presented_children(&client, &element)).expect("children read");
     assert_eq!(children.len(), 60);
+    assert!(!whole);
     assert_eq!(calls.get_children.load(Ordering::SeqCst), 0);
 }

@@ -140,12 +140,14 @@ pub(in crate::tree) async fn read_level_children(
 /// The children an object presents, for a caller that follows the live tree
 /// and has no stored path: the whole list of an object within the limit, the
 /// cells in view of a larger table, the leading children of any other larger
-/// object. Used by the hit test, which needs the objects that can sit under a
-/// point and never the children that are not in view.
+/// object. The flag says whether that is every child. The hit test needs only
+/// the objects that can sit under a point; a caller that concludes anything
+/// about all children, as a search by name does, must not conclude it from a
+/// list that is not whole.
 pub(crate) async fn presented_children(
     connection: &Connection,
     element: &AtspiElement,
-) -> Result<Vec<ChildAddress>, AdapterError> {
+) -> Result<(Vec<ChildAddress>, bool), AdapterError> {
     let count = get_one(
         connection,
         element,
@@ -165,8 +167,13 @@ pub(crate) async fn presented_children(
     )
     .await?;
     match view.children {
-        Field::Present(children) => Ok(children),
-        Field::Absent => Ok(Vec::new()),
+        Field::Present(children) => {
+            let whole = view
+                .slots
+                .is_none_or(|slots| slots.reported as usize <= children.len());
+            Ok((children, whole))
+        }
+        Field::Absent => Ok((Vec::new(), true)),
         Field::Failed(detail) => Err(AdapterError::new(
             agent_desktop_core::ErrorCode::Internal,
             "The children of the accessible object could not be listed",
