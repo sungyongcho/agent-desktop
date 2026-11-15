@@ -47,8 +47,6 @@ pub(super) const ALL_PROPERTIES: &[TreeProperty] = &[
     TreeProperty::WindowAvailable,
     TreeProperty::GridAvailable,
     TreeProperty::GridItemAvailable,
-    TreeProperty::GridItemRow,
-    TreeProperty::GridItemColumn,
     TreeProperty::GridRowCount,
     TreeProperty::GridColumnCount,
     TreeProperty::TableItemAvailable,
