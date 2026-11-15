@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::sync::atomic::Ordering;
 use std::time::Duration;
 
 use agent_desktop_core::system::launch_options::LaunchOptions;
@@ -274,55 +275,53 @@ impl Launch<'_> {
             .then(|| focus_return::read_prior(self.deadline))
             .and_then(PriorFocus::held);
         let mut spawned = spawn(self.id, plan, self.options)?;
-        let focus_returned = self.return_focus(prior.as_ref(), &mut spawned, &before);
-        let mut result = match find_owner(self.bus, &mut spawned, plan, &before, self.deadline)? {
-            Some(owner) => {
-                let known = before
-                    .residents
-                    .iter()
-                    .find(|resident| resident.owner.identity() == owner.identity());
-                let window = match known {
-                    Some(resident) => self.window_of(&owner, true, &resident.windows)?,
-                    None if before.processes.contains(&owner.identity()) => None,
-                    None => self.window_of(&owner, true, &HashSet::new())?,
-                };
-                let arrival = Arrival::started(
-                    owner.pid == spawned.pid,
-                    !before.processes.contains(&owner.identity()),
-                );
-                self.conclude_with(&owner, window, arrival)
-            }
-            None => self.report_unlisted(&spawned),
-        };
+        let residents = before.residents.iter().map(|r| r.owner.pid).collect();
+        let belongs = focus_return::belongs_to(spawned.pid, residents);
+        let watch =
+            launch_focus_watch::returning(prior, belongs, self.watch_lease(), self.deadline);
+        let (focus_returned, ready) = launch_focus_watch::beside(watch, |hopeless| {
+            let ready = self.ready(&mut spawned, plan, &before);
+            hopeless.store(spawned.exited_in_failure(), Ordering::Relaxed);
+            ready
+        });
+        let mut result = ready?;
         result.guidance.focus_returned = focus_returned;
         Ok(result)
     }
 
-    /// Gives the focus back to the window that had it when the launched
-    /// application took it, then releases the lease: the readiness wait that
-    /// follows moves nothing, so other agents are not held out for it. A
-    /// launch that was asked to activate keeps the lease to the end.
-    fn return_focus(
-        &mut self,
-        prior: Option<&focus_return::Prior>,
+    /// The lease a background launch hands to its focus watch, which releases
+    /// it when the watch ends. A launch asked to activate keeps it.
+    fn watch_lease(&mut self) -> Option<InteractionLease> {
+        self.lease.take_if(|_| !self.options.activate)
+    }
+
+    fn ready(
+        &self,
         spawned: &mut Spawned,
+        plan: &Plan,
         before: &baseline::Baseline,
-    ) -> bool {
-        if self.options.activate {
-            return false;
-        }
-        let residents = before.residents.iter().map(|r| r.owner.pid).collect();
-        let belongs = focus_return::belongs_to(spawned.pid, residents);
-        let returned = prior.is_some_and(|prior| {
-            focus_return::give_back(
-                prior,
-                belongs,
-                || !spawned.exited_in_failure(),
-                self.deadline,
-            )
-        });
-        self.lease = None;
-        returned
+    ) -> Result<LaunchResult, AdapterError> {
+        Ok(
+            match find_owner(self.bus, spawned, plan, before, self.deadline)? {
+                Some(owner) => {
+                    let known = before
+                        .residents
+                        .iter()
+                        .find(|resident| resident.owner.identity() == owner.identity());
+                    let window = match known {
+                        Some(resident) => self.window_of(&owner, true, &resident.windows)?,
+                        None if before.processes.contains(&owner.identity()) => None,
+                        None => self.window_of(&owner, true, &HashSet::new())?,
+                    };
+                    let arrival = Arrival::started(
+                        owner.pid == spawned.pid,
+                        !before.processes.contains(&owner.identity()),
+                    );
+                    self.conclude_with(&owner, window, arrival)
+                }
+                None => self.report_unlisted(spawned),
+            },
+        )
     }
 }
 
@@ -390,6 +389,7 @@ pub(super) mod indexed_entry;
 mod launch_arrival;
 pub(super) mod launch_attach;
 mod launch_conclude;
+mod launch_focus_watch;
 mod launch_handoff;
 pub(super) mod launch_observe;
 pub(crate) mod launch_sample;
