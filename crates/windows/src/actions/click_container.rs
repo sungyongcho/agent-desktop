@@ -101,12 +101,13 @@ mod imp {
     use crate::tree::properties::element_properties::known_as_bool;
     use crate::tree::properties::property_ids::TreeProperty;
     use crate::tree::properties::property_outcome::PropertyOutcome;
-    use crate::tree::properties::read_one;
+    use crate::tree::properties::{read_live_bounded, read_one};
+    use crate::tree::walk::walker::walk_role;
     use crate::tree::walk::walker_source::parent_step;
-    use agent_desktop_core::LocatorField;
+    use agent_desktop_core::{Deadline, LocatorField};
 
     /// The selection item that holds `element` inside a grid or list, if any.
-    pub(crate) fn container_item(element: &UIAElement) -> Option<UIAElement> {
+    fn container_item(element: &UIAElement) -> Option<UIAElement> {
         let walker = automation_client().ok()?.get_raw_view_walker().ok()?;
         let mut ancestors = Vec::new();
         let mut facts = Vec::new();
@@ -125,6 +126,19 @@ mod imp {
         }
         let index = container_item_index(&facts)?;
         ancestors.into_iter().nth(index)
+    }
+
+    /// The item a click on `element` selects: the one the snapshot advertises
+    /// `Click` for, so only a grid cell with an interactive role has one. Any
+    /// other element costs one property read and is never climbed from.
+    pub(crate) fn clicked_item(element: &UIAElement, deadline: Deadline) -> Option<UIAElement> {
+        if !is_true(element, TreeProperty::GridItemAvailable) {
+            return None;
+        }
+        let (properties, _) = read_live_bounded(element, deadline);
+        super::is_click_candidate(true, &walk_role(&properties))
+            .then(|| container_item(element))
+            .flatten()
     }
 
     /// The live action list, extended for a grid cell the way a click can
@@ -151,7 +165,7 @@ mod imp {
 }
 
 #[cfg(target_os = "windows")]
-pub(crate) use imp::{advertise_container_click, container_item};
+pub(crate) use imp::{advertise_container_click, clicked_item};
 
 #[cfg(test)]
 #[path = "click_container_tests.rs"]

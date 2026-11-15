@@ -8,8 +8,8 @@
 //! other element is pressed through its LegacyIAccessible default action,
 //! which changes no foreground state on Win32, WinForms, WPF and the Ribbon
 //! (W-W0-6). InvokePattern takes no foreground either (A31-5), so every
-//! policy runs it. An element with none of those routes, such as a text cell of
-//! a grid or list, is selected through the item that holds it
+//! policy runs it. A grid cell with none of those routes, the one the snapshot
+//! advertises `Click` for, is selected through the item that holds it
 //! (`click_container`), the last semantic rung.
 
 use agent_desktop_core::{ActionStep, AdapterError, Deadline, InteractionPolicy};
@@ -34,7 +34,7 @@ mod imp {
         invoke_pattern_delivered, legacy_default_action, legacy_default_action_available,
         legacy_select, offered, poll_until, rung, selection_item_select,
     };
-    use crate::actions::click_container::container_item;
+    use crate::actions::click_container::clicked_item;
     use crate::actions::select_tab::{TAB_SELECT_LABEL, is_tab_item, select_native_tab};
     use crate::tree::properties::property_ids::TreeProperty;
     use crate::tree::properties::read_one;
@@ -53,7 +53,7 @@ mod imp {
         let container = if tab_item || item || default_action || invokable {
             None
         } else {
-            container_item(element)
+            clicked_item(element, deadline)
         };
         let mut select = || {
             if !legacy_select(element)? {
