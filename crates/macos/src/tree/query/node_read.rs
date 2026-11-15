@@ -47,9 +47,13 @@ pub(crate) fn read_node(
         return Err(permission_error("attributes"));
     }
     let raw_role = read.attrs.role.as_deref();
-    let grid_cell = (requirements.identifiers && grid_position::is_cell_role(raw_role))
-        .then(|| grid_position::read_cell_identifier(element, deadline))
+    let token = crate::tree::resolve::retained::capture(element)
+        .ok()
         .flatten();
+    let grid_cell = (requirements.identifiers
+        && grid_position::takes_address(raw_role, token.is_some()))
+    .then(|| grid_position::read_cell_identifier(element, deadline))
+    .flatten();
     let table_size = if requirements.identifiers && grid_position::is_table_role(raw_role) {
         grid_position::read_table_size(element, deadline)
     } else {
@@ -208,7 +212,7 @@ pub(crate) fn read_node(
         } else {
             LocatorField::Unknown
         },
-        identifiers: crate::tree::resolve::retained::evidence(element, identifiers)
+        identifiers: crate::tree::resolve::retained::evidence(token, identifiers)
             .with_borrowed_name(
                 requirements.name
                     && super::evidence_fields::name_borrowed(

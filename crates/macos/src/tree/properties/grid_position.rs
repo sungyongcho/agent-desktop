@@ -11,6 +11,14 @@ pub(crate) fn is_cell_role(role: Option<&str>) -> bool {
     role == Some(CELL_ROLE)
 }
 
+/// Whether a cell's position is reported. A position describes a cell and
+/// does not identify one: it names another cell once rows move. So it is
+/// reported only for an element that carries its own token, which is then its
+/// identity; a cell without one would be found again by its position.
+pub(crate) fn takes_address(role: Option<&str>, has_token: bool) -> bool {
+    has_token && is_cell_role(role)
+}
+
 pub(crate) fn is_table_role(role: Option<&str>) -> bool {
     role.is_some_and(|role| TABLE_ROLES.contains(&role))
 }

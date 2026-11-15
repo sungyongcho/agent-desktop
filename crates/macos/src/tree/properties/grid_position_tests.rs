@@ -47,3 +47,10 @@ fn a_cell_that_spans_several_positions_gets_no_address() {
     assert_eq!(single_index(0, 4), None);
     assert_eq!(single_index(0, 0), None);
 }
+
+#[test]
+fn a_cell_without_its_own_token_gets_no_address() {
+    assert!(takes_address(Some("AXCell"), true));
+    assert!(!takes_address(Some("AXCell"), false));
+    assert!(!takes_address(Some("AXButton"), true));
+}

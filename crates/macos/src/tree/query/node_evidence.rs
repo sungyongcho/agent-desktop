@@ -162,7 +162,7 @@ mod tests {
     }
 
     #[test]
-    fn grid_cell_alone_is_the_identity_of_an_otherwise_anonymous_cell() {
+    fn a_grid_cell_alone_is_the_preferred_identifier() {
         let evidence = super::identifiers(
             &crate::tree::properties::node_identifiers::NodeIdentifiers::default(),
             Some(agent_desktop_core::ElementIdentifier::grid_cell(0, 0)),
