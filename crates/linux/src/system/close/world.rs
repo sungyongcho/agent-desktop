@@ -95,7 +95,12 @@ impl World for Live<'_> {
 
     fn nested_dialogs(&self) -> Result<NestedDialogs, AdapterError> {
         let look = self.deadline.capped(Duration::from_millis(NESTED_LOOK_MS));
-        surfaces::nested_dialog_titles(self.bus, self.pid, look)
+        let read = surfaces::nested_dialog_titles(self.bus, self.pid, look);
+        self.deadline.ensure_remaining()?;
+        Ok(read.unwrap_or(NestedDialogs {
+            titles: Vec::new(),
+            complete: false,
+        }))
     }
 
     fn request_close(&self, window: u32) -> Result<(), ControlError> {
