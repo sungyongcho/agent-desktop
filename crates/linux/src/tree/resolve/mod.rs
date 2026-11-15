@@ -1,5 +1,5 @@
 use agent_desktop_core::refs::ref_identity::element_token;
-use agent_desktop_core::refs::resolve_errors::element_token_required;
+use agent_desktop_core::refs::resolve_errors::{element_token_required, element_token_stale};
 use agent_desktop_core::{AdapterError, Deadline, ErrorCode, LocatorEvidence, RefEntry};
 
 use super::AtspiElement;
@@ -69,8 +69,11 @@ pub(crate) fn resolve<S: Source>(
     if let Some(name) = source.stopped_app(entry.process.pid.get()) {
         return Err(AdapterError::app_unresponsive(&name));
     }
-    let Some(token) = element_token(entry).and_then(decode) else {
+    let Some(raw) = element_token(entry) else {
         return Err(element_token_required(entry));
+    };
+    let Some(token) = decode(raw) else {
+        return Err(element_token_stale(entry, "token_format", None));
     };
     let outcome = resolve_token(source, entry, &token, deadline);
     settle_outcome(source, entry, outcome)
