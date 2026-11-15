@@ -63,13 +63,14 @@ pub(crate) fn right_click_rungs<'a>(
     let deadline = ctx.deadline;
     vec![
         physical(PHYSICAL_CLICK, POINTER_EFFECTS, move || {
-            let pid = crate::system::app::app_ops::pid_from_element(element, deadline);
-            physical_click(element, &context, MouseButton::Right, 1)?;
-            let menu_seen = match pid {
-                Some(pid) => chain_menu_steps::wait_for_new_menu(pid, deadline),
-                None => false,
+            let click = || {
+                let pid = crate::system::app::app_ops::pid_from_element(element, deadline);
+                physical_click(element, &context, MouseButton::Right, 1)?;
+                let menu_seen =
+                    pid.is_some_and(|pid| chain_menu_steps::wait_for_new_menu(pid, deadline));
+                Ok(DeliveryOutcome::from_delivery(true, menu_seen))
             };
-            Ok(DeliveryOutcome::from_delivery(true, menu_seen))
+            chain_menu_steps::show_menu_after(click, element, deadline)
         }),
         custom(
             "show_menu",
