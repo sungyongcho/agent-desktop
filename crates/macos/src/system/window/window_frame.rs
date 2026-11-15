@@ -9,7 +9,7 @@ use serde_json::json;
 
 use crate::system::display_work_area;
 use crate::system::window::{
-    window_frame_place::{FramePlace, same_frame},
+    window_frame_place::{FramePlace, refreshed, same_frame},
     window_ops,
     window_postcondition::TOLERANCE,
     window_report, window_resolve,
@@ -92,19 +92,10 @@ fn refresh_maximized_frame(win: &WindowInfo) -> Result<(), AdapterError> {
         return Ok(());
     };
     let current = current_frame(win, Deadline::detached_after(FRAME_READ_MS)?)?;
-    if same_frame(current, record.maximized)
-        || FramePlace::of(&record, current) == FramePlace::Before
-    {
+    let Some(record) = refreshed(record, current) else {
         return Ok(());
-    }
-    memory.remember(
-        &key,
-        WindowFrameRecord {
-            maximized: current,
-            ..record
-        },
-        process_alive,
-    )
+    };
+    memory.remember(&key, record, process_alive)
 }
 
 fn restore(win: &WindowInfo, deadline: Deadline) -> Result<OperationReport, AdapterError> {

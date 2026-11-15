@@ -28,6 +28,17 @@ impl FramePlace {
     }
 }
 
+/// The record to keep after a maximize left the window at `frame`. Only a
+/// frame the record does not explain replaces the maximized frame, as a window
+/// that clamps its size leaves; a frame that is still ours, such as a move
+/// whose resize has not landed, keeps the record as it is.
+pub(crate) fn refreshed(record: WindowFrameRecord, frame: Rect) -> Option<WindowFrameRecord> {
+    (FramePlace::of(&record, frame) == FramePlace::Elsewhere).then_some(WindowFrameRecord {
+        maximized: frame,
+        ..record
+    })
+}
+
 pub(crate) fn same_frame(left: Rect, right: Rect) -> bool {
     same_origin(left, right) && same_size(left, right)
 }

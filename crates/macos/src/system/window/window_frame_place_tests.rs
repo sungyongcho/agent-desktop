@@ -65,3 +65,20 @@ fn drift_within_tolerance_still_matches() {
         FramePlace::Ours
     );
 }
+
+#[test]
+fn a_maximize_whose_resize_has_not_landed_keeps_the_record() {
+    assert!(refreshed(record(), rect(0.0, 30.0, 400.0, 300.0)).is_none());
+    assert!(refreshed(record(), rect(0.0, 30.0, 1496.0, 900.0)).is_none());
+    assert!(refreshed(record(), rect(100.0, 30.0, 400.0, 300.0)).is_none());
+}
+
+#[test]
+fn a_window_that_clamps_its_size_records_the_frame_it_reached() {
+    let clamped = rect(0.0, 30.0, 1200.0, 700.0);
+
+    let kept = refreshed(record(), clamped).expect("a clamped frame is recorded");
+
+    assert_eq!(kept.maximized, clamped);
+    assert_eq!(kept.before, record().before);
+}
