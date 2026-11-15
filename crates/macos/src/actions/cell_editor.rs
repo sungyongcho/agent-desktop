@@ -69,15 +69,29 @@ pub(crate) fn target(element: &AXElement, deadline: Deadline) -> CellTarget {
     }
     let role = ax_helpers::element_role(element, deadline).ok().flatten();
     if role.as_deref() == Some(CELL_ROLE) {
-        if crate::actions::background_effect::press_disturbs(element, deadline) {
-            CellTarget::ForegroundCell
-        } else {
-            CellTarget::Cell
-        }
+        cell_target(
+            ax_helpers::is_attr_settable(element, "AXValue", deadline).ok(),
+            || crate::actions::background_effect::press_disturbs(element, deadline),
+        )
     } else if holds_focus(element, deadline).unwrap_or(false) {
         CellTarget::Editor
     } else {
         CellTarget::Neither
+    }
+}
+
+/// The target a cell is, from whether its own value can be set. Only a cell
+/// that takes no value of its own is pressed for its editor. A cell that
+/// takes one, or that could not be asked, keeps its ordinary chain, which
+/// writes the value without a press or reports the failed read.
+pub(crate) fn cell_target(
+    takes_value: Option<bool>,
+    press_disturbs: impl FnOnce() -> bool,
+) -> CellTarget {
+    match takes_value {
+        Some(false) if press_disturbs() => CellTarget::ForegroundCell,
+        Some(false) => CellTarget::Cell,
+        _ => CellTarget::Neither,
     }
 }
 
@@ -150,31 +164,124 @@ pub(crate) fn write(
     if ax_helpers::element_role(cell, deadline)?.as_deref() != Some(CELL_ROLE) {
         return Ok(DeliveryOutcome::NotDelivered);
     }
+    write_through(&mut LiveCell { cell, deadline }, value)
+}
+
+/// The reads and sends a cell write is made of. The live cell implements
+/// them, and a scripted cell shows the order `write_through` runs them in.
+pub(crate) trait CellEdit {
+    type Editor;
+
+    /// The text element inside the cell that holds the keyboard focus.
+    fn editor(&mut self) -> Result<Option<Self::Editor>, AdapterError>;
+
+    /// Presses the cell the way a click does.
+    fn press(&mut self) -> Result<DeliveryOutcome, AdapterError>;
+
+    /// The editor a press opened, waited for until the press settles.
+    fn opened_editor(&mut self) -> Result<Option<Self::Editor>, AdapterError>;
+
+    /// Replaces the editor's whole text with `value`.
+    fn replace(
+        &mut self,
+        editor: &Self::Editor,
+        value: &str,
+    ) -> Result<DeliveryOutcome, AdapterError>;
+
+    fn holds_focus(&mut self, editor: &Self::Editor) -> Result<bool, AdapterError>;
+
+    /// Sends Return to the editor.
+    fn commit(&mut self, editor: &Self::Editor) -> Result<(), AdapterError>;
+}
+
+/// The write sequence over `edit`. An error after anything was sent is
+/// reported as delivered.
+pub(crate) fn write_through<E: CellEdit>(
+    edit: &mut E,
+    value: &str,
+) -> Result<DeliveryOutcome, AdapterError> {
     let mut sent = false;
-    write_steps(cell, value, deadline, &mut sent)
+    write_steps(edit, value, &mut sent)
         .map_err(|error| DeliveryTracker::from_delivered_units(usize::from(sent)).annotate(error))
 }
 
-fn write_steps(
-    cell: &AXElement,
+fn write_steps<E: CellEdit>(
+    edit: &mut E,
     value: &str,
-    deadline: Deadline,
     sent: &mut bool,
 ) -> Result<DeliveryOutcome, AdapterError> {
-    let Some(editor) = open_editor(cell, deadline, sent)? else {
+    let Some(editor) = open_editor(edit, sent)? else {
         return nothing_typed(*sent);
     };
-    let typed = replace(&editor, value, deadline)?;
+    let typed = edit.replace(&editor, value)?;
     if typed == DeliveryOutcome::NotDelivered {
         return nothing_typed(*sent);
     }
     *sent |= typed != DeliveryOutcome::Satisfied;
-    if !background_keyboard::holds_focus(&editor, deadline)? {
+    if !edit.holds_focus(&editor)? {
         return left_open(*sent);
     }
-    background_keyboard::press(&editor, &return_key(), deadline)?;
+    edit.commit(&editor)?;
     *sent = true;
     Ok(DeliveryOutcome::from_delivery(true, false))
+}
+
+fn open_editor<E: CellEdit>(
+    edit: &mut E,
+    pressed: &mut bool,
+) -> Result<Option<E::Editor>, AdapterError> {
+    if let Some(editor) = edit.editor()? {
+        return Ok(Some(editor));
+    }
+    for _ in 0..MAX_PRESSES {
+        if edit.press()? == DeliveryOutcome::NotDelivered {
+            return Ok(None);
+        }
+        *pressed = true;
+        if let Some(editor) = edit.opened_editor()? {
+            return Ok(Some(editor));
+        }
+    }
+    Ok(None)
+}
+
+struct LiveCell<'a> {
+    cell: &'a AXElement,
+    deadline: Deadline,
+}
+
+impl CellEdit for LiveCell<'_> {
+    type Editor = AXElement;
+
+    fn editor(&mut self) -> Result<Option<AXElement>, AdapterError> {
+        editor_of(self.cell, self.deadline)
+    }
+
+    fn press(&mut self) -> Result<DeliveryOutcome, AdapterError> {
+        press_selection::press_or_select_container(self.cell, self.deadline)
+    }
+
+    fn opened_editor(&mut self) -> Result<Option<AXElement>, AdapterError> {
+        let read = || editor_of(self.cell, self.deadline);
+        self.deadline
+            .poll_until(SETTLE, SETTLE_POLL, read, |read| !matches!(read, Ok(None)))
+    }
+
+    fn replace(
+        &mut self,
+        editor: &AXElement,
+        value: &str,
+    ) -> Result<DeliveryOutcome, AdapterError> {
+        replace(editor, value, self.deadline)
+    }
+
+    fn holds_focus(&mut self, editor: &AXElement) -> Result<bool, AdapterError> {
+        background_keyboard::holds_focus(editor, self.deadline)
+    }
+
+    fn commit(&mut self, editor: &AXElement) -> Result<(), AdapterError> {
+        background_keyboard::press(editor, &return_key(), self.deadline)
+    }
 }
 
 /// The end of a write whose editor lost the keyboard focus before the commit,
@@ -205,30 +312,6 @@ pub(crate) fn nothing_typed(pressed: bool) -> Result<DeliveryOutcome, AdapterErr
     )
     .with_suggestion(NO_EDITOR_SUGGESTION)
     .with_disposition(DeliverySemantics::delivered_unverified()))
-}
-
-fn open_editor(
-    cell: &AXElement,
-    deadline: Deadline,
-    pressed: &mut bool,
-) -> Result<Option<AXElement>, AdapterError> {
-    if let Some(editor) = editor_of(cell, deadline)? {
-        return Ok(Some(editor));
-    }
-    for _ in 0..MAX_PRESSES {
-        let press = press_selection::press_or_select_container(cell, deadline)?;
-        if press == DeliveryOutcome::NotDelivered {
-            return Ok(None);
-        }
-        *pressed = true;
-        let read = || editor_of(cell, deadline);
-        let opened =
-            deadline.poll_until(SETTLE, SETTLE_POLL, read, |read| !matches!(read, Ok(None)))?;
-        if opened.is_some() {
-            return Ok(opened);
-        }
-    }
-    Ok(None)
 }
 
 /// The text element inside `cell` that holds the application's keyboard focus.
