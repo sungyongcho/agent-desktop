@@ -98,7 +98,9 @@ mod imp {
     use crate::tree::automation::automation_client;
     use crate::tree::element::UIAElement;
     use crate::tree::properties::ElementProperties;
+    use crate::tree::properties::element_properties::known_as_bool;
     use crate::tree::properties::property_ids::TreeProperty;
+    use crate::tree::properties::property_outcome::PropertyOutcome;
     use crate::tree::properties::read_one;
     use crate::tree::walk::walker_source::parent_step;
     use agent_desktop_core::LocatorField;
@@ -141,7 +143,10 @@ mod imp {
     }
 
     fn is_true(element: &UIAElement, property: TreeProperty) -> bool {
-        read_one(element, property).flag() == Some(true)
+        matches!(
+            read_one(element, property),
+            PropertyOutcome::Known(value) if known_as_bool(&value) == Some(true)
+        )
     }
 }
 

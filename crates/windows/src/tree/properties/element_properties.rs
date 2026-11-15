@@ -27,7 +27,7 @@ fn withheld(outcome: PropertyOutcome) -> PropertyOutcome {
 /// the `VT_I4` divergence `is_secure`'s doc comment names (`Number`, nonzero
 /// meaning true). `None` for any other `Known` shape, which is not this
 /// provider's divergence and must not be guessed at.
-fn known_as_bool(value: &PropertyValue) -> Option<bool> {
+pub(crate) fn known_as_bool(value: &PropertyValue) -> Option<bool> {
     match value {
         PropertyValue::Flag(value) => Some(*value),
         PropertyValue::Number(value) => Some(*value != 0),
