@@ -12,8 +12,6 @@ pub(crate) use bus_nodes::BusNodes;
 /// `Parent` steps one climb takes.
 pub(crate) const DEPTH_CAP: usize = 50;
 
-const MAX_BRANCH_NODES: usize = 1_000;
-
 /// What `GetAccessibleAtPoint` answered.
 #[derive(Debug, Clone)]
 pub(crate) enum Hit {
@@ -185,13 +183,8 @@ pub(crate) fn require_unambiguous_branch<S: NodeSource>(
             .map(|child| (child, false))
             .collect();
         let mut next: Option<(AtspiElement, bool)> = None;
-        let mut visited = 0;
         while let Some((child, behind_group)) = pending.pop() {
             deadline.ensure_remaining()?;
-            visited += 1;
-            if visited > MAX_BRANCH_NODES {
-                return Err(unproven("ancestry_limit"));
-            }
             let Some(extents) = source.describe(&child)?.window_extents else {
                 return Err(unproven("child_bounds_unknown"));
             };
