@@ -40,3 +40,10 @@ fn only_cell_and_table_roles_pay_for_the_extra_reads() {
     assert!(!is_table_role(Some("AXRow")));
     assert!(!is_table_role(None));
 }
+
+#[test]
+fn a_cell_that_spans_several_positions_gets_no_address() {
+    assert_eq!(single_index(3, 1), Some(3));
+    assert_eq!(single_index(0, 4), None);
+    assert_eq!(single_index(0, 0), None);
+}

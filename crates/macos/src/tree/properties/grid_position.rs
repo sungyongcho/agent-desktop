@@ -21,6 +21,14 @@ pub(crate) fn cell_identifier(row: Option<i64>, column: Option<i64>) -> Option<E
     Some(ElementIdentifier::grid_cell(row, column))
 }
 
+/// The index a cell holds on one axis, given the range the platform reports.
+/// A cell that spans several rows or columns holds no single position, so it
+/// gets no address: the platform can return such a cell once for every column
+/// it covers, and each copy would claim the position of the first one.
+pub(crate) fn single_index(location: i64, length: i64) -> Option<i64> {
+    (length == 1).then_some(location)
+}
+
 pub(crate) fn table_size(rows: Option<i64>, columns: Option<i64>) -> NodeDescriptor {
     NodeDescriptor {
         row_count: rows.and_then(|count| u32::try_from(count).ok()),
@@ -64,7 +72,7 @@ mod imp {
             .to_i64()
     }
 
-    fn read_range_start(element: &AXElement, attribute: &str, deadline: Deadline) -> Option<i64> {
+    fn read_single_index(element: &AXElement, attribute: &str, deadline: Deadline) -> Option<i64> {
         let value = copy_value(element, attribute, deadline)?;
         if value.type_of() != unsafe { AXValueGetTypeID() } {
             return None;
@@ -80,7 +88,13 @@ mod imp {
                 (&mut range as *mut CFRange).cast(),
             )
         };
-        decoded.then_some(i64::try_from(range.location).ok()?)
+        if !decoded {
+            return None;
+        }
+        super::single_index(
+            i64::try_from(range.location).ok()?,
+            i64::try_from(range.length).ok()?,
+        )
     }
 
     pub(crate) fn read_cell_identifier(
@@ -88,8 +102,8 @@ mod imp {
         deadline: Deadline,
     ) -> Option<ElementIdentifier> {
         super::cell_identifier(
-            read_range_start(element, "AXRowIndexRange", deadline),
-            read_range_start(element, "AXColumnIndexRange", deadline),
+            read_single_index(element, "AXRowIndexRange", deadline),
+            read_single_index(element, "AXColumnIndexRange", deadline),
         )
     }
 
