@@ -76,14 +76,11 @@ pub fn run_from_ref_with_context(
     let capture = drill_capture(adapter, opts, &entry, deadline)?;
     let DrillCapture {
         window,
-        tree: mut raw_tree,
+        tree: raw_tree,
         nodes_observed,
         path_prefix,
         observed,
     } = capture;
-    if opts.skeleton {
-        crate::snapshot::grid_collapse::collapse_grids(&mut raw_tree);
-    }
     let capture_proof =
         crate::refs::ref_capture_proof::CaptureProof::new(&observed).rooted_at(&path_prefix);
     let owner = resolve_result_owner(&entry, &window, adapter)?;
