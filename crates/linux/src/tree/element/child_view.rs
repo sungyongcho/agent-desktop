@@ -26,9 +26,9 @@ const CHILDREN_IN_FLIGHT: usize = 32;
 /// How a child list that is shorter than the object's own count was read.
 /// `positions` holds the index in the parent of each listed child, in the
 /// order of the list; `reported` is the count the object gave. `grid_view` is
-/// set when the list is the cells in view of a table: each cell of a grid is
-/// identified by its position inside its table, so a cell that is not in view
-/// is not a hidden twin of anything and the observation stays complete.
+/// set when the list is the cells in view of a table: the snapshot presents
+/// that view as complete, while the count it carries tells core that cells
+/// were left unread, so no ref is proven unique against them.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) struct ChildSlots {
     pub(crate) positions: Vec<usize>,
@@ -85,14 +85,16 @@ pub(in crate::tree) async fn read_child_view(
     let names = interface_names(connection, element, interfaces, liveness).await?;
     let has = |wanted: &str| names.iter().any(|name| name == wanted);
     let is_table = has(TABLE_INTERFACE) && has(COMPONENT_INTERFACE);
-    if is_table && let Some(cells) = read_table_view(connection, element, limit, liveness).await? {
+    if is_table
+        && let Some((cells, whole)) = read_table_view(connection, element, limit, liveness).await?
+    {
         let (children, positions) = cells.into_iter().unzip();
         return Ok(ChildView {
             children: Field::Present(children),
             slots: Some(ChildSlots {
                 positions,
                 reported,
-                grid_view: true,
+                grid_view: whole,
             }),
         });
     }

@@ -87,19 +87,28 @@ impl Component {
     }
 }
 
-pub(crate) struct Table(i32, Arc<Calls>, bool);
+pub(crate) struct Table(i32, Arc<Calls>, bool, Option<i32>);
 
 #[zbus::interface(name = "org.a11y.atspi.Table")]
 impl Table {
-    fn get_accessible_at(&self, row: i32, column: i32) -> (String, OwnedObjectPath) {
+    fn get_accessible_at(
+        &self,
+        row: i32,
+        column: i32,
+    ) -> zbus::fdo::Result<(String, OwnedObjectPath)> {
         self.1.accessible_at.fetch_add(1, Ordering::SeqCst);
         let index = row * self.0 + column;
+        if self.3 == Some(index) {
+            return Err(zbus::fdo::Error::Failed(
+                "the cell cannot be read".to_owned(),
+            ));
+        }
         if self.2 {
             let path =
                 OwnedObjectPath::try_from(format!("/fresh/{index}")).expect("a cell path parses");
-            return (BUS.to_owned(), path);
+            return Ok((BUS.to_owned(), path));
         }
-        (BUS.to_owned(), cell_path(index))
+        Ok((BUS.to_owned(), cell_path(index)))
     }
 
     fn get_index_at(&self, row: i32, column: i32) -> i32 {
@@ -115,10 +124,19 @@ impl Table {
     }
 }
 
-pub(crate) struct Cell(i32);
+pub(crate) struct Cell(i32, bool);
 
 #[zbus::interface(name = "org.a11y.atspi.Accessible")]
 impl Cell {
+    #[zbus(property)]
+    fn parent(&self) -> (String, OwnedObjectPath) {
+        let path = if self.1 { "/wrapper" } else { TABLE_PATH };
+        (
+            BUS.to_owned(),
+            OwnedObjectPath::try_from(path).expect("a parent path parses"),
+        )
+    }
+
     fn get_index_in_parent(&self) -> i32 {
         self.0
     }
@@ -138,11 +156,15 @@ pub(crate) fn grid(
 /// the table answer with a new object path for a cell each time, as a toolkit
 /// that creates cell objects on demand does. `blind` makes a point query at
 /// the table answer with the null object, as a table that shows no cell there
-/// does.
+/// does. `nested_hit` makes the cells at the corners report a wrapper, not the
+/// table, as their parent. `failing_cell` makes the lookup of the cell at that
+/// index fail.
 #[derive(Default, Clone, Copy)]
 pub(crate) struct Quirks {
     pub(crate) fresh_objects: bool,
     pub(crate) blind: bool,
+    pub(crate) nested_hit: bool,
+    pub(crate) failing_cell: Option<i32>,
 }
 
 /// The same table with the departures `quirks` names.
@@ -172,11 +194,18 @@ pub(crate) fn grid_with(
         .and_then(|builder| {
             builder.serve_at(
                 TABLE_PATH,
-                Table(columns, calls.clone(), quirks.fresh_objects),
+                Table(
+                    columns,
+                    calls.clone(),
+                    quirks.fresh_objects,
+                    quirks.failing_cell,
+                ),
             )
         })
-        .and_then(|builder| builder.serve_at("/cell/0", Cell(0)))
-        .and_then(|builder| builder.serve_at(format!("/cell/{corner}"), Cell(corner)))
+        .and_then(|builder| builder.serve_at("/cell/0", Cell(0, quirks.nested_hit)))
+        .and_then(|builder| {
+            builder.serve_at(format!("/cell/{corner}"), Cell(corner, quirks.nested_hit))
+        })
         .expect("the objects are served");
     let (client, server) = zbus::block_on(futures_lite::future::zip(
         Builder::async_io_unix_stream(near).p2p().build(),
