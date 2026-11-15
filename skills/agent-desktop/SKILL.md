@@ -92,11 +92,9 @@ Request `--cdp` only for the step that needs it. `close-app` ends the exposure.
   its baseline when it observes and can miss an already-completed transition.
 - Targeting: use `find` when the role or name is known; explore a large window with
   a skeleton snapshot and a `--root` drill.
-- Tables: a table node reports `row_count` and `column_count`, and a skeleton keeps it
-  as one node; drill it with `--root`. Write a cell with `set-value` on the cell ref when
-  the cell lists `SetValue`, then read the cell again: a cell write can report
-  `delivered_unverified`. The platform skill says how cells are addressed and which
-  cells take a background write.
+- Tables: a table node reports `row_count` and `column_count`; a skeleton keeps it as one
+  node, so drill it with `--root`. `set-value` on a cell that lists `SetValue` writes the
+  cell; read it again to verify. The platform skill says how cells are addressed.
 - Parallel tasks: create a session per task with `session start` and pass `--session`
   or `AGENT_DESKTOP_SESSION` to every command. Each agent uses refs from its own snapshots.
 - Concurrency: read-only observations of independent targets can run in parallel;

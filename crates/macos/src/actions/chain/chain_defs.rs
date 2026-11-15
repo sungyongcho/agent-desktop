@@ -111,8 +111,6 @@ pub(crate) fn set_value_rungs<'a>(
     let value = ctx.dynamic_value;
     let deadline = ctx.deadline;
     vec![
-        cell_write_rung(element, ctx),
-        cell_editor_rung(element, ctx),
         value_rung(element, ctx),
         semantic("IncrementToDynamic", move || match value {
             Some(value) => chain_value_write::increment_to_value(element, value, deadline),
@@ -128,8 +126,6 @@ pub(crate) fn clear_rungs<'a>(
     let policy = ctx.policy;
     let deadline = ctx.deadline;
     vec![
-        cell_write_rung(element, ctx),
-        cell_editor_rung(element, ctx),
         physical("FocusThenClearByKeyboard", KEYBOARD_EFFECTS, move || {
             crate::actions::physical_keyboard::press_sequence(
                 element,
@@ -259,6 +255,21 @@ fn value_rung<'a>(element: &'a AXElement, ctx: &ChainContext<'a>) -> ChainRung<'
         }
         chain_value_write::set_dynamic_verified(element, "AXValue", value, deadline)
     })
+}
+
+/// The rung that goes before a value or clear chain when the target is a
+/// table cell or the editor inside one. Every other element gets none, so
+/// its chain is exactly the one above and holds no keyboard rung.
+pub(crate) fn cell_rungs<'a>(
+    target: cell_editor::CellTarget,
+    element: &'a AXElement,
+    ctx: &ChainContext<'a>,
+) -> Vec<ChainRung<'a>> {
+    match target {
+        cell_editor::CellTarget::Cell => vec![cell_write_rung(element, ctx)],
+        cell_editor::CellTarget::Editor => vec![cell_editor_rung(element, ctx)],
+        cell_editor::CellTarget::Neither => Vec::new(),
+    }
 }
 
 /// The write through a cell that opens an editor when it is pressed: the

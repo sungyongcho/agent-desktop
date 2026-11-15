@@ -48,6 +48,30 @@ pub(crate) fn replacement(current: &str, wanted: &str) -> Replacement {
     }
 }
 
+/// How a value write reaches an element through a cell's in-place editor.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum CellTarget {
+    Cell,
+    Editor,
+    Neither,
+}
+
+/// Classifies `element` for a value write. A read that fails says `Neither`:
+/// the element then gets its ordinary chain, which reports the failure.
+pub(crate) fn target(element: &AXElement, deadline: Deadline) -> CellTarget {
+    if element.0.is_null() {
+        return CellTarget::Neither;
+    }
+    let role = ax_helpers::element_role(element, deadline).ok().flatten();
+    if role.as_deref() == Some(CELL_ROLE) {
+        CellTarget::Cell
+    } else if holds_focus(element, deadline).unwrap_or(false) {
+        CellTarget::Editor
+    } else {
+        CellTarget::Neither
+    }
+}
+
 /// Whether `element` sits directly inside a table cell and holds its
 /// application's keyboard focus.
 pub(crate) fn holds_focus(element: &AXElement, deadline: Deadline) -> Result<bool, AdapterError> {
