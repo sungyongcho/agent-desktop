@@ -52,7 +52,12 @@ pub enum TreeProperty {
     ScrollAvailable,
     ScrollItemAvailable,
     WindowAvailable,
+    GridAvailable,
     GridItemAvailable,
+    GridItemRow,
+    GridItemColumn,
+    GridRowCount,
+    GridColumnCount,
     TableItemAvailable,
     LegacyAvailable,
     ProviderDescription,
@@ -132,7 +137,7 @@ impl TreeProperty {
     /// nothing consumes it on the pinned stack (A16-6 measured it carrying no
     /// `class` token, so `dom_classes` ships schema-only), and the standing
     /// rule is that nothing unread is paid for.
-    pub const WALK_SET: [TreeProperty; 43] = [
+    pub const WALK_SET: [TreeProperty; 48] = [
         TreeProperty::Name,
         TreeProperty::AutomationId,
         TreeProperty::ClassName,
@@ -171,7 +176,12 @@ impl TreeProperty {
         TreeProperty::ScrollAvailable,
         TreeProperty::ScrollItemAvailable,
         TreeProperty::WindowAvailable,
+        TreeProperty::GridAvailable,
         TreeProperty::GridItemAvailable,
+        TreeProperty::GridItemRow,
+        TreeProperty::GridItemColumn,
+        TreeProperty::GridRowCount,
+        TreeProperty::GridColumnCount,
         TreeProperty::TableItemAvailable,
         TreeProperty::LegacyAvailable,
         TreeProperty::LocalizedControlType,
@@ -233,7 +243,12 @@ impl TreeProperty {
             | TreeProperty::ScrollAvailable
             | TreeProperty::ScrollItemAvailable
             | TreeProperty::WindowAvailable
+            | TreeProperty::GridAvailable
             | TreeProperty::GridItemAvailable
+            | TreeProperty::GridItemRow
+            | TreeProperty::GridItemColumn
+            | TreeProperty::GridRowCount
+            | TreeProperty::GridColumnCount
             | TreeProperty::TableItemAvailable
             | TreeProperty::LegacyAvailable
             | TreeProperty::ProviderDescription
@@ -275,6 +290,12 @@ impl TreeProperty {
             TreeProperty::RangeValueIsReadOnly => Some(TreeProperty::RangeValueAvailable),
             TreeProperty::SelectionCanSelectMultiple => Some(TreeProperty::SelectionAvailable),
             TreeProperty::WindowIsModal => Some(TreeProperty::WindowAvailable),
+            TreeProperty::GridItemRow | TreeProperty::GridItemColumn => {
+                Some(TreeProperty::GridItemAvailable)
+            }
+            TreeProperty::GridRowCount | TreeProperty::GridColumnCount => {
+                Some(TreeProperty::GridAvailable)
+            }
             _ => None,
         }
     }
@@ -320,7 +341,12 @@ impl TreeProperty {
             Self::ScrollAvailable => "IsScrollPatternAvailable",
             Self::ScrollItemAvailable => "IsScrollItemPatternAvailable",
             Self::WindowAvailable => "IsWindowPatternAvailable",
+            Self::GridAvailable => "IsGridPatternAvailable",
             Self::GridItemAvailable => "IsGridItemPatternAvailable",
+            Self::GridItemRow => "GridItemRow",
+            Self::GridItemColumn => "GridItemColumn",
+            Self::GridRowCount => "GridRowCount",
+            Self::GridColumnCount => "GridColumnCount",
             Self::TableItemAvailable => "IsTableItemPatternAvailable",
             Self::LegacyAvailable => "IsLegacyIAccessiblePatternAvailable",
             Self::ProviderDescription => "ProviderDescription",

@@ -258,22 +258,41 @@ impl ElementProperties {
         )
     }
 
+    /// The zero-based position a grid reports for this element, as a table
+    /// cell address. Only an element that advertises the grid item pattern and
+    /// answers both indices gets one; any other read leaves the element's
+    /// identity as it was.
+    fn grid_cell_identifier(&self) -> Option<ElementIdentifier> {
+        let row = self.gated_index(TreeProperty::GridItemRow)?;
+        let column = self.gated_index(TreeProperty::GridItemColumn)?;
+        Some(ElementIdentifier::grid_cell(row, column))
+    }
+
+    /// A non-negative count or index behind its pattern gate.
+    pub(crate) fn gated_index(&self, property: TreeProperty) -> Option<u32> {
+        u32::try_from(self.gated_number(property)?).ok()
+    }
+
     fn identifier_evidence(&self) -> IdentifierEvidence {
+        let mut identifiers: Vec<ElementIdentifier> =
+            self.grid_cell_identifier().into_iter().collect();
+        let has_cell = !identifiers.is_empty();
         let automation_id = self.get(TreeProperty::AutomationId);
-        match automation_id {
+        match &automation_id {
             PropertyOutcome::Known(PropertyValue::Text(value)) if !value.trim().is_empty() => {
-                IdentifierEvidence::typed(
-                    [ElementIdentifier {
-                        kind: IdentifierKind::AutomationId,
-                        value,
-                    }],
-                    Some(0),
-                    true,
-                )
+                identifiers.push(ElementIdentifier {
+                    kind: IdentifierKind::AutomationId,
+                    value: value.clone(),
+                });
             }
-            PropertyOutcome::Known(_) | PropertyOutcome::Absent => IdentifierEvidence::absent(),
-            PropertyOutcome::Unknown => IdentifierEvidence::unknown(),
+            PropertyOutcome::Unknown if !has_cell => return IdentifierEvidence::unknown(),
+            _ => {}
         }
+        if identifiers.is_empty() {
+            return IdentifierEvidence::absent();
+        }
+        let complete = !matches!(automation_id, PropertyOutcome::Unknown);
+        IdentifierEvidence::typed(identifiers, Some(0), complete)
     }
 }
 
