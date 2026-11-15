@@ -1,5 +1,5 @@
 use super::{AXElement, properties::element::element_for_pid, surface_read};
-use agent_desktop_core::{AdapterError, Deadline, SnapshotSurface};
+use agent_desktop_core::{AdapterError, Deadline, ErrorCode, SnapshotSurface};
 
 #[cfg(target_os = "macos")]
 const POPOVER_SEARCH_LIMIT: usize = 4_096;
@@ -60,8 +60,9 @@ pub(crate) fn surface_in_window(
     }
 }
 
-/// The first popover in `window`, nearest the window first. The search stops
-/// at `POPOVER_SEARCH_LIMIT` elements or at the deadline.
+/// The first popover in `window`, nearest the window first. None only when
+/// every element was read: a search cut at `POPOVER_SEARCH_LIMIT` elements
+/// fails as not found and says it is incomplete.
 #[cfg(target_os = "macos")]
 fn popover_in_window(
     window: &AXElement,
@@ -77,7 +78,14 @@ fn popover_in_window(
             }
             searched += 1;
             if searched >= POPOVER_SEARCH_LIMIT {
-                return Ok(None);
+                return Err(AdapterError::new(
+                    ErrorCode::ElementNotFound,
+                    format!("No popover among the first {searched} elements of the window; the rest was not searched"),
+                )
+                .with_details(serde_json::json!({
+                    "kind": "popover_search_limit",
+                    "complete": false,
+                })));
             }
             below.extend(surface_read::elements(&element, "AXChildren", deadline)?);
         }
