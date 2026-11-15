@@ -3,6 +3,8 @@
 
 use agent_desktop_core::AdapterError;
 
+use crate::actions::select_container::Realization;
+
 pub(crate) const MAX_REALIZE_SCROLLS: u32 = 16;
 
 /// One realize scroll attempt: either expose a searchable window or stop.
@@ -23,8 +25,8 @@ pub(crate) trait ItemSource {
     fn scroll_step(&mut self) -> Result<RealizeScrollStep, AdapterError>;
     /// Scrolls back to `position`; `false` when the container cannot.
     fn scroll_to(&mut self, position: f64) -> Result<bool, AdapterError>;
-    /// Asks the container's own lookup for the item and builds it.
-    fn realize(&mut self) -> Result<Option<Self::Item>, AdapterError>;
+    /// Asks the container's own lookup for the item and builds it, reporting whether that sent a request.
+    fn realize(&mut self) -> Result<Option<(Self::Item, Realization)>, AdapterError>;
 }
 
 /// The answer of the search.
@@ -79,9 +81,9 @@ fn first_scan<S: ItemSource>(source: &mut S) -> Result<Phase<S::Item>, AdapterEr
 
 fn container_lookup<S: ItemSource>(source: &mut S) -> Result<Phase<S::Item>, AdapterError> {
     Ok(match source.realize()? {
-        Some(item) => Phase::Done(Located::Found {
+        Some((item, realization)) => Phase::Done(Located::Found {
             item,
-            realized: true,
+            realized: realization == Realization::Sent,
         }),
         None => Phase::Sweep(None),
     })
@@ -144,9 +146,9 @@ fn rebuild<S: ItemSource>(
     sighting: Sighting<S::Item>,
 ) -> Result<Phase<S::Item>, AdapterError> {
     Ok(match source.realize()? {
-        Some(item) => Phase::Done(Located::Found {
+        Some((item, realization)) => Phase::Done(Located::Found {
             item,
-            realized: true,
+            realized: realization == Realization::Sent,
         }),
         None => Phase::Return(sighting),
     })

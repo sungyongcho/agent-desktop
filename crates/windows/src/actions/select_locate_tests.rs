@@ -12,7 +12,7 @@ struct Fake {
     named: Vec<u8>,
     at: usize,
     scroll: ScrollCapabilities,
-    lookup: Option<u8>,
+    lookup: Option<(u8, Realization)>,
     log: Vec<String>,
 }
 
@@ -84,7 +84,7 @@ impl ItemSource for Fake {
         Ok(true)
     }
 
-    fn realize(&mut self) -> Result<Option<Self::Item>, AdapterError> {
+    fn realize(&mut self) -> Result<Option<(Self::Item, Realization)>, AdapterError> {
         self.log.push("realize".to_string());
         Ok(self.lookup)
     }
@@ -100,10 +100,26 @@ fn found(located: Located<u8>) -> Option<(u8, bool)> {
 #[test]
 fn a_miss_asks_the_container_before_any_scroll_and_stops_when_it_answers() {
     let mut fake = Fake::new(vec![vec![9]], vec![1]);
-    fake.lookup = Some(7);
+    fake.lookup = Some((7, Realization::Sent));
     let located = locate(&mut fake).unwrap();
     assert_eq!(found(located), Some((7, true)));
     assert_eq!(fake.log, vec!["scan", "realize"]);
+}
+
+#[test]
+fn an_item_the_container_already_built_is_not_reported_as_realized() {
+    let mut fake = Fake::new(vec![vec![9]], vec![1]);
+    fake.lookup = Some((7, Realization::AlreadyBuilt));
+    let located = locate(&mut fake).unwrap();
+    assert_eq!(found(located), Some((7, false)));
+}
+
+#[test]
+fn a_row_the_container_rebuilt_with_a_realize_is_reported_as_realized() {
+    let mut fake = Fake::new(vec![vec![1], vec![9]], vec![1]);
+    fake.lookup = Some((1, Realization::Sent));
+    let located = locate(&mut fake).unwrap();
+    assert_eq!(found(located), Some((1, true)));
 }
 
 #[test]
@@ -188,7 +204,7 @@ fn a_row_still_in_the_list_after_the_sweep_is_used_without_scrolling_back() {
 #[test]
 fn the_containers_own_lookup_is_tried_before_scrolling_back() {
     let mut fake = Fake::new(vec![vec![1], vec![2]], vec![1]);
-    fake.lookup = Some(1);
+    fake.lookup = Some((1, Realization::Sent));
     let located = locate(&mut fake).unwrap();
     assert_eq!(found(located), Some((1, true)));
     assert!(!fake.log.iter().any(|entry| entry.starts_with("scroll_to")));

@@ -98,7 +98,7 @@ mod imp {
     use crate::actions::mutation::{classify_success, classify_write};
     use crate::actions::scroll::vertical_scroll;
     use crate::actions::select_combo::{COMBO_SELECT_LABEL, native_combo, select_native_combo};
-    use crate::actions::select_container::realize_named_item;
+    use crate::actions::select_container::{Realization, realize_named_item};
     use crate::actions::select_locate::{ItemSource, Located, RealizeScrollStep, locate};
     use crate::actions::select_search::{
         find_named_selection_item, name_matches, realize_scroll_step, scroll_to_position,
@@ -200,7 +200,7 @@ mod imp {
             }
         }
 
-        fn realize(&mut self) -> Result<Option<UIAElement>, AdapterError> {
+        fn realize(&mut self) -> Result<Option<(UIAElement, Realization)>, AdapterError> {
             realize_named_item(self.element, self.value, self.deadline)
         }
     }
