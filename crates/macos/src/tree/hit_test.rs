@@ -275,6 +275,9 @@ mod imp {
                 };
                 visible = intersection;
             }
+            if role.as_deref().is_some_and(owns_surface) {
+                return Ok(Some(visible));
+            }
             current = match crate::tree::resolve::resolve_ax_read::read_element(
                 &current, "AXParent", deadline,
             ) {
@@ -286,8 +289,8 @@ mod imp {
         Ok(None)
     }
 
-    use crate::tree::element_bounds::clips_descendants;
     pub(super) use crate::tree::element_bounds::intersect_rects;
+    use crate::tree::element_bounds::{clips_descendants, owns_surface};
 
     pub(super) fn remember_ancestor(visited: &mut Vec<AXElement>, current: &AXElement) -> bool {
         if visited
