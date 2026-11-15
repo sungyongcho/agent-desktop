@@ -47,6 +47,14 @@ may report `unknown` when consent would require a prompt.
   actions refuse it because a changed field could falsely imply a renamed file.
 - Chromium accessibility is enabled by the adapter when needed. A sparse or
   incomplete read still needs another observation, not an assumption of absence.
+- A table cell carries its grid address in `native_id` (kind `grid_cell`, for example
+  `B7`). Get one cell with `find --role cell --native-id B7 --root '<table ref>'`.
+  A cell that spans several rows or columns has no address.
+- `set-value` and `clear` on a table cell that lists `SetValue` write through the
+  cell's own editor and commit with Return, without activating the app. Start a
+  formula with `=`. The cell publishes no value, so the result is
+  `delivered_unverified`: read the cell's name to verify. The write also commits an
+  edit that is open in another cell.
 - AX success alone does not prove an application effect. Verify the task's
   result independently, especially after a menu action or a value write.
 
