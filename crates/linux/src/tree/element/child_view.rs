@@ -182,6 +182,33 @@ pub(crate) async fn presented_children(
     }
 }
 
+/// Whether `parent` presents `node` at the index `node` reports for itself,
+/// read with one `GetIndexInParent` and one `GetChildAtIndex`. A failed or
+/// disagreeing read is `false`, so no list of the parent is needed.
+pub(crate) async fn is_child_at_own_index(
+    connection: &Connection,
+    parent: &AtspiElement,
+    node: &AtspiElement,
+) -> Result<bool, AdapterError> {
+    let reply = call(
+        connection,
+        node,
+        ACCESSIBLE_INTERFACE,
+        "GetIndexInParent",
+        &(),
+    )
+    .await;
+    let Some(index) = reply
+        .ok()
+        .and_then(|reply| reply.body().deserialize::<i32>().ok())
+        .and_then(|index| usize::try_from(index).ok())
+    else {
+        return Ok(false);
+    };
+    let child = child_at_index(connection, parent, index).await?;
+    Ok(child.is_some_and(|(bus, path)| bus == node.bus_name() && path == node.path()))
+}
+
 /// The interface names of an object, as one `GetInterfaces` call gives them.
 pub(in crate::tree) async fn read_interfaces(
     connection: &Connection,

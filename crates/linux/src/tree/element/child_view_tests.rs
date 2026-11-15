@@ -2,7 +2,7 @@ use std::sync::atomic::Ordering;
 
 use super::*;
 use crate::tree::element::child_list::list_children;
-use crate::tree::test_support::grid_fake::{TABLE_PATH, grid};
+use crate::tree::test_support::grid_fake::{BUS, TABLE_PATH, grid};
 
 fn read(
     reported: i32,
@@ -131,5 +131,20 @@ fn the_hit_test_sees_the_cells_in_view_of_a_large_table_and_never_lists_it() {
         zbus::block_on(presented_children(&client, &element)).expect("children read");
     assert_eq!(children.len(), 60);
     assert!(!whole);
+    assert_eq!(calls.get_children.load(Ordering::SeqCst), 0);
+}
+
+#[test]
+fn a_child_is_proven_by_its_own_index_in_a_container_over_the_limit() {
+    let (client, parent, calls, _server) = grid(1_000_000, 10, 6);
+    let cell = AtspiElement::new(BUS, "/cell/59", 1);
+    let unserved = AtspiElement::new(BUS, "/cell/5", 1);
+    assert!(
+        zbus::block_on(is_child_at_own_index(&client, &parent, &cell)).expect("the index reads")
+    );
+    assert!(
+        !zbus::block_on(is_child_at_own_index(&client, &parent, &unserved))
+            .expect("a failed read is not an error")
+    );
     assert_eq!(calls.get_children.load(Ordering::SeqCst), 0);
 }
