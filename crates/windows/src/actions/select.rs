@@ -1,8 +1,8 @@
 //! Select.
 //!
 //! A native combo box that stores item names selects by name through its own
-//! window messages (`select_combo`); an owner-drawn one, or a name its search
-//! misses, falls through to the route below. A tab item of a native tab
+//! window messages (`select_combo`), and a name its search misses is not
+//! found; an owner-drawn one falls through to the route below. A tab item of a native tab
 //! control selects through `TCM_SETCURFOCUS` (`select_tab`), because the
 //! accessibility select route changes the index without the notification
 //! that swaps the page. Any other target selects a named item, itself or one of
