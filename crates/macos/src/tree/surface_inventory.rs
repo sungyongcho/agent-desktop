@@ -68,12 +68,14 @@ fn push_menu_surface(
 /// below the control that raised it, not below its window. A control that
 /// anchors a surface has few children, so an element with more than
 /// `ANCHOR_CHILD_LIMIT` is left unread instead of listing a whole container.
+/// The anchor only adds to `surfaces`: a read of it that fails ends the look
+/// and leaves what is already listed.
 #[cfg(target_os = "macos")]
 pub(crate) fn collect_anchored_surfaces(
     anchor: &AXElement,
     deadline: Deadline,
     surfaces: &mut Vec<SurfaceInfo>,
-) -> Result<(), AdapterError> {
+) {
     use core_foundation::{base::TCFType, string::CFString};
 
     let children = CFString::new("AXChildren");
@@ -82,10 +84,9 @@ pub(crate) fn collect_anchored_surfaces(
         children.as_concrete_TypeRef(),
         deadline,
     );
-    if !anchors_few_children(count.ok()) {
-        return Ok(());
+    if anchors_few_children(count.ok()) {
+        let _ = collect_window_surfaces(anchor, "target", deadline, surfaces);
     }
-    collect_window_surfaces(anchor, "target", deadline, surfaces)
 }
 
 fn anchors_few_children(count: Option<usize>) -> bool {
