@@ -377,10 +377,9 @@ fn an_element_gone_after_a_delivered_action_does_not_suggest_a_retry() {
         error.disposition,
         crate::DeliverySemantics::delivered_unverified()
     );
-    assert_eq!(
-        error.suggestion.as_deref(),
-        Some("Inspect the returned state before deciding whether another action is needed.")
-    );
+    let suggestion = error.suggestion.unwrap();
+    assert!(suggestion.contains("Do not repeat the action"));
+    assert!(suggestion.contains("snapshot --surface focused"));
 }
 
 #[test]
