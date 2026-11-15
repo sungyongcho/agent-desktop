@@ -108,15 +108,17 @@ fn clearing_by_keyboard_takes_focus_and_never_the_pointer() {
     assert_eq!(
         labels(&rungs),
         [
+            "CellEditorWrite",
             "PIDTargetedReplaceText",
             "FocusThenClearByKeyboard",
             "AXValue"
         ]
     );
     assert_background_keys(&rungs[0]);
-    assert_eq!(rungs[1].effects, [Effect::FocusSteal]);
-    assert_eq!(rungs[1].mechanism, StepMechanism::PhysicalSynthetic);
-    assert_semantic(&rungs[2..]);
+    assert_background_keys(&rungs[1]);
+    assert_eq!(rungs[2].effects, [Effect::FocusSteal]);
+    assert_eq!(rungs[2].mechanism, StepMechanism::PhysicalSynthetic);
+    assert_semantic(&rungs[3..]);
 }
 
 #[test]
@@ -128,10 +130,16 @@ fn a_value_write_tries_the_cell_editor_keys_first_and_they_take_no_foreground() 
 
     assert_eq!(
         labels(&rungs),
-        ["PIDTargetedReplaceText", "AXValue", "IncrementToDynamic"]
+        [
+            "CellEditorWrite",
+            "PIDTargetedReplaceText",
+            "AXValue",
+            "IncrementToDynamic"
+        ]
     );
     assert_background_keys(&rungs[0]);
-    assert_semantic(&rungs[1..]);
+    assert_background_keys(&rungs[1]);
+    assert_semantic(&rungs[2..]);
 }
 
 #[test]

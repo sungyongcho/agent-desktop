@@ -111,6 +111,7 @@ pub(crate) fn set_value_rungs<'a>(
     let value = ctx.dynamic_value;
     let deadline = ctx.deadline;
     vec![
+        cell_write_rung(element, ctx),
         cell_editor_rung(element, ctx),
         value_rung(element, ctx),
         semantic("IncrementToDynamic", move || match value {
@@ -127,6 +128,7 @@ pub(crate) fn clear_rungs<'a>(
     let policy = ctx.policy;
     let deadline = ctx.deadline;
     vec![
+        cell_write_rung(element, ctx),
         cell_editor_rung(element, ctx),
         physical("FocusThenClearByKeyboard", KEYBOARD_EFFECTS, move || {
             crate::actions::physical_keyboard::press_sequence(
@@ -256,6 +258,18 @@ fn value_rung<'a>(element: &'a AXElement, ctx: &ChainContext<'a>) -> ChainRung<'
             return Ok(DeliveryOutcome::NotDelivered);
         }
         chain_value_write::set_dynamic_verified(element, "AXValue", value, deadline)
+    })
+}
+
+/// The write through a cell that opens an editor when it is pressed: the
+/// presses, the text and the commit all stay inside the application, so no
+/// effect is declared.
+fn cell_write_rung<'a>(element: &'a AXElement, ctx: &ChainContext<'a>) -> ChainRung<'a> {
+    let value = ctx.dynamic_value;
+    let deadline = ctx.deadline;
+    physical(cell_editor::WRITE_LABEL, &[], move || match value {
+        Some(value) => cell_editor::write(element, value, deadline),
+        None => Ok(DeliveryOutcome::NotDelivered),
     })
 }
 

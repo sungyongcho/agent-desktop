@@ -78,10 +78,15 @@ fn is_text_target(element: &AXElement, deadline: Deadline) -> Result<bool, Adapt
         )
         .with_details(serde_json::json!({ "ax_error": error }))
     })?;
-    Ok(matches!(
-        role.as_deref(),
+    Ok(takes_typed_text(role.as_deref()))
+}
+
+/// The roles whose element takes typed text when it holds the keyboard focus.
+pub(crate) fn takes_typed_text(role: Option<&str>) -> bool {
+    matches!(
+        role,
         Some("AXTextField" | "AXTextArea" | "AXSecureTextField" | "AXComboBox")
-    ))
+    )
 }
 
 fn prepare(element: &AXElement, deadline: Deadline) -> Result<(), AdapterError> {
