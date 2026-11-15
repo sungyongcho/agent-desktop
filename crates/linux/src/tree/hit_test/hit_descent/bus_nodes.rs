@@ -4,9 +4,10 @@ use zbus::zvariant::{OwnedObjectPath, OwnedValue};
 
 use super::{Described, Hit, NodeSource};
 use crate::system::{ACCESSIBLE_INTERFACE, PROPERTIES_INTERFACE, within};
+use crate::tree::element::child_view::presented_children;
 use crate::tree::properties::node_read::call;
 use crate::tree::surfaces::window_extents::{WINDOW_COORDINATES, read_extents_async};
-use crate::tree::{AtspiElement, COMPONENT_INTERFACE, Extents, list_children};
+use crate::tree::{AtspiElement, COMPONENT_INTERFACE, Extents};
 
 const NULL_PATH: &str = "/org/a11y/atspi/null";
 
@@ -114,7 +115,7 @@ impl NodeSource for BusNodes<'_> {
             let Hit::Object(parent) = named(bus, path.to_string(), node) else {
                 return Ok(None);
             };
-            let listed = list_children(self.connection, &parent).await;
+            let listed = presented_children(self.connection, &parent).await;
             Ok(listed.ok().and_then(|children| {
                 children
                     .iter()
@@ -126,7 +127,7 @@ impl NodeSource for BusNodes<'_> {
 
     fn children(&mut self, node: &AtspiElement) -> Result<Option<Vec<AtspiElement>>, AdapterError> {
         within(self.deadline, async {
-            Ok(list_children(self.connection, node)
+            Ok(presented_children(self.connection, node)
                 .await
                 .ok()
                 .map(|children| {

@@ -53,14 +53,23 @@ pub(crate) fn resolve_vocabulary(
             &node.properties.accessible_id,
             &node.attributes,
             in_web_document,
+            node.properties.grid.cell,
         )
         .with_borrowed_name(borrowed),
-        descriptor: descriptors(
-            &traits.role,
-            &traits.role_name,
-            &placeholder,
-            &node.attributes,
-            in_web_document,
-        ),
+        descriptor: NodeDescriptor {
+            row_count: node.properties.grid.size.map(|(rows, _)| rows),
+            column_count: node.properties.grid.size.map(|(_, columns)| columns),
+            ..descriptors(
+                &traits.role,
+                &traits.role_name,
+                &placeholder,
+                &node.attributes,
+                in_web_document,
+            )
+        },
     }
 }
+
+#[cfg(test)]
+#[path = "grid_vocabulary_tests.rs"]
+mod grid_vocabulary_tests;

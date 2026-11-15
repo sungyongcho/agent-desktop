@@ -23,8 +23,14 @@ pub(crate) trait Source {
     fn is_shell_frame(&mut self, frame: &AtspiElement) -> bool;
     /// The verified root of the ref's surface, carrying its window ancestry.
     fn open_window(&mut self, entry: &RefEntry) -> Result<AtspiElement, AdapterError>;
-    /// The children of one node, in the order a walk records them.
-    fn level(&mut self, element: &AtspiElement) -> Result<Level<AtspiElement>, AdapterError>;
+    /// The children of one node, in the order a walk records them. `toward`
+    /// is the index of the child a stored path needs next; a node with too
+    /// many children to list gives only that child.
+    fn level(
+        &mut self,
+        element: &AtspiElement,
+        toward: Option<usize>,
+    ) -> Result<Level<AtspiElement>, AdapterError>;
     /// The evidence of one node, read as the snapshot walk reads it.
     fn evidence(&mut self, element: &AtspiElement) -> Result<LocatorEvidence, AdapterError>;
     /// The listed name of the application when `/proc` shows it stopped.

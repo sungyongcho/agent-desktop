@@ -158,6 +158,7 @@ fn a_node_whose_children_could_not_be_read_is_truncated_and_the_walk_incomplete(
                         children: Vec::new(),
                         children_unread: true,
                         gone: false,
+                        slots: None,
                     },
                     other => Expansion::read(other, Vec::new()),
                 })
@@ -188,6 +189,7 @@ fn a_child_that_vanished_is_kept_and_does_not_abort_the_walk() {
                         children: Vec::new(),
                         children_unread: true,
                         gone: true,
+                        slots: None,
                     },
                     other => Expansion::read(other, Vec::new()),
                 })
@@ -261,4 +263,57 @@ fn a_deadline_that_expired_before_the_first_level_is_a_timeout() {
     )
     .expect_err("an expired deadline reads nothing");
     assert_eq!(error.code, ErrorCode::Timeout);
+}
+
+fn walk_with_slots(grid_view: bool) -> Walk<&'static str> {
+    use crate::tree::element::child_view::ChildSlots;
+    walk_levels(
+        "a",
+        &WalkLimits::default(),
+        deadline(),
+        |level| {
+            Ok(level
+                .iter()
+                .map(|key| match *key {
+                    "a" => Expansion {
+                        payload: "a",
+                        children: vec!["x", "y"],
+                        children_unread: false,
+                        gone: false,
+                        slots: Some(ChildSlots {
+                            positions: vec![40, 57],
+                            reported: 1_000_000,
+                            grid_view,
+                        }),
+                    },
+                    other => Expansion::read(other, Vec::new()),
+                })
+                .collect())
+        },
+        |_| NodeClass::default(),
+    )
+    .expect("an in-memory walk cannot fail")
+}
+
+#[test]
+fn the_cells_in_view_of_a_table_keep_their_index_and_the_walk_stays_complete() {
+    let result = walk_with_slots(true);
+    assert!(result.complete);
+    assert!(!result.root.truncated);
+    assert_eq!(result.root.child_count, Some(1_000_000));
+    let places: Vec<usize> = result
+        .root
+        .children
+        .iter()
+        .map(|c| c.source_index)
+        .collect();
+    assert_eq!(places, [40, 57]);
+}
+
+#[test]
+fn a_cut_child_list_that_is_not_a_grid_view_is_truncated_and_incomplete() {
+    let result = walk_with_slots(false);
+    assert!(!result.complete);
+    assert!(result.root.truncated);
+    assert_eq!(result.root.child_count, Some(1_000_000));
 }

@@ -53,6 +53,11 @@ fn dom_identifier(
     }
 }
 
+/// The identifiers of a node. The position the platform table interface gives
+/// a cell is its grid cell identifier, kept first and preferred: a grid holds
+/// one cell per position, so it names the cell inside its table. A node that
+/// is not a cell of a table gets none.
+///
 /// The developer identifiers of a node. Qt's `AccessibleId` is kept whole
 /// unless its last segment is a Qt class name, which names the widget's type
 /// and identifies nothing. The DOM `id` counts only inside a web document,
@@ -63,10 +68,12 @@ pub(crate) fn identifier_evidence(
     accessible_id: &Field<String>,
     attributes: &AttributeRead,
     in_web_document: bool,
+    cell: Option<(u32, u32)>,
 ) -> IdentifierEvidence {
     let (dom, dom_complete) = dom_identifier(attributes, in_web_document);
     let (native, native_complete) = native_identifier(accessible_id);
-    let found: Vec<ElementIdentifier> = dom.into_iter().chain(native).collect();
+    let grid = cell.map(|(row, column)| ElementIdentifier::grid_cell(row, column));
+    let found: Vec<ElementIdentifier> = grid.into_iter().chain(dom).chain(native).collect();
     let preferred = if found.is_empty() { None } else { Some(0) };
     IdentifierEvidence::typed(found, preferred, dom_complete && native_complete)
 }
