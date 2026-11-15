@@ -28,7 +28,6 @@ fn a_dotted_qt_id_is_kept_whole() {
         &id("QApplication.mainWin.centralPane.nameEdit"),
         &attributes(&[]),
         false,
-        None,
     );
     assert_eq!(
         evidence.identifiers(),
@@ -43,20 +42,19 @@ fn a_qt_id_ending_in_a_class_name_identifies_nothing() {
         &id("QApplication.QMainWindow.QWidget.QPushButton"),
         &attributes(&[]),
         false,
-        None,
     );
     assert!(evidence.identifiers().is_empty());
     assert!(evidence.is_complete());
-    let quit = identifier_evidence(&id("QApplication.Quit"), &attributes(&[]), false, None);
+    let quit = identifier_evidence(&id("QApplication.Quit"), &attributes(&[]), false);
     assert_eq!(quit.identifiers(), [native("QApplication.Quit")]);
 }
 
 #[test]
 fn a_dom_id_counts_only_inside_a_web_document() {
     let attrs = attributes(&[("id", "showOnStartup"), ("tag", "div")]);
-    let inside = identifier_evidence(&id(""), &attrs, true, None);
+    let inside = identifier_evidence(&id(""), &attrs, true);
     assert_eq!(inside.identifiers(), [dom("showOnStartup")]);
-    let outside = identifier_evidence(&id(""), &attrs, false, None);
+    let outside = identifier_evidence(&id(""), &attrs, false);
     assert!(outside.identifiers().is_empty());
     assert!(outside.is_complete());
 }
@@ -64,7 +62,7 @@ fn a_dom_id_counts_only_inside_a_web_document() {
 #[test]
 fn the_dom_id_is_preferred_and_the_native_id_is_kept() {
     let attrs = attributes(&[("id", "chat")]);
-    let evidence = identifier_evidence(&id("QApplication.chat"), &attrs, true, None);
+    let evidence = identifier_evidence(&id("QApplication.chat"), &attrs, true);
     assert_eq!(
         evidence.identifiers(),
         [dom("chat"), native("QApplication.chat")]
@@ -74,48 +72,16 @@ fn the_dom_id_is_preferred_and_the_native_id_is_kept() {
 
 #[test]
 fn a_blank_id_is_absent_and_a_failed_read_is_unknown() {
-    let blank = identifier_evidence(&id(""), &attributes(&[]), true, None);
+    let blank = identifier_evidence(&id(""), &attributes(&[]), true);
     assert!(blank.identifiers().is_empty());
     assert!(blank.is_complete());
-    let absent = identifier_evidence(&Field::Absent, &attributes(&[]), true, None);
+    let absent = identifier_evidence(&Field::Absent, &attributes(&[]), true);
     assert!(absent.is_complete());
-    let failed = identifier_evidence(
-        &Field::Failed("gone".to_owned()),
-        &attributes(&[]),
-        true,
-        None,
-    );
+    let failed = identifier_evidence(&Field::Failed("gone".to_owned()), &attributes(&[]), true);
     assert!(failed.identifiers().is_empty());
     assert!(!failed.is_complete());
-    let attrs_failed = identifier_evidence(&id(""), &Field::Failed("gone".to_owned()), true, None);
+    let attrs_failed = identifier_evidence(&id(""), &Field::Failed("gone".to_owned()), true);
     assert!(!attrs_failed.is_complete());
-    let outside = identifier_evidence(&id(""), &Field::Failed("gone".to_owned()), false, None);
+    let outside = identifier_evidence(&id(""), &Field::Failed("gone".to_owned()), false);
     assert!(outside.is_complete());
-}
-
-#[test]
-fn a_cell_position_is_the_first_and_preferred_identifier() {
-    let evidence = identifier_evidence(
-        &id("QApplication.table"),
-        &attributes(&[]),
-        false,
-        Some((6, 1)),
-    );
-    assert_eq!(
-        evidence.identifiers(),
-        [
-            ElementIdentifier::grid_cell(6, 1),
-            native("QApplication.table")
-        ]
-    );
-    assert_eq!(
-        evidence.preferred_identifier(),
-        Some(&ElementIdentifier::grid_cell(6, 1))
-    );
-}
-
-#[test]
-fn a_node_that_is_not_a_cell_gets_no_grid_identifier() {
-    let evidence = identifier_evidence(&id(""), &attributes(&[]), false, None);
-    assert!(evidence.identifiers().is_empty());
 }

@@ -63,7 +63,7 @@ impl Grid {
     }
 }
 
-pub(crate) struct Component(i32, i32);
+pub(crate) struct Component(i32, i32, bool);
 
 #[zbus::interface(name = "org.a11y.atspi.Component")]
 impl Component {
@@ -77,6 +77,12 @@ impl Component {
         y: i32,
         _coordinates: u32,
     ) -> (String, OwnedObjectPath) {
+        if self.2 {
+            return (
+                String::new(),
+                OwnedObjectPath::try_from("/org/a11y/atspi/null").expect("the null path parses"),
+            );
+        }
         (BUS.to_owned(), cell_path((y / CELL) * self.0 + x / CELL))
     }
 }
@@ -125,17 +131,26 @@ pub(crate) fn grid(
     columns: i32,
     view_rows: i32,
 ) -> (Connection, AtspiElement, Arc<Calls>, Connection) {
-    grid_with(reported, columns, view_rows, false)
+    grid_with(reported, columns, view_rows, Quirks::default())
 }
 
-/// The same table, where `fresh_objects` makes the table answer with a new
-/// object path for a cell each time, as a toolkit that creates cell objects
-/// on demand does.
+/// How the fake table departs from a well-behaved one. `fresh_objects` makes
+/// the table answer with a new object path for a cell each time, as a toolkit
+/// that creates cell objects on demand does. `blind` makes a point query at
+/// the table answer with the null object, as a table that shows no cell there
+/// does.
+#[derive(Default, Clone, Copy)]
+pub(crate) struct Quirks {
+    pub(crate) fresh_objects: bool,
+    pub(crate) blind: bool,
+}
+
+/// The same table with the departures `quirks` names.
 pub(crate) fn grid_with(
     reported: i32,
     columns: i32,
     view_rows: i32,
-    fresh_objects: bool,
+    quirks: Quirks,
 ) -> (Connection, AtspiElement, Arc<Calls>, Connection) {
     let calls = Arc::new(Calls::default());
     let (near, far) = std::os::unix::net::UnixStream::pair().expect("a socket pair opens");
@@ -151,9 +166,14 @@ pub(crate) fn grid_with(
                 calls: calls.clone(),
             },
         )
-        .and_then(|builder| builder.serve_at(TABLE_PATH, Component(columns, view_rows)))
         .and_then(|builder| {
-            builder.serve_at(TABLE_PATH, Table(columns, calls.clone(), fresh_objects))
+            builder.serve_at(TABLE_PATH, Component(columns, view_rows, quirks.blind))
+        })
+        .and_then(|builder| {
+            builder.serve_at(
+                TABLE_PATH,
+                Table(columns, calls.clone(), quirks.fresh_objects),
+            )
         })
         .and_then(|builder| builder.serve_at("/cell/0", Cell(0)))
         .and_then(|builder| builder.serve_at(format!("/cell/{corner}"), Cell(corner)))

@@ -172,3 +172,91 @@ fn numbers_print_without_a_trailing_fraction_and_non_finite_numbers_are_refused(
     assert_eq!(number_text(f64::NAN), None);
     assert_eq!(number_text(f64::INFINITY), None);
 }
+
+#[test]
+fn a_table_cell_with_the_text_interface_reads_its_content_editable_or_not() {
+    use crate::tree::vocabulary::role_numbers::TABLE_CELL;
+    assert_eq!(
+        value_source(&node(TABLE_CELL, &["Text"], &[])),
+        ValueSource::CellText
+    );
+    assert_eq!(
+        value_source(&node(TABLE_CELL, &["Text", "Value"], &[EDITABLE])),
+        ValueSource::CellText
+    );
+    assert_eq!(
+        value_source(&node(TABLE_CELL, &["Component"], &[])),
+        ValueSource::None
+    );
+}
+
+mod cell_text_on_a_bus {
+    use std::sync::Arc;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    use zbus::connection::Builder;
+
+    use super::node;
+    use crate::tree::Field;
+    use crate::tree::capabilities::value_read::read_value;
+    use crate::tree::vocabulary::role_numbers::TABLE_CELL;
+
+    struct Text {
+        content: &'static str,
+        calls: Arc<AtomicUsize>,
+    }
+
+    #[zbus::interface(name = "org.a11y.atspi.Text")]
+    impl Text {
+        fn get_text(&self, _start: i32, end: i32) -> String {
+            assert_eq!(end, -1);
+            self.calls.fetch_add(1, Ordering::SeqCst);
+            self.content.to_owned()
+        }
+
+        #[zbus(property)]
+        fn character_count(&self) -> i32 {
+            self.calls.fetch_add(100, Ordering::SeqCst);
+            0
+        }
+    }
+
+    fn read(content: &'static str) -> (Field<String>, usize) {
+        let calls = Arc::new(AtomicUsize::new(0));
+        let (near, far) = std::os::unix::net::UnixStream::pair().unwrap();
+        let (client, server) = zbus::block_on(futures_lite::future::zip(
+            Builder::async_io_unix_stream(near).p2p().build(),
+            Builder::async_io_unix_stream(far)
+                .server(zbus::Guid::generate())
+                .unwrap()
+                .p2p()
+                .serve_at(
+                    "/p",
+                    Text {
+                        content,
+                        calls: calls.clone(),
+                    },
+                )
+                .unwrap()
+                .build(),
+        ));
+        let _server = server.unwrap();
+        let cell = node(TABLE_CELL, &["Text"], &[]);
+        let read = zbus::block_on(read_value(&client.unwrap(), &cell, 1024)).unwrap();
+        (read.value, calls.load(Ordering::SeqCst))
+    }
+
+    #[test]
+    fn a_cell_is_read_with_one_text_call_and_no_length_call() {
+        let (value, calls) = read("Flux");
+        assert_eq!(value.present().map(String::as_str), Some("Flux"));
+        assert_eq!(calls, 1);
+    }
+
+    #[test]
+    fn a_blank_cell_has_no_value() {
+        let (value, calls) = read("");
+        assert!(matches!(value, Field::Absent));
+        assert_eq!(calls, 1);
+    }
+}

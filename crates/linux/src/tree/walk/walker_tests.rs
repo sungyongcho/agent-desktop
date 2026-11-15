@@ -317,3 +317,17 @@ fn a_cut_child_list_that_is_not_a_grid_view_is_truncated_and_incomplete() {
     assert!(result.root.truncated);
     assert_eq!(result.root.child_count, Some(1_000_000));
 }
+
+#[test]
+fn the_children_of_a_node_that_advertises_selection_know_their_parent_selects() {
+    use crate::tree::test_support::helpers::read_of;
+    let mut node = read_of(55, "table", &[]).node;
+    node.element = AtspiElement::new(":1.2", "/table", 7);
+    node.children = Field::Present(vec![(":1.2".to_owned(), "/cell".to_owned())]);
+    let pids = HashMap::from([(":1.2".to_owned(), 7u32)]);
+    let plain = child_elements(&node, &pids);
+    assert!(!plain[0].ancestry().selecting_parent());
+    node.traits.interfaces = Field::Present(vec!["org.a11y.atspi.Selection".to_owned()]);
+    let selecting = child_elements(&node, &pids);
+    assert!(selecting[0].ancestry().selecting_parent());
+}

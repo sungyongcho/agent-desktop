@@ -53,7 +53,6 @@ pub(crate) fn resolve_vocabulary(
             &node.properties.accessible_id,
             &node.attributes,
             in_web_document,
-            node.properties.grid.cell,
         )
         .with_borrowed_name(borrowed),
         descriptor: NodeDescriptor {

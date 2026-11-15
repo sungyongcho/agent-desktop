@@ -16,12 +16,13 @@ use crate::tree::capabilities::text_selection::{CaretAndSelection, read_caret_an
 use crate::tree::capabilities::text_units::LengthUnit;
 use crate::tree::live_read::live_offscreen::toolkit_of;
 use crate::tree::properties::toolkit_trust::{insert_length_unit, is_gecko};
-use crate::tree::vocabulary::role_numbers::{DIAL, SCROLL_BAR, SLIDER, SPIN_BUTTON};
+use crate::tree::vocabulary::role_numbers::{DIAL, SCROLL_BAR, SLIDER, SPIN_BUTTON, TABLE_CELL};
 use crate::tree::vocabulary::state_bits::{EDITABLE, READ_ONLY};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum Route {
     Numeric { spin_button: bool },
+    Cell,
     Text,
     Unsupported,
 }
@@ -40,6 +41,9 @@ pub(crate) fn route(role: Option<u32>, interfaces: Option<&[String]>) -> Route {
         return Route::Numeric {
             spin_button: role == Some(SPIN_BUTTON),
         };
+    }
+    if role == Some(TABLE_CELL) && advertises(interfaces, VALUE_INTERFACE) == Some(true) {
+        return Route::Cell;
     }
     if text_advertised(interfaces) {
         Route::Text
@@ -165,6 +169,15 @@ fn unsupported(action: &str) -> AdapterError {
     .with_disposition(DeliverySemantics::not_delivered())
 }
 
+fn cell_takes_a_number() -> AdapterError {
+    AdapterError::new(
+        ErrorCode::InvalidArgs,
+        "The cell takes a number through its value interface; text has no background route on this cell",
+    )
+    .with_suggestion("Give a number. Text in this cell needs headed mode, which only the user can request")
+    .with_disposition(DeliverySemantics::not_delivered())
+}
+
 fn ensure_writable(view: &NodeView) -> Result<(), AdapterError> {
     if writable(view.state(READ_ONLY), view.state(EDITABLE)) {
         Ok(())
@@ -210,6 +223,15 @@ pub(crate) fn set_value(
             }
             let increment = spin_button.then(|| minimum_increment(target)).flatten();
             let plan = numeric_write::plan(text, spin_button, increment)?;
+            let port = LiveNumeric { target };
+            let mut rungs = numeric_write::write_rungs(&port, plan);
+            run_semantic_chain(&action, &mut rungs, target.deadline, SET_VALUE_SUGGESTION)
+        }
+        Route::Cell => {
+            if view.state(EDITABLE) != Some(true) || view.state(READ_ONLY) == Some(true) {
+                return Err(unsupported("set a value"));
+            }
+            let plan = numeric_write::plan(text, false, None).map_err(|_| cell_takes_a_number())?;
             let port = LiveNumeric { target };
             let mut rungs = numeric_write::write_rungs(&port, plan);
             run_semantic_chain(&action, &mut rungs, target.deadline, SET_VALUE_SUGGESTION)

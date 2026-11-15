@@ -15,6 +15,7 @@ use crate::tree::properties::read_purpose::ReadPurpose;
 use crate::tree::vocabulary::label_read::read_label_if_needed;
 use crate::tree::{AtspiElement, Expansion, ObservedRead, RawNode, WalkLimits};
 
+const SELECTION_INTERFACE: &str = "org.a11y.atspi.Selection";
 const NODES_IN_FLIGHT: usize = 32;
 const PID_LOOKUPS_IN_FLIGHT: usize = 64;
 
@@ -66,7 +67,13 @@ pub(in crate::tree) fn child_elements(
     node: &RawNode,
     pids: &HashMap<String, u32>,
 ) -> Vec<AtspiElement> {
-    let ancestry = ancestry::child(&node.element, node.traits.role.present().copied());
+    let selecting = node
+        .traits
+        .interfaces
+        .present()
+        .is_some_and(|names| names.iter().any(|name| name == SELECTION_INTERFACE));
+    let ancestry = ancestry::child(&node.element, node.traits.role.present().copied())
+        .with_selecting_parent(selecting);
     node.children
         .present()
         .into_iter()

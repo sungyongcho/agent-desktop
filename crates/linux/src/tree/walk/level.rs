@@ -22,3 +22,7 @@ impl<K> Level<K> {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "level_tests.rs"]
+mod tests;

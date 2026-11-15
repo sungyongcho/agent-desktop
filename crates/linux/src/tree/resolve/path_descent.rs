@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
 use agent_desktop_core::{AdapterError, Deadline, ErrorCode};
-use futures_util::future::join;
+use futures_util::future::join3;
 use zbus::Connection;
 
 use super::landing::Landing;
 use crate::system::within;
-use crate::tree::element::child_view::read_level_children;
+use crate::tree::element::child_view::{read_interfaces, read_level_children};
 use crate::tree::properties::liveness::Liveness;
 use crate::tree::properties::node_read::{CHILD_COUNT, count_value, get_one, read_node_for};
 use crate::tree::properties::read_purpose::ReadPurpose;
@@ -119,7 +119,7 @@ impl Levels {
         };
         let (connection, pids) = (&self.connection, &mut self.pids);
         within(self.deadline, async {
-            let (read, count) = join(
+            let (read, count, interfaces) = join3(
                 read_node_for(connection, element, ReadPurpose::Shape),
                 get_one(
                     connection,
@@ -128,9 +128,11 @@ impl Levels {
                     count_value,
                     Liveness::Alive,
                 ),
+                read_interfaces(connection, element, Liveness::Alive),
             )
             .await;
             let (mut node, liveness) = read?;
+            node.traits.interfaces = interfaces?;
             let view = read_level_children(connection, element, &count?, toward, liveness).await?;
             node.children = view.children;
             node.properties.grid.slots = view.slots;

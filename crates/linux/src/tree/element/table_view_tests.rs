@@ -1,5 +1,5 @@
 use super::*;
-use crate::tree::test_support::grid_fake::{grid, grid_with};
+use crate::tree::test_support::grid_fake::{Quirks, grid, grid_with};
 
 #[test]
 fn the_rectangle_between_two_corners_runs_row_by_row() {
@@ -11,11 +11,26 @@ fn the_rectangle_between_two_corners_runs_row_by_row() {
 }
 
 #[test]
-fn a_table_without_a_hit_at_its_corners_presents_no_view() {
+fn a_table_that_shows_no_cell_at_its_corners_presents_no_view() {
+    let (client, element, _calls, _server) = grid_with(
+        1_000_000,
+        10,
+        6,
+        Quirks {
+            blind: true,
+            ..Quirks::default()
+        },
+    );
+    let view = zbus::block_on(read_table_view(&client, &element, 4096, Liveness::Alive));
+    assert!(matches!(view, Ok(None)), "{view:?}");
+}
+
+#[test]
+fn a_table_whose_extents_cannot_be_read_presents_no_view() {
     let (client, element, _calls, _server) = grid(1_000_000, 10, 6);
     let missing = AtspiElement::new(element.bus_name(), "/missing", 1);
     let view = zbus::block_on(read_table_view(&client, &missing, 4096, Liveness::Alive));
-    assert!(matches!(view, Ok(None)) || view.is_err());
+    assert!(matches!(view, Ok(None)), "{view:?}");
 }
 
 #[test]
@@ -31,7 +46,15 @@ fn the_view_of_a_table_is_its_cells_with_their_indexes() {
 
 #[test]
 fn a_toolkit_that_answers_with_new_cell_objects_still_has_a_view() {
-    let (client, element, _calls, _server) = grid_with(1_000_000, 10, 6, true);
+    let (client, element, _calls, _server) = grid_with(
+        1_000_000,
+        10,
+        6,
+        Quirks {
+            fresh_objects: true,
+            ..Quirks::default()
+        },
+    );
     let cells = zbus::block_on(read_table_view(&client, &element, 4096, Liveness::Alive))
         .expect("the view reads")
         .expect("the table has a view");

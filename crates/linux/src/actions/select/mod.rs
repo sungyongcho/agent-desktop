@@ -26,7 +26,7 @@ use crate::tree::live_read::live_offscreen::toolkit_of;
 use crate::tree::properties::toolkit_trust::is_gecko;
 use crate::tree::vocabulary::role_numbers::COMBO_BOX;
 use crate::tree::vocabulary::state_bits::{CHECKABLE, SELECTABLE, SELECTED};
-use crate::tree::{AtspiElement, atspi_element, element::ancestry, list_children};
+use crate::tree::{AtspiElement, atspi_element, element::ancestry};
 
 pub(super) const SELECT_SETTLE: Duration = Duration::from_millis(1000);
 const SELECT_CHILD_LABEL: &str = "Selection.SelectChild";
@@ -85,7 +85,7 @@ pub(super) fn children_of(
 ) -> Result<Vec<AtspiElement>, AdapterError> {
     let connection = bus.get(deadline)?;
     let children = within(deadline, async {
-        list_children(connection.inner(), node).await
+        crate::tree::presented_children(connection.inner(), node).await
     })?;
     Ok(children
         .into_iter()
@@ -129,23 +129,6 @@ pub(super) fn parent_of(
         });
         Ok(parent)
     })
-}
-
-fn selection_parent(
-    reader: &mut BusReader<'_>,
-    node: &AtspiElement,
-) -> Result<Option<Container<AtspiElement>>, AdapterError> {
-    let Some(parent) = parent_of(reader.bus, node, reader.deadline)? else {
-        return Ok(None);
-    };
-    if !reader.inspect(&parent)?.selection {
-        return Ok(None);
-    }
-    let siblings = reader.children(&parent)?;
-    let present = siblings
-        .iter()
-        .any(|sibling| sibling.bus_name() == node.bus_name() && sibling.path() == node.path());
-    Ok(present.then_some(Container { node: parent }))
 }
 
 pub(super) fn container_target<'a>(
@@ -339,7 +322,7 @@ pub(crate) fn select(
                 if own_names_verb {
                     None
                 } else {
-                    selection_parent(&mut reader, target.element)?
+                    select_parent::selection_parent(&mut reader, target.element)?
                 }
             } else {
                 let combo = view.role() == Some(COMBO_BOX) && advertises_selection(&view);
@@ -381,6 +364,7 @@ pub(crate) fn select(
 pub(crate) mod select_exclusive;
 pub(super) mod select_identity;
 pub(super) mod select_index;
+pub(crate) mod select_parent;
 pub(crate) mod select_pointer;
 pub(super) mod select_pointer_combo;
 pub(crate) mod select_popup;

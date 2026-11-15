@@ -1,21 +1,7 @@
-use agent_desktop_core::ElementIdentifier;
-
 use super::resolve_vocabulary;
 use crate::tree::LabelOutcome;
 use crate::tree::test_support::helpers::read_of;
 use crate::tree::vocabulary::role_numbers::{PANEL, TABLE};
-
-#[test]
-fn a_cell_with_a_position_carries_its_grid_identifier_first() {
-    let mut read = read_of(PANEL, "Flux", &[]);
-    read.node.properties.grid.cell = Some((6, 1));
-    let vocabulary = resolve_vocabulary(&read.node, &LabelOutcome::Failed, false);
-    assert_eq!(
-        vocabulary.identifiers.preferred_identifier(),
-        Some(&ElementIdentifier::grid_cell(6, 1))
-    );
-    assert_eq!(vocabulary.descriptor.row_count, None);
-}
 
 #[test]
 fn a_table_carries_its_row_and_column_counts() {
@@ -27,7 +13,7 @@ fn a_table_carries_its_row_and_column_counts() {
 }
 
 #[test]
-fn a_node_without_table_facts_is_unchanged() {
+fn a_node_without_table_size_is_unchanged() {
     let read = read_of(PANEL, "", &[]);
     let vocabulary = resolve_vocabulary(&read.node, &LabelOutcome::Failed, false);
     assert!(vocabulary.identifiers.identifiers().is_empty());

@@ -173,6 +173,23 @@ pub(crate) async fn presented_children(
     }
 }
 
+/// The interface names of an object, as one `GetInterfaces` call gives them.
+pub(in crate::tree) async fn read_interfaces(
+    connection: &Connection,
+    element: &AtspiElement,
+    liveness: Liveness,
+) -> Result<Field<Vec<String>>, AdapterError> {
+    let reply = call(
+        connection,
+        element,
+        ACCESSIBLE_INTERFACE,
+        "GetInterfaces",
+        &(),
+    )
+    .await;
+    field(deserialize::<Vec<String>>(reply), liveness)
+}
+
 async fn interface_names(
     connection: &Connection,
     element: &AtspiElement,
@@ -182,18 +199,12 @@ async fn interface_names(
     if let Field::Present(names) = known {
         return Ok(names.clone());
     }
-    let reply = call(
-        connection,
-        element,
-        ACCESSIBLE_INTERFACE,
-        "GetInterfaces",
-        &(),
+    Ok(
+        match read_interfaces(connection, element, liveness).await? {
+            Field::Present(names) => names,
+            Field::Absent | Field::Failed(_) => Vec::new(),
+        },
     )
-    .await;
-    Ok(match field(deserialize::<Vec<String>>(reply), liveness)? {
-        Field::Present(names) => names,
-        Field::Absent | Field::Failed(_) => Vec::new(),
-    })
 }
 
 async fn leading_children(
