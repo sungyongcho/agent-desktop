@@ -1,5 +1,5 @@
-use super::{Replacement, nothing_typed, replacement, write_outcome};
-use agent_desktop_core::{DeliveryObservation, DeliveryOutcome, DeliverySemantics, ErrorCode};
+use super::{Replacement, left_open, nothing_typed, replacement};
+use agent_desktop_core::{DeliveryOutcome, DeliverySemantics, ErrorCode};
 
 #[test]
 fn an_empty_editor_is_typed_into_without_a_selection() {
@@ -28,21 +28,19 @@ fn the_selection_length_counts_utf16_units() {
 }
 
 #[test]
-fn a_write_is_verified_only_when_the_text_was_confirmed_and_the_commit_sent() {
-    let verified = DeliveryOutcome::Delivered(DeliveryObservation::Verified);
-    let unverified = DeliveryOutcome::Delivered(DeliveryObservation::Unverified);
-
-    assert_eq!(write_outcome(verified, true), verified);
-    assert_eq!(write_outcome(DeliveryOutcome::Satisfied, true), verified);
-    assert_eq!(write_outcome(verified, false), unverified);
-    assert_eq!(write_outcome(unverified, true), unverified);
-}
-
-#[test]
 fn a_cell_that_was_pressed_and_gave_no_editor_fails_as_delivered() {
     assert_eq!(nothing_typed(false).unwrap(), DeliveryOutcome::NotDelivered);
 
     let error = nothing_typed(true).unwrap_err();
+    assert_eq!(error.code, ErrorCode::ActionFailed);
+    assert_eq!(error.disposition, DeliverySemantics::delivered_unverified());
+}
+
+#[test]
+fn text_left_in_an_editor_the_application_moved_fails_as_delivered() {
+    assert_eq!(left_open(false).unwrap(), DeliveryOutcome::NotDelivered);
+
+    let error = left_open(true).unwrap_err();
     assert_eq!(error.code, ErrorCode::ActionFailed);
     assert_eq!(error.disposition, DeliverySemantics::delivered_unverified());
 }

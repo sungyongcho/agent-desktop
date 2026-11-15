@@ -266,19 +266,27 @@ pub(crate) fn cell_rungs<'a>(
     ctx: &ChainContext<'a>,
 ) -> Vec<ChainRung<'a>> {
     match target {
-        cell_editor::CellTarget::Cell => vec![cell_write_rung(element, ctx)],
+        cell_editor::CellTarget::Cell => vec![cell_write_rung(element, ctx, &[])],
+        cell_editor::CellTarget::ForegroundCell => {
+            vec![cell_write_rung(element, ctx, KEYBOARD_EFFECTS)]
+        }
         cell_editor::CellTarget::Editor => vec![cell_editor_rung(element, ctx)],
         cell_editor::CellTarget::Neither => Vec::new(),
     }
 }
 
-/// The write through a cell that opens an editor when it is pressed: the
-/// presses, the text and the commit all stay inside the application, so no
-/// effect is declared.
-fn cell_write_rung<'a>(element: &'a AXElement, ctx: &ChainContext<'a>) -> ChainRung<'a> {
+/// The write through a cell that opens an editor when it is pressed. The
+/// text and the commit stay inside the application. `effects` is what the
+/// press does: nothing for a plain cell, and the foreground for a cell whose
+/// press shows a menu or opens a dialog.
+fn cell_write_rung<'a>(
+    element: &'a AXElement,
+    ctx: &ChainContext<'a>,
+    effects: &'static [Effect],
+) -> ChainRung<'a> {
     let value = ctx.dynamic_value;
     let deadline = ctx.deadline;
-    physical(cell_editor::WRITE_LABEL, &[], move || match value {
+    physical(cell_editor::WRITE_LABEL, effects, move || match value {
         Some(value) => cell_editor::write(element, value, deadline),
         None => Ok(DeliveryOutcome::NotDelivered),
     })

@@ -139,3 +139,15 @@ fn only_a_cell_or_its_editor_gets_a_rung_that_types_and_it_takes_no_foreground()
         assert_eq!(rungs[0].mechanism, StepMechanism::PhysicalSynthetic);
     }
 }
+
+#[test]
+fn a_cell_whose_press_takes_the_foreground_declares_it_on_the_write_rung() {
+    use crate::actions::cell_editor::CellTarget;
+    let element = AXElement(std::ptr::null_mut());
+    let ctx = context();
+
+    let rungs = cell_rungs(CellTarget::ForegroundCell, &element, &ctx);
+
+    assert_eq!(labels(&rungs), ["CellEditorWrite"]);
+    assert_eq!(rungs[0].effects, [Effect::FocusSteal]);
+}

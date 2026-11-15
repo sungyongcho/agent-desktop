@@ -14,7 +14,7 @@ use agent_desktop_core::{
 };
 
 use crate::actions::chain::press_selection;
-use crate::actions::{ax_helpers, background_keyboard};
+use crate::actions::{DeliveryTracker, ax_helpers, background_keyboard};
 use crate::tree::AXElement;
 use crate::tree::properties::attributes;
 
@@ -23,6 +23,7 @@ pub(crate) const REPLACE_LABEL: &str = "PIDTargetedReplaceText";
 pub(crate) const WRITE_LABEL: &str = "CellEditorWrite";
 
 const MAX_PRESSES: usize = 2;
+const LEFT_OPEN_SUGGESTION: &str = "Commit the open edit with a key press scoped to the application, such as press return --app <app>, then read the cell to verify.";
 const NO_EDITOR_SUGGESTION: &str = "Take a fresh snapshot before another write: the press can select the cell or open another surface.";
 
 const CELL_ROLE: &str = "cell";
@@ -48,23 +49,31 @@ pub(crate) fn replacement(current: &str, wanted: &str) -> Replacement {
     }
 }
 
-/// How a value write reaches an element through a cell's in-place editor.
+/// How a value write reaches an element through a cell's in-place editor. A
+/// cell is pressed to open its editor, and `ForegroundCell` is a cell whose
+/// press shows a menu or opens a dialog.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum CellTarget {
     Cell,
+    ForegroundCell,
     Editor,
     Neither,
 }
 
-/// Classifies `element` for a value write. A read that fails says `Neither`:
-/// the element then gets its ordinary chain, which reports the failure.
+/// Classifies `element` for a value write. A role read that fails says
+/// `Neither`: the element then gets its ordinary chain, which reports the
+/// failure. A cell whose label cannot be read is a `ForegroundCell`.
 pub(crate) fn target(element: &AXElement, deadline: Deadline) -> CellTarget {
     if element.0.is_null() {
         return CellTarget::Neither;
     }
     let role = ax_helpers::element_role(element, deadline).ok().flatten();
     if role.as_deref() == Some(CELL_ROLE) {
-        CellTarget::Cell
+        if crate::actions::background_effect::press_disturbs(element, deadline) {
+            CellTarget::ForegroundCell
+        } else {
+            CellTarget::Cell
+        }
     } else if holds_focus(element, deadline).unwrap_or(false) {
         CellTarget::Editor
     } else {
@@ -89,7 +98,7 @@ pub(crate) fn holds_focus(element: &AXElement, deadline: Deadline) -> Result<boo
 
 /// Replaces the whole text of a focused cell editor with `value`. Sends
 /// nothing when `element` is not such an editor, or when the text it holds
-/// cannot be selected first: typing would then add to it.
+/// cannot be read or selected first: typing would then add to it.
 pub(crate) fn replace(
     element: &AXElement,
     value: &str,
@@ -98,7 +107,9 @@ pub(crate) fn replace(
     if !holds_focus(element, deadline)? {
         return Ok(DeliveryOutcome::NotDelivered);
     }
-    let current = crate::tree::copy_value_typed(element, deadline).unwrap_or_default();
+    let Some(current) = crate::tree::copy_value_typed(element, deadline) else {
+        return Ok(DeliveryOutcome::NotDelivered);
+    };
     let selected = match replacement(&current, value) {
         Replacement::AlreadyHeld => return Ok(DeliveryOutcome::Satisfied),
         Replacement::Type => true,
@@ -124,10 +135,13 @@ pub(crate) fn replace(
 ///
 /// The cell is pressed, the way a click presses it, until its editor holds
 /// the application's keyboard focus, at most twice, because a first press can
-/// only select the cell. The
-/// editor's text is then replaced and Return commits it. Text goes only to an
-/// editor that sits inside this cell, so it cannot land in another cell. A
-/// cell that was pressed and gave no editor fails: nothing was typed.
+/// only select the cell. The editor's text is then replaced and Return commits
+/// it. The cell is not read after the commit, so a write that sent anything
+/// is delivered and unverified. Text and Return go only to the editor inside
+/// this cell. When the application moves the edit into another element, as a
+/// formula can, the write stops there and fails as delivered and unverified.
+/// A cell that was pressed and took no text fails the same way: nothing was
+/// typed.
 pub(crate) fn write(
     cell: &AXElement,
     value: &str,
@@ -136,16 +150,47 @@ pub(crate) fn write(
     if ax_helpers::element_role(cell, deadline)?.as_deref() != Some(CELL_ROLE) {
         return Ok(DeliveryOutcome::NotDelivered);
     }
-    let mut pressed = false;
-    let typed = match open_editor(cell, deadline, &mut pressed)? {
-        Some(editor) => replace(&editor, value, deadline)?,
-        None => DeliveryOutcome::NotDelivered,
+    let mut sent = false;
+    write_steps(cell, value, deadline, &mut sent)
+        .map_err(|error| DeliveryTracker::from_delivered_units(usize::from(sent)).annotate(error))
+}
+
+fn write_steps(
+    cell: &AXElement,
+    value: &str,
+    deadline: Deadline,
+    sent: &mut bool,
+) -> Result<DeliveryOutcome, AdapterError> {
+    let Some(editor) = open_editor(cell, deadline, sent)? else {
+        return nothing_typed(*sent);
     };
+    let typed = replace(&editor, value, deadline)?;
     if typed == DeliveryOutcome::NotDelivered {
-        return nothing_typed(pressed);
+        return nothing_typed(*sent);
     }
-    let committed = background_keyboard::press_text_focus_holder(cell, &return_key(), deadline)?;
-    Ok(write_outcome(typed, committed))
+    *sent |= typed != DeliveryOutcome::Satisfied;
+    if !background_keyboard::holds_focus(&editor, deadline)? {
+        return left_open(*sent);
+    }
+    background_keyboard::press(&editor, &return_key(), deadline)?;
+    *sent = true;
+    Ok(DeliveryOutcome::from_delivery(true, false))
+}
+
+/// The end of a write whose editor lost the keyboard focus before the commit,
+/// as it does when the application moves the edit into an editor of its own.
+/// Return is not sent to another element. Text that was sent stays on record
+/// as a failure, so the caller does not read it as a committed write.
+pub(crate) fn left_open(sent: bool) -> Result<DeliveryOutcome, AdapterError> {
+    if !sent {
+        return Ok(DeliveryOutcome::NotDelivered);
+    }
+    Err(AdapterError::new(
+        ErrorCode::ActionFailed,
+        "The text was typed, and the application moved the edit out of the cell's editor before it was committed",
+    )
+    .with_suggestion(LEFT_OPEN_SUGGESTION)
+    .with_disposition(DeliverySemantics::delivered_unverified()))
 }
 
 /// The end of a write that typed nothing. A press that was sent stays on
@@ -156,21 +201,10 @@ pub(crate) fn nothing_typed(pressed: bool) -> Result<DeliveryOutcome, AdapterErr
     }
     Err(AdapterError::new(
         ErrorCode::ActionFailed,
-        "The cell was pressed and gave no text editor to type into; nothing was typed",
+        "The cell was pressed and nothing was typed: it gave no text editor, or the editor's text could not be read or selected",
     )
     .with_suggestion(NO_EDITOR_SUGGESTION)
     .with_disposition(DeliverySemantics::delivered_unverified()))
-}
-
-/// The editor text was confirmed before the commit, and the commit was sent:
-/// only then is the write verified.
-pub(crate) fn write_outcome(typed: DeliveryOutcome, committed: bool) -> DeliveryOutcome {
-    let confirmed = matches!(
-        typed,
-        DeliveryOutcome::Satisfied
-            | DeliveryOutcome::Delivered(agent_desktop_core::DeliveryObservation::Verified)
-    );
-    DeliveryOutcome::from_delivery(true, confirmed && committed)
 }
 
 fn open_editor(
@@ -229,7 +263,7 @@ fn select_all(element: &AXElement, held: usize, deadline: Deadline) -> bool {
 }
 
 fn settles_on(element: &AXElement, value: &str, deadline: Deadline) -> bool {
-    let read = || crate::tree::copy_value_typed(element, deadline).unwrap_or_default() == value;
+    let read = || crate::tree::copy_value_typed(element, deadline).as_deref() == Some(value);
     deadline.poll_until(SETTLE, SETTLE_POLL, read, |held| *held)
 }
 
