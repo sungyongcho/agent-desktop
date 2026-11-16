@@ -127,3 +127,14 @@ fn an_empty_frame_size_is_not_placed() {
     let windows = [window(40, "Notes", rect(0, 0, 0, 0), rect(0, 0, 0, 0))];
     assert_eq!(matching_window(&windows, 40, "Notes", (0, 0)), None);
 }
+
+#[test]
+fn only_an_x11_window_of_the_frame_marks_it_as_xwayland() {
+    let mut x11 = window(40, "Notes", rect(0, 0, 420, 300), rect(0, 0, 420, 300));
+    x11.wayland = false;
+    let native = gtk4_editor();
+    assert!(xwayland_window(&[native.clone(), x11.clone()], 40, "Notes"));
+    assert!(!xwayland_window(&[native], 40, "Notes"));
+    assert!(!xwayland_window(std::slice::from_ref(&x11), 41, "Notes"));
+    assert!(!xwayland_window(&[x11], 40, "Other"));
+}

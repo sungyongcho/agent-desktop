@@ -173,6 +173,11 @@ both. With it enabled:
   with the label and any `--image` or `--pointer-image`. With GNOME animations
   turned off, the cursor jumps to each target and the ripple and outline are
   skipped.
+- After `type` or `set-value`, the overlay draws the typing caret in a native
+  Wayland window, and a `press` that moves the insertion point moves it, as on
+  macOS and Windows. GTK 4 entries report no character positions, so they keep
+  the element outline and get no caret. No caret is drawn over an Xwayland
+  window, in an X11 session, or without the extension.
 - `snapshot --include-bounds`, `get` and `list-windows` report screen positions
   for native Wayland windows. Without it, a GTK 4 node has no bounds, and GTK 3,
   Qt and Chromium bounds are relative to their own window.

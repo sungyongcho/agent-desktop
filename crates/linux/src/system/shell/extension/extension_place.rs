@@ -66,6 +66,21 @@ pub(crate) fn locate_frame(
     matching_window(&windows, pid, title, size).map(|(_, space)| space)
 }
 
+/// Whether a window of process `pid` titled `title` is an Xwayland window.
+/// The extension places only native Wayland windows, so this tells a frame it
+/// cannot place because it is X11 from one it found no window for.
+pub(crate) fn xwayland_window(windows: &[ShellWindow], pid: u32, title: &str) -> bool {
+    windows
+        .iter()
+        .any(|window| !window.wayland && window.pid == pid && window.title == title)
+}
+
+/// [`xwayland_window`] against the live window list. `false` when the list
+/// cannot be read.
+pub(crate) fn is_xwayland_frame(pid: u32, title: &str, deadline: Deadline) -> bool {
+    live_windows(deadline).is_some_and(|windows| xwayland_window(&windows, pid, title))
+}
+
 #[cfg(test)]
 #[path = "extension_place_tests.rs"]
 mod tests;

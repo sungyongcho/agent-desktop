@@ -6,7 +6,7 @@ use agent_desktop_core::{BoundsSpace, Deadline};
 
 use super::visibility::is_sentinel;
 use crate::system::display::display_server::{DisplayServer, session_server};
-use crate::system::shell::extension::extension_place::locate_frame;
+use crate::system::shell::extension::extension_place::{is_xwayland_frame, locate_frame};
 use crate::system::within;
 use crate::tree::properties::node_read::read_node_for;
 use crate::tree::properties::read_purpose::ReadPurpose;
@@ -59,6 +59,20 @@ pub(crate) fn frame_origin(
         deadline,
     )?;
     Some((space.x, space.y))
+}
+
+/// Whether `element`'s frame is an Xwayland window on a Wayland session, as
+/// GNOME Shell's window list shows it. `false` when that cannot be read.
+pub(crate) fn frame_on_xwayland(
+    connection: &zbus::Connection,
+    element: &AtspiElement,
+    deadline: Deadline,
+) -> bool {
+    let Some(frame) = element.frame() else {
+        return false;
+    };
+    frame_facts(connection, element, deadline)
+        .is_some_and(|(title, _)| is_xwayland_frame(frame.pid(), &title, deadline))
 }
 
 /// A window-coordinate rectangle moved to the frame's place on screen.
