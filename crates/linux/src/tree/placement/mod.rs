@@ -5,6 +5,7 @@ pub(super) mod node_position;
 pub(crate) mod offscreen;
 pub(super) mod placed_states;
 pub(super) mod popup_position;
+pub(crate) mod shell_space;
 
 use super::Extents;
 use super::surfaces::window_tie::WindowTie;
@@ -25,6 +26,9 @@ pub(crate) struct Placement {
     pub(crate) x11: Option<WindowX11State>,
     pub(crate) displays: Option<Vec<Extents>>,
     pub(crate) wayland_unplaced: bool,
+    /// Where the frame's window coordinates start on screen, from the GNOME
+    /// Shell extension, for a native Wayland window it placed.
+    pub(crate) shell_origin: Option<(i32, i32)>,
     /// The frame maps to several display windows that nothing tells apart.
     pub(crate) tie: Option<WindowTie>,
 }
