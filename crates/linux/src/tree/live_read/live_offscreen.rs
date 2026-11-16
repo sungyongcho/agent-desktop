@@ -157,9 +157,7 @@ fn place(bus: &SharedBus, element: &AtspiElement, deadline: Deadline) -> Placeme
     };
     placed.frame_iconified = read.iconified;
     if let Some(origin) = shell_origin(bus, element, deadline) {
-        placed.shell_origin = Some(origin);
-        placed.wayland_unplaced = false;
-        return placed;
+        return placed.placed_by_shell(origin);
     }
     if element.is_menu_target()
         && matches!(
