@@ -1,7 +1,7 @@
 //! The agent-desktop GNOME Shell extension, the compositor-side half of the
 //! adapter on a GNOME Wayland session. A Wayland client cannot read where any
-//! window sits; the extension runs inside gnome-shell, so it reports window
-//! rectangles.
+//! window sits or draw above other clients; the extension runs inside
+//! gnome-shell, so it reports window rectangles and draws the cursor overlay.
 //! Its source is `crates/linux/gnome-shell-extension/`.
 use agent_desktop_core::{AdapterError, Deadline, ErrorCode};
 use serde::Serialize;
@@ -11,7 +11,11 @@ use zbus::zvariant::{DynamicType, OwnedValue};
 use crate::system::bus::session_bus::SessionBus;
 use crate::system::{NAME_HAS_NO_OWNER, SERVICE_UNKNOWN, within};
 
+pub(crate) mod extension_cursor;
+pub(crate) mod extension_frames;
 pub(crate) mod extension_place;
+pub(crate) mod extension_request;
+pub(crate) mod extension_start;
 pub(crate) mod extension_window;
 
 const BUS_NAME: &str = "dev.agentbrowser.AgentDesktop";
@@ -29,6 +33,9 @@ const UNKNOWN_CALLS: [&str; 4] = [
 /// own as the `Version` property; any other value is refused before a call.
 pub(crate) const PROTOCOL_VERSION: u32 = 1;
 
+/// The extension's UUID, as `gnome-extensions` names it.
+pub(crate) const EXTENSION_UUID: &str = "agent-desktop@agent-browser.dev";
+
 /// Why the extension could not answer a call.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum Unavailable {
@@ -37,6 +44,26 @@ pub(crate) enum Unavailable {
     Absent,
     /// The owner speaks another protocol version, or not this interface.
     Incompatible,
+}
+
+impl Unavailable {
+    pub(crate) const fn cause(self) -> &'static str {
+        match self {
+            Self::Absent => "shell_extension_absent",
+            Self::Incompatible => "shell_extension_incompatible",
+        }
+    }
+
+    pub(crate) fn suggestion(self) -> String {
+        match self {
+            Self::Absent => format!(
+                "Install and enable the {EXTENSION_UUID} GNOME Shell extension, then log out and back in"
+            ),
+            Self::Incompatible => format!(
+                "Install the {EXTENSION_UUID} extension from the same agent-desktop release as this CLI, then log out and back in"
+            ),
+        }
+    }
 }
 
 fn classify(error: zbus::Error) -> Result<Unavailable, AdapterError> {

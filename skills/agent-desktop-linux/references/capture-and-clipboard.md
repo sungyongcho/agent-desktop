@@ -38,7 +38,8 @@ agent-desktop screenshot /tmp/everything.png
   matches this window") with `candidates` and the suggestion to give the windows
   distinct titles.
 - The tool hides its own cursor overlays during capture and restores them; they
-  neither block the screenshot nor appear in its pixels.
+  neither block the screenshot nor appear in its pixels. On GNOME Wayland the
+  agent-desktop extension hides them the same way.
 - A display-server or caller-deadline timeout stays `TIMEOUT`, including when
   capturing a covered window. It does not prove coverage or advise focus.
 - Resource, connection and visibility failures keep their own errors. Only a
