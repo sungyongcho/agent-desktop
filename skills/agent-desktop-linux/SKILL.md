@@ -162,6 +162,26 @@ draws nothing.
 nothing is drawn until an agent acts. Each agent id then gets its own cursor on
 X11, and on GNOME Wayland with the extension.
 
+### X11
+
+On X11 the first command that draws a cursor starts a renderer: the
+agent-desktop binary itself, running in the background for that display and
+state root. It draws what macOS and Windows draw: the cursor travels along the
+same path to each target, then the click ripple and element outline play, with
+the label, any `--image` or `--pointer-image`, and after `type` or `set-value`
+the typing caret.
+
+- Without a compositing manager, X11 cannot blend transparency. Each part is
+  drawn solid, with no soft shadow under the label, and a fading part stays
+  until it is half faded.
+- The label uses fontconfig's semibold sans-serif. With no font that fontconfig
+  or the DejaVu paths name, the cursor has no label.
+- The renderer exits 30 s after its last cursor goes. The cursors of a session
+  that ended without `cursor-overlay disable` go within about 3 s.
+- A program that loads the C library cannot start the renderer. It draws a
+  static arrow instead, with no ripple, outline, label, caret or custom image,
+  and the caret refuses with `PLATFORM_NOT_SUPPORTED`.
+
 ### GNOME Wayland extension
 
 A Wayland client cannot draw above other windows or read where they sit. The
@@ -177,7 +197,7 @@ both. With it enabled:
   Wayland or Xwayland window, and a `press` that moves the insertion point
   moves it, as on macOS and Windows. GTK 4 entries report no character
   positions, so they keep the element outline and get no caret. No caret is
-  drawn in an X11 session or without the extension.
+  drawn without the extension.
 - `snapshot --include-bounds`, `get` and `list-windows` report screen positions
   for native Wayland and Xwayland windows. Without it, a GTK 4 node has no
   bounds, GTK 3, Qt and Chromium bounds are relative to their own window, and

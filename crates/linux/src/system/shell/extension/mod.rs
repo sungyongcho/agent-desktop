@@ -12,10 +12,7 @@ use crate::system::bus::session_bus::SessionBus;
 use crate::system::{NAME_HAS_NO_OWNER, SERVICE_UNKNOWN, within};
 
 pub(crate) mod extension_cursor;
-pub(crate) mod extension_frames;
 pub(crate) mod extension_place;
-pub(crate) mod extension_request;
-pub(crate) mod extension_start;
 pub(crate) mod extension_window;
 pub(crate) mod protocol_map;
 

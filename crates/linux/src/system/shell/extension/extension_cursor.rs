@@ -1,9 +1,9 @@
 use agent_desktop_core::{AdapterError, CursorOverlayControl, Deadline, Point};
 use serde_json::{Value, json};
 
-use super::extension_request::{cursor_request, travel_destination};
-use super::extension_start::CursorStart;
 use super::{Unavailable, call};
+use crate::system::overlay::cursor_request::{cursor_request, travel_destination};
+use crate::system::overlay::cursor_start::CursorStart;
 
 /// The refusal for an overlay the extension cannot draw. It keeps the code and
 /// `rendered: false` an unrendered Wayland overlay has always had, and names

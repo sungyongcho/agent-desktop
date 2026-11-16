@@ -87,3 +87,43 @@ fn an_xwayland_caret_keeps_its_x11_offset_and_lands_scaled() {
         Some(screen_rect(447.0, 275.0, 2.0, 10.0))
     );
 }
+
+#[test]
+fn an_x11_caret_read_in_window_coordinates_lands_by_the_node_on_screen() {
+    let caret = caret_on_x11_screen(
+        rect(69, 175, 2, 20),
+        CoordSpace::Window,
+        Some(rect(0, 0, 420, 100)),
+        Some(rect(40, 150, 420, 100)),
+        rect(1040, 650, 420, 100),
+    );
+    assert_eq!(caret, Some(Rect::from(drawn_caret(rect(1069, 675, 2, 20)))));
+}
+
+#[test]
+fn an_x11_caret_read_in_screen_coordinates_keeps_its_place_on_a_global_toolkit() {
+    let node = rect(480, 290, 200, 30);
+    let caret = caret_on_x11_screen(
+        rect(500, 296, 1, 18),
+        CoordSpace::Screen,
+        Some(node),
+        None,
+        node,
+    );
+    assert_eq!(caret, Some(Rect::from(drawn_caret(rect(500, 296, 1, 18)))));
+}
+
+#[test]
+fn an_x11_caret_without_the_node_rectangle_of_its_space_is_not_placed() {
+    let node = rect(480, 290, 200, 30);
+    assert_eq!(
+        caret_on_x11_screen(
+            rect(500, 296, 1, 18),
+            CoordSpace::Window,
+            Some(node),
+            None,
+            node
+        ),
+        None
+    );
+}

@@ -1,15 +1,16 @@
-//! The extension request for one overlay control. Ownership follows the X11
-//! overlay: `disable` removes every cursor of the session, `hide` and `show`
-//! without an agent id reach every cursor of the session, and every other
-//! request reaches the exact session and agent pair.
+//! The cursor request for one overlay control, which the GNOME Shell
+//! extension plays on Wayland and the renderer process plays on X11.
+//! `disable` removes every cursor of the session, `hide` and `show` without
+//! an agent id reach every cursor of the session, and every other request
+//! reaches the exact session and agent pair.
 use agent_desktop_core::{
     CursorImage, CursorMotion, CursorMotionProfile, CursorOverlayControl, CursorOverlayInstruction,
     CursorOverlayStyle, CursorPhase, Point, Rect,
 };
 use serde_json::{Value, json};
 
-use super::extension_frames::{FRAME_MS, effect_frames, travel_frames};
-use super::extension_start::CursorStart;
+use super::cursor_frames::{FRAME_MS, effect_frames, travel_frames};
+use super::cursor_start::CursorStart;
 
 fn image(image: Option<&CursorImage>) -> Value {
     image.map_or(Value::Null, |image| {
@@ -149,5 +150,5 @@ pub(crate) fn cursor_request(control: &CursorOverlayControl, start: Option<Curso
 }
 
 #[cfg(test)]
-#[path = "extension_request_tests.rs"]
+#[path = "cursor_request_tests.rs"]
 mod tests;

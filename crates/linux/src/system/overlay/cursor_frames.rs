@@ -72,5 +72,5 @@ pub(crate) fn highlight_progress(elapsed_ms: u64, hold_ms: u64) -> f64 {
 }
 
 #[cfg(test)]
-#[path = "extension_frames_tests.rs"]
+#[path = "cursor_frames_tests.rs"]
 mod tests;
