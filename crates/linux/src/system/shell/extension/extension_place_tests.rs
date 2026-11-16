@@ -17,6 +17,7 @@ fn window(pid: u32, title: &str, frame: Extents, buffer: Extents) -> ShellWindow
         minimized: false,
         frame,
         buffer,
+        protocol: None,
     }
 }
 
@@ -128,13 +129,69 @@ fn an_empty_frame_size_is_not_placed() {
     assert_eq!(matching_window(&windows, 40, "Notes", (0, 0)), None);
 }
 
+fn xwayland(pid: u32, title: &str, protocol: Extents, frame: Extents) -> ShellWindow {
+    ShellWindow {
+        wayland: false,
+        protocol: Some(protocol),
+        ..window(pid, title, frame, frame)
+    }
+}
+
 #[test]
-fn only_an_x11_window_of_the_frame_marks_it_as_xwayland() {
-    let mut x11 = window(40, "Notes", rect(0, 0, 420, 300), rect(0, 0, 420, 300));
-    x11.wayland = false;
-    let native = gtk4_editor();
-    assert!(xwayland_window(&[native.clone(), x11.clone()], 40, "Notes"));
-    assert!(!xwayland_window(&[native], 40, "Notes"));
-    assert!(!xwayland_window(std::slice::from_ref(&x11), 41, "Notes"));
-    assert!(!xwayland_window(&[x11], 40, "Other"));
+fn an_xwayland_process_maps_its_x11_coordinates_by_its_windows_frames() {
+    let windows = [
+        gtk4_editor(),
+        xwayland(
+            52,
+            "Probe",
+            rect(774, 504, 500, 338),
+            rect(387, 252, 250, 169),
+        ),
+        xwayland(52, "", rect(900, 600, 200, 100), rect(450, 300, 100, 50)),
+    ];
+    let map = xwayland_map(&windows, 52).expect("map");
+    assert_eq!(
+        map.to_stage(rect(854, 582, 420, 34)),
+        Some(rect(427, 291, 210, 17))
+    );
+}
+
+#[test]
+fn a_native_wayland_process_has_no_xwayland_map() {
+    let mut mixed = gtk4_editor();
+    mixed.pid = 52;
+    let windows = [
+        mixed,
+        xwayland(
+            52,
+            "Probe",
+            rect(774, 504, 500, 338),
+            rect(387, 252, 250, 169),
+        ),
+    ];
+    assert_eq!(xwayland_map(&windows, 52), None);
+    assert_eq!(xwayland_map(&[gtk4_editor()], 40), None);
+    assert_eq!(xwayland_map(&windows, 99), None);
+}
+
+#[test]
+fn xwayland_windows_that_disagree_or_lack_a_protocol_frame_give_no_map() {
+    let disagreeing = [
+        xwayland(
+            52,
+            "Probe",
+            rect(774, 504, 500, 338),
+            rect(387, 252, 250, 169),
+        ),
+        xwayland(
+            52,
+            "Other",
+            rect(100, 100, 200, 100),
+            rect(100, 100, 200, 100),
+        ),
+    ];
+    assert_eq!(xwayland_map(&disagreeing, 52), None);
+    let mut unreported = xwayland(52, "Probe", rect(0, 0, 1, 1), rect(387, 252, 250, 169));
+    unreported.protocol = None;
+    assert_eq!(xwayland_map(&[unreported], 52), None);
 }

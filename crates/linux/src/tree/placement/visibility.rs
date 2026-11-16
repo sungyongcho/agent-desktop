@@ -118,7 +118,7 @@ pub(crate) fn derived_offscreen(read: &ObservedRead, placement: &Placement) -> O
 /// The node's rectangle in screen coordinates: the toolkit's own extents when
 /// it reports global positions, the provable pointer rectangle otherwise.
 fn screen_rect(read: &ObservedRead, placement: &Placement) -> Option<Extents> {
-    if reports_global_position(&placement.toolkit) && placement.shell_origin.is_none() {
+    if reports_global_position(&placement.toolkit) && placement.shell.is_none() {
         return match &read.node.extents {
             Field::Present(extents) => Some(*extents),
             Field::Absent | Field::Failed(_) => None,
@@ -131,10 +131,10 @@ pub(crate) fn pointer_extents(read: &ObservedRead, placement: &Placement) -> Opt
     let Field::Present(screen) = &read.node.extents else {
         return None;
     };
-    let window: Extents = placement.node?;
-    if let Some(origin) = placement.shell_origin {
-        return super::shell_space::on_screen(window, origin);
+    if let Some(shell) = placement.shell {
+        return shell.place(Some(*screen), placement.node);
     }
+    let window: Extents = placement.node?;
     let origin = placement.popup_origin.or_else(|| {
         placement.x11.and_then(|x11| {
             Some((

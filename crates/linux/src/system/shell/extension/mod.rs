@@ -17,6 +17,7 @@ pub(crate) mod extension_place;
 pub(crate) mod extension_request;
 pub(crate) mod extension_start;
 pub(crate) mod extension_window;
+pub(crate) mod protocol_map;
 
 const BUS_NAME: &str = "dev.agentbrowser.AgentDesktop";
 const OBJECT_PATH: &str = "/dev/agentbrowser/AgentDesktop";

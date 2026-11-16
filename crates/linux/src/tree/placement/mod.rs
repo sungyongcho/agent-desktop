@@ -5,6 +5,7 @@ pub(super) mod node_position;
 pub(crate) mod offscreen;
 pub(super) mod placed_states;
 pub(super) mod popup_position;
+pub(crate) mod shell_place;
 pub(crate) mod shell_space;
 
 use super::Extents;
@@ -30,9 +31,9 @@ pub(crate) struct Placement {
     /// whose rectangle cannot be read still falls back to its frame's mapped
     /// state.
     pub(crate) wayland_unplaced: bool,
-    /// Where the frame's window coordinates start on screen, from the GNOME
-    /// Shell extension, for a native Wayland window it placed.
-    pub(crate) shell_origin: Option<(i32, i32)>,
+    /// How the GNOME Shell extension places the frame's window on the stage,
+    /// for a native Wayland or Xwayland window it placed.
+    pub(crate) shell: Option<shell_place::ShellPlace>,
     /// The frame maps to several display windows that nothing tells apart.
     pub(crate) tie: Option<WindowTie>,
 }
@@ -42,11 +43,11 @@ pub(super) mod snapshot_visibility;
 pub(crate) mod visibility;
 
 impl Placement {
-    /// The placement once the GNOME Shell extension has said where the frame's
-    /// window coordinates start. Everything already read is kept.
-    pub(crate) fn placed_by_shell(self, origin: (i32, i32)) -> Self {
+    /// The placement once the GNOME Shell extension has said how the frame's
+    /// rectangles reach the stage. Everything already read is kept.
+    pub(crate) fn placed_by_shell(self, shell: shell_place::ShellPlace) -> Self {
         Self {
-            shell_origin: Some(origin),
+            shell: Some(shell),
             ..self
         }
     }

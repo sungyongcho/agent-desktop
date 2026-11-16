@@ -3,6 +3,7 @@ use std::time::Duration;
 use agent_desktop_core::Deadline;
 
 use super::extension_window::{ShellWindow, list_windows};
+use super::protocol_map::ProtocolMap;
 use crate::system::display::display_server::{DisplayServer, session_server};
 use crate::tree::Extents;
 
@@ -26,8 +27,8 @@ fn space_of(window: &ShellWindow, size: (i32, i32)) -> Option<Extents> {
 /// L43-2). Several matching windows, or none, give `None`, so a frame is never
 /// placed on a guess. A minimized window still counts as a match, so a visible
 /// window is never lent to the frame of a minimized twin; the match itself is
-/// then refused. Xwayland windows are skipped, because their toolkits already
-/// report global positions.
+/// then refused. Xwayland windows are skipped: [`xwayland_map`] places them
+/// from the screen positions their toolkits report.
 pub(crate) fn matching_window<'a>(
     windows: &'a [ShellWindow],
     pid: u32,
@@ -54,31 +55,43 @@ pub(crate) fn live_windows(deadline: Deadline) -> Option<Vec<ShellWindow>> {
     list_windows(deadline.capped(LIST_SLICE)).ok()?.ok()
 }
 
-/// Where the window coordinates of a native Wayland frame start on screen:
-/// the rectangle [`matching_window`] chose from the live window list.
-pub(crate) fn locate_frame(
+/// The one visible Xwayland window of process `pid` titled `title`.
+pub(crate) fn titled_xwayland<'a>(
+    windows: &'a [ShellWindow],
     pid: u32,
     title: &str,
-    size: (i32, i32),
-    deadline: Deadline,
-) -> Option<Extents> {
-    let windows = live_windows(deadline)?;
-    matching_window(&windows, pid, title, size).map(|(_, space)| space)
+) -> Option<&'a ShellWindow> {
+    let mut found = windows.iter().filter(|window| {
+        !window.wayland && !window.minimized && window.pid == pid && window.title == title
+    });
+    let first = found.next()?;
+    found.next().is_none().then_some(first)
 }
 
-/// Whether a window of process `pid` titled `title` is an Xwayland window.
-/// The extension places only native Wayland windows, so this tells a frame it
-/// cannot place because it is X11 from one it found no window for.
-pub(crate) fn xwayland_window(windows: &[ShellWindow], pid: u32, title: &str) -> bool {
-    windows
-        .iter()
-        .any(|window| !window.wayland && window.pid == pid && window.title == title)
-}
-
-/// [`xwayland_window`] against the live window list. `false` when the list
-/// cannot be read.
-pub(crate) fn is_xwayland_frame(pid: u32, title: &str, deadline: Deadline) -> bool {
-    live_windows(deadline).is_some_and(|windows| xwayland_window(&windows, pid, title))
+/// How the X11 coordinates of process `pid` land on the stage, when its
+/// windows are Xwayland windows. `None` when the process has a native Wayland
+/// window, has no Xwayland window with both frames, or its windows disagree.
+///
+/// A process is either an X11 or a Wayland client, so the map is found by
+/// process alone, and an untitled popup or dialog of the process maps the
+/// same way as its main window.
+pub(crate) fn xwayland_map(windows: &[ShellWindow], pid: u32) -> Option<ProtocolMap> {
+    let mut owned = windows.iter().filter(|window| window.pid == pid).peekable();
+    owned.peek()?;
+    let mut maps = Vec::new();
+    for window in owned {
+        if window.wayland {
+            return None;
+        }
+        if let Some(map) = window
+            .protocol
+            .and_then(|protocol| ProtocolMap::new(protocol, window.frame))
+        {
+            maps.push(map);
+        }
+    }
+    let (first, rest) = maps.split_first()?;
+    rest.iter().all(|map| first.agrees(*map)).then_some(*first)
 }
 
 #[cfg(test)]

@@ -797,19 +797,37 @@ function rectOf(r) {
 }
 
 /**
+ * The frame of an Xwayland window in the X11 coordinates its client reports.
+ * With a fractional monitor scale Xwayland can scale its clients, so these
+ * differ from the stage's logical coordinates. A shell without the conversion
+ * does not scale Xwayland clients, so the frame is unchanged there.
+ */
+function protocolFrame(window) {
+    const frame = window.get_frame_rect();
+    return rectOf(typeof window.stage_to_protocol_rect === 'function'
+        ? window.stage_to_protocol_rect(frame)
+        : frame);
+}
+
+/**
  * Every window the compositor manages, with the two rectangles a client's
  * window coordinates can start from: the frame (the visible window) and the
- * buffer (the surface, including client-side shadows).
+ * buffer (the surface, including client-side shadows). An Xwayland window
+ * also carries its frame in X11 coordinates.
  */
 function listWindows() {
-    return global.display.list_all_windows().map(window => ({
-        pid: window.get_pid(),
-        title: window.get_title() ?? '',
-        wayland: window.get_client_type() === Meta.WindowClientType.WAYLAND,
-        minimized: window.minimized,
-        frame: rectOf(window.get_frame_rect()),
-        buffer: rectOf(window.get_buffer_rect()),
-    }));
+    return global.display.list_all_windows().map(window => {
+        const wayland = window.get_client_type() === Meta.WindowClientType.WAYLAND;
+        return {
+            pid: window.get_pid(),
+            title: window.get_title() ?? '',
+            wayland,
+            minimized: window.minimized,
+            frame: rectOf(window.get_frame_rect()),
+            buffer: rectOf(window.get_buffer_rect()),
+            protocol: wayland ? null : protocolFrame(window),
+        };
+    });
 }
 
 export default class AgentDesktopExtension extends Extension {

@@ -23,7 +23,7 @@ fn a_window_coordinate_caret_moves_by_the_window_origin() {
     let frame = CaretFrame {
         screen: None,
         window: Some(rect(40, 150, 420, 100)),
-        origin: (311, 187),
+        place: ShellPlace::Native((311, 187)),
     };
     assert_eq!(
         caret_on_screen(rect(69, 175, 2, 20), CoordSpace::Window, frame),
@@ -36,7 +36,7 @@ fn a_screen_coordinate_caret_keeps_its_offset_from_the_node() {
     let frame = CaretFrame {
         screen: Some(rect(47, 61, 300, 21)),
         window: Some(rect(73, 140, 300, 21)),
-        origin: (311, 187),
+        place: ShellPlace::Native((311, 187)),
     };
     assert_eq!(
         caret_on_screen(rect(139, 63, 2, 17), CoordSpace::Screen, frame),
@@ -49,7 +49,7 @@ fn a_node_without_a_rectangle_in_the_caret_space_places_nothing() {
     let frame = CaretFrame {
         screen: None,
         window: Some(rect(73, 140, 300, 21)),
-        origin: (311, 187),
+        place: ShellPlace::Native((311, 187)),
     };
     assert_eq!(
         caret_on_screen(rect(139, 63, 2, 17), CoordSpace::Screen, frame),
@@ -58,10 +58,32 @@ fn a_node_without_a_rectangle_in_the_caret_space_places_nothing() {
     let unplaced = CaretFrame {
         screen: Some(rect(47, 61, 300, 21)),
         window: None,
-        origin: (311, 187),
+        place: ShellPlace::Native((311, 187)),
     };
     assert_eq!(
         caret_on_screen(rect(139, 63, 2, 17), CoordSpace::Screen, unplaced),
         None
+    );
+}
+
+#[test]
+fn an_xwayland_caret_keeps_its_x11_offset_and_lands_scaled() {
+    let map = crate::system::shell::extension::protocol_map::ProtocolMap::new(
+        rect(774, 504, 500, 338),
+        rect(387, 252, 250, 169),
+    )
+    .expect("map");
+    let frame = CaretFrame {
+        screen: Some(rect(814, 542, 420, 34)),
+        window: Some(rect(40, 38, 420, 34)),
+        place: ShellPlace::Xwayland(map),
+    };
+    assert_eq!(
+        caret_on_screen(rect(893, 549, 2, 19), CoordSpace::Screen, frame),
+        Some(screen_rect(447.0, 275.0, 2.0, 10.0))
+    );
+    assert_eq!(
+        caret_on_screen(rect(119, 45, 2, 19), CoordSpace::Window, frame),
+        Some(screen_rect(447.0, 275.0, 2.0, 10.0))
     );
 }

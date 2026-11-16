@@ -1,12 +1,18 @@
-//! Placement of native Wayland windows through the GNOME Shell extension. A
-//! Wayland client cannot learn where its window sits, so its toolkit reports
-//! window coordinates even where it claims screen ones; the extension supplies
-//! the window's place, and every node rectangle moves by it.
+//! Placement of windows on a GNOME Wayland session through the GNOME Shell
+//! extension. A native Wayland client cannot learn where its window sits, so
+//! its toolkit reports window coordinates even where it claims screen ones;
+//! the extension supplies the window's place, and every node rectangle moves
+//! by it. An Xwayland client reports X11 screen coordinates, which the
+//! extension's frames map onto the stage.
 use agent_desktop_core::{BoundsSpace, Deadline};
 
+use super::shell_place::ShellPlace;
 use super::visibility::is_sentinel;
 use crate::system::display::display_server::{DisplayServer, session_server};
-use crate::system::shell::extension::extension_place::{is_xwayland_frame, locate_frame};
+use crate::system::shell::extension::extension_place::{
+    live_windows, matching_window, xwayland_map,
+};
+use crate::system::shell::extension::protocol_map::ProtocolMap;
 use crate::system::within;
 use crate::tree::properties::node_read::read_node_for;
 use crate::tree::properties::read_purpose::ReadPurpose;
@@ -38,41 +44,28 @@ fn frame_facts(
     Some((title.unwrap_or_default(), window))
 }
 
-/// Where the window coordinates of `element`'s frame start on screen, as the
-/// extension places the frame's native Wayland window. `None` on X11, for an
-/// element without a frame, without the extension, and for a frame that does
-/// not match exactly one window.
-pub(crate) fn frame_origin(
+/// How the GNOME Shell extension places `element`'s frame on the stage: by
+/// the origin of the one native Wayland window it matches, or by the X11 map
+/// of its process's Xwayland windows. `None` on X11, for an element without a
+/// frame, without the extension, and for a frame neither places exactly.
+pub(crate) fn frame_place(
     connection: &zbus::Connection,
     element: &AtspiElement,
     deadline: Deadline,
-) -> Option<(i32, i32)> {
+) -> Option<ShellPlace> {
     if session_server() != DisplayServer::Wayland {
         return None;
     }
+    let pid = element.frame()?.pid();
     let (title, window) = frame_facts(connection, element, deadline)?;
-    let window = window.filter(|window| !is_sentinel(*window))?;
-    let space = locate_frame(
-        element.frame()?.pid(),
-        &title,
-        (window.width, window.height),
-        deadline,
-    )?;
-    Some((space.x, space.y))
-}
-
-/// Whether `element`'s frame is an Xwayland window on a Wayland session, as
-/// GNOME Shell's window list shows it. `false` when that cannot be read.
-pub(crate) fn frame_on_xwayland(
-    connection: &zbus::Connection,
-    element: &AtspiElement,
-    deadline: Deadline,
-) -> bool {
-    let Some(frame) = element.frame() else {
-        return false;
-    };
-    frame_facts(connection, element, deadline)
-        .is_some_and(|(title, _)| is_xwayland_frame(frame.pid(), &title, deadline))
+    let windows = live_windows(deadline)?;
+    let native = window
+        .filter(|window| !is_sentinel(*window))
+        .and_then(|window| matching_window(&windows, pid, &title, (window.width, window.height)));
+    if let Some((_, space)) = native {
+        return Some(ShellPlace::Native((space.x, space.y)));
+    }
+    xwayland_map(&windows, pid).map(ShellPlace::Xwayland)
 }
 
 /// A window-coordinate rectangle moved to the frame's place on screen.
@@ -88,9 +81,9 @@ pub(crate) fn on_screen(window: Extents, origin: (i32, i32)) -> Option<Extents> 
     })
 }
 
-/// Places one read from its window-coordinate rectangle: the screen rectangle
-/// is that rectangle moved to `origin`, and the window rectangle stays the
-/// evidence, tagged with its frame.
+/// Places one read on a native Wayland window from its window-coordinate
+/// rectangle: the screen rectangle is that rectangle moved to `origin`, and
+/// the window rectangle stays the evidence, tagged with its frame.
 pub(super) fn place_read(read: &mut ObservedRead, origin: (i32, i32), window: Option<Extents>) {
     let window = window.filter(|window| !is_sentinel(*window));
     read.evidence_bounds = window.map(|window| (window, BoundsSpace::Window));
@@ -100,6 +93,21 @@ pub(super) fn place_read(read: &mut ObservedRead, origin: (i32, i32), window: Op
             || Field::Failed("Screen position could not be established".to_owned()),
             Field::Present,
         );
+}
+
+/// Places one read on an Xwayland window: its screen rectangle, in X11
+/// coordinates, moves onto the stage.
+pub(super) fn map_read(read: &mut ObservedRead, map: ProtocolMap) {
+    let Field::Present(screen) = read.node.extents else {
+        return;
+    };
+    if is_sentinel(screen) {
+        return;
+    }
+    read.node.extents = map.to_stage(screen).map_or_else(
+        || Field::Failed("Screen position could not be established".to_owned()),
+        Field::Present,
+    );
 }
 
 #[cfg(test)]

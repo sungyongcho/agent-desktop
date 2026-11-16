@@ -6,7 +6,8 @@ use crate::tree::Extents;
 
 /// One window as GNOME Shell manages it, in the compositor's logical
 /// coordinates. `frame` is the visible window; `buffer` is the client's whole
-/// surface, which also holds any client-side shadow.
+/// surface, which also holds any client-side shadow. `protocol` is an
+/// Xwayland window's frame in the X11 coordinates its client reports.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub(crate) struct ShellWindow {
     pub(crate) pid: u32,
@@ -15,6 +16,8 @@ pub(crate) struct ShellWindow {
     pub(crate) minimized: bool,
     pub(crate) frame: Extents,
     pub(crate) buffer: Extents,
+    #[serde(default)]
+    pub(crate) protocol: Option<Extents>,
 }
 
 /// Parses the extension's `ListWindows` reply.

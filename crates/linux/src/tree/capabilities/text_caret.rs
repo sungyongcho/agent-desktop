@@ -52,6 +52,16 @@ fn usable(rect: Extents) -> bool {
     rect.height > 0 && !is_sentinel(rect)
 }
 
+/// `caret` at the size the overlay draws it: its width, and at least the
+/// shortest caret's height. A caret scaled onto the stage keeps it too.
+pub(crate) fn drawn_caret(caret: Extents) -> Extents {
+    Extents {
+        width: CARET_WIDTH,
+        height: caret.height.max(MIN_CARET_HEIGHT),
+        ..caret
+    }
+}
+
 fn caret_at(x: i32, y: i32, height: i32) -> Extents {
     Extents {
         x,

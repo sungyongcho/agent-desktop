@@ -174,13 +174,15 @@ both. With it enabled:
   turned off, the cursor jumps to each target and the ripple and outline are
   skipped.
 - After `type` or `set-value`, the overlay draws the typing caret in a native
-  Wayland window, and a `press` that moves the insertion point moves it, as on
-  macOS and Windows. GTK 4 entries report no character positions, so they keep
-  the element outline and get no caret. No caret is drawn over an Xwayland
-  window, in an X11 session, or without the extension.
+  Wayland or Xwayland window, and a `press` that moves the insertion point
+  moves it, as on macOS and Windows. GTK 4 entries report no character
+  positions, so they keep the element outline and get no caret. No caret is
+  drawn in an X11 session or without the extension.
 - `snapshot --include-bounds`, `get` and `list-windows` report screen positions
-  for native Wayland windows. Without it, a GTK 4 node has no bounds, and GTK 3,
-  Qt and Chromium bounds are relative to their own window.
+  for native Wayland and Xwayland windows. Without it, a GTK 4 node has no
+  bounds, GTK 3, Qt and Chromium bounds are relative to their own window, and
+  Xwayland bounds are X11 coordinates, which a fractional monitor scale
+  multiplies (by 2 at 125%).
 - `screenshot` hides the cursors while it captures.
 
 Install it from the source of the agent-desktop release you run, then log out

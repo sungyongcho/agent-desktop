@@ -2,7 +2,9 @@ use agent_desktop_core::Rect;
 
 use super::listed_twins::listed_client;
 use crate::system::registry::listed_window::ListedWindow;
-use crate::system::shell::extension::extension_place::matching_window;
+use crate::system::shell::extension::extension_place::{
+    matching_window, titled_xwayland, xwayland_map,
+};
 use crate::system::shell::extension::extension_window::ShellWindow;
 use crate::system::x11::map::ClientMatch;
 use crate::system::x11::twin_tie::tied_agree;
@@ -112,8 +114,10 @@ pub(crate) fn place_windows(
 }
 
 /// Gives each listed native Wayland window the visible frame rectangle GNOME
-/// Shell manages for it, as the X11 path gives the visible client rectangle.
-/// A window the extension does not name exactly once keeps what it had.
+/// Shell manages for it, as the X11 path gives the visible client rectangle,
+/// and an Xwayland window the visible frame of the one window its title
+/// names, or else its own X11 rectangle moved onto the stage. A native window
+/// the extension does not name exactly once keeps what it had.
 pub(crate) fn place_shell_windows(listed: &mut [ListedWindow], shell: &[ShellWindow]) {
     for window in listed.iter_mut() {
         let Some(extents) = window.frame.extents else {
@@ -124,6 +128,11 @@ pub(crate) fn place_shell_windows(listed: &mut [ListedWindow], shell: &[ShellWin
             matching_window(shell, window.frame.pid, &window.frame.title, size)
         {
             window.info.bounds = Some(Rect::from(found.frame));
+        } else if let Some(map) = xwayland_map(shell, window.frame.pid) {
+            window.info.bounds = titled_xwayland(shell, window.frame.pid, &window.frame.title)
+                .map(|found| found.frame)
+                .or_else(|| map.to_stage(extents))
+                .map(Rect::from);
         }
     }
 }

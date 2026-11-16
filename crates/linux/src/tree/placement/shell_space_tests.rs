@@ -51,3 +51,19 @@ fn a_read_whose_window_rectangle_is_unknown_loses_its_screen_position() {
     assert!(matches!(read.node.extents, Field::Failed(_)));
     assert_eq!(read.evidence_bounds, None);
 }
+
+#[test]
+fn an_xwayland_read_maps_its_screen_rectangle_onto_the_stage() {
+    let map = ProtocolMap::new(rect(774, 504, 500, 338), rect(387, 252, 250, 169)).expect("map");
+    let mut read = read_of(62, "Save", &[]);
+    read.node.extents = Field::Present(rect(854, 582, 420, 34));
+    map_read(&mut read, map);
+    assert_eq!(read.node.extents, Field::Present(rect(427, 291, 210, 17)));
+    let mut sentinel = read_of(62, "Save", &[]);
+    sentinel.node.extents = Field::Present(rect(i32::MIN, i32::MIN, -1, -1));
+    map_read(&mut sentinel, map);
+    assert_eq!(
+        sentinel.node.extents,
+        Field::Present(rect(i32::MIN, i32::MIN, -1, -1))
+    );
+}

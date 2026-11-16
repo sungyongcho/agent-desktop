@@ -54,6 +54,7 @@ fn shell(title: &str, x: i32) -> ShellWindow {
         minimized: false,
         frame: rect(x, 187, 420, 337),
         buffer: rect(x - 26, 164, 472, 389),
+        protocol: None,
     }
 }
 
@@ -87,4 +88,62 @@ fn a_window_the_shell_does_not_list_keeps_its_bounds() {
     let before = windows[0].info.bounds;
     place_shell_windows(&mut windows, &[shell("Other", 311)]);
     assert_eq!(windows[0].info.bounds, before);
+}
+
+#[test]
+fn an_untitled_xwayland_window_moves_from_x11_coordinates_onto_the_stage() {
+    let mut windows = listed(&["Doc"]);
+    let xwayland = ShellWindow {
+        wayland: false,
+        frame: rect(387, 252, 236, 195),
+        buffer: rect(387, 252, 236, 195),
+        protocol: Some(rect(774, 504, 472, 389)),
+        ..shell("Main", 0)
+    };
+    windows[0].frame.extents = Some(rect(774, 504, 472, 389));
+    place_shell_windows(&mut windows, &[xwayland]);
+    assert_eq!(
+        windows[0].info.bounds,
+        Some(Rect {
+            x: 387.0,
+            y: 252.0,
+            width: 236.0,
+            height: 195.0
+        })
+    );
+}
+
+#[test]
+fn an_xwayland_window_its_title_names_takes_the_visible_frame() {
+    let mut windows = listed(&["Doc"]);
+    let xwayland = ShellWindow {
+        wayland: false,
+        frame: rect(311, 187, 483, 575),
+        buffer: rect(300, 177, 505, 598),
+        protocol: Some(rect(622, 374, 966, 1150)),
+        ..shell("Doc", 0)
+    };
+    windows[0].frame.extents = Some(rect(600, 354, 1010, 1196));
+    place_shell_windows(&mut windows, std::slice::from_ref(&xwayland));
+    assert_eq!(
+        windows[0].info.bounds,
+        Some(Rect {
+            x: 311.0,
+            y: 187.0,
+            width: 483.0,
+            height: 575.0
+        })
+    );
+    let mut untitled = listed(&["Popup"]);
+    untitled[0].frame.extents = Some(rect(600, 354, 1010, 1196));
+    place_shell_windows(&mut untitled, &[xwayland]);
+    assert_eq!(
+        untitled[0].info.bounds,
+        Some(Rect {
+            x: 300.0,
+            y: 177.0,
+            width: 505.0,
+            height: 598.0
+        })
+    );
 }
