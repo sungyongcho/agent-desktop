@@ -195,3 +195,21 @@ fn xwayland_windows_that_disagree_or_lack_a_protocol_frame_give_no_map() {
     unreported.protocol = None;
     assert_eq!(xwayland_map(&[unreported], 52), None);
 }
+
+#[test]
+fn a_titled_xwayland_window_with_a_minimized_twin_is_not_chosen() {
+    let visible = xwayland(
+        52,
+        "Probe",
+        rect(774, 504, 500, 338),
+        rect(387, 252, 250, 169),
+    );
+    let mut minimized = visible.clone();
+    minimized.minimized = true;
+    assert_eq!(
+        titled_xwayland(std::slice::from_ref(&visible), 52, "Probe"),
+        Some(&visible)
+    );
+    assert_eq!(titled_xwayland(&[minimized.clone()], 52, "Probe"), None);
+    assert_eq!(titled_xwayland(&[minimized, visible], 52, "Probe"), None);
+}

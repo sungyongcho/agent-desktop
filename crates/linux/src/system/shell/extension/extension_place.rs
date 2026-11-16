@@ -55,17 +55,19 @@ pub(crate) fn live_windows(deadline: Deadline) -> Option<Vec<ShellWindow>> {
     list_windows(deadline.capped(LIST_SLICE)).ok()?.ok()
 }
 
-/// The one visible Xwayland window of process `pid` titled `title`.
+/// The one Xwayland window of process `pid` titled `title`, when it is not
+/// minimized. A minimized window of the same title still counts, so its
+/// visible twin's frame is never lent to it.
 pub(crate) fn titled_xwayland<'a>(
     windows: &'a [ShellWindow],
     pid: u32,
     title: &str,
 ) -> Option<&'a ShellWindow> {
-    let mut found = windows.iter().filter(|window| {
-        !window.wayland && !window.minimized && window.pid == pid && window.title == title
-    });
+    let mut found = windows
+        .iter()
+        .filter(|window| !window.wayland && window.pid == pid && window.title == title);
     let first = found.next()?;
-    found.next().is_none().then_some(first)
+    (found.next().is_none() && !first.minimized).then_some(first)
 }
 
 /// How the X11 coordinates of process `pid` land on the stage, when its
