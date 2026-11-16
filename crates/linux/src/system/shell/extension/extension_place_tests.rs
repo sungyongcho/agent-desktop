@@ -110,6 +110,19 @@ fn a_minimized_window_is_not_placed() {
 }
 
 #[test]
+fn a_minimized_twin_of_the_same_title_and_size_places_neither_window() {
+    let mut minimized = gtk4_editor();
+    minimized.minimized = true;
+    let mut visible = gtk4_editor();
+    visible.frame = rect(600, 120, 420, 300);
+    visible.buffer = rect(586, 108, 448, 329);
+    assert_eq!(
+        matching_window(&[minimized, visible], 40, "Notes", (420, 300)),
+        None
+    );
+}
+
+#[test]
 fn an_empty_frame_size_is_not_placed() {
     let windows = [window(40, "Notes", rect(0, 0, 0, 0), rect(0, 0, 0, 0))];
     assert_eq!(matching_window(&windows, 40, "Notes", (0, 0)), None);

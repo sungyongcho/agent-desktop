@@ -24,8 +24,10 @@ fn space_of(window: &ShellWindow, size: (i32, i32)) -> Option<Extents> {
 /// Chromium), and the AT-SPI frame's own size says which: the rectangle of the
 /// same size is the one its coordinates start from (`probes/linux/FINDINGS.md`
 /// L43-2). Several matching windows, or none, give `None`, so a frame is never
-/// placed on a guess. Xwayland windows are skipped, because their toolkits
-/// already report global positions.
+/// placed on a guess. A minimized window still counts as a match, so a visible
+/// window is never lent to the frame of a minimized twin; the match itself is
+/// then refused. Xwayland windows are skipped, because their toolkits already
+/// report global positions.
 pub(crate) fn matching_window<'a>(
     windows: &'a [ShellWindow],
     pid: u32,
@@ -37,12 +39,10 @@ pub(crate) fn matching_window<'a>(
     }
     let mut found = windows
         .iter()
-        .filter(|window| {
-            window.wayland && !window.minimized && window.pid == pid && window.title == title
-        })
+        .filter(|window| window.wayland && window.pid == pid && window.title == title)
         .filter_map(|window| space_of(window, size).map(|space| (window, space)));
     let first = found.next()?;
-    found.next().is_none().then_some(first)
+    (found.next().is_none() && !first.0.minimized).then_some(first)
 }
 
 /// GNOME Shell's window list on a Wayland session, within a share of
