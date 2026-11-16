@@ -650,6 +650,7 @@ class Cursor {
 class CursorLayer {
     constructor() {
         this._cursors = [];
+        this._concealDepth = 0;
         this._concealTimeout = 0;
     }
 
@@ -666,7 +667,7 @@ class CursorLayer {
         let entry = this._find(request.session, request.agent);
         if (!entry) {
             entry = {session: request.session, agent: request.agent, cursor: new Cursor()};
-            entry.cursor.concealed = this._concealTimeout !== 0;
+            entry.cursor.concealed = this._concealDepth > 0;
             entry.cursor.restyle(request.look);
             entry.cursor._updateVisibility();
             this._cursors.push(entry);
@@ -725,26 +726,41 @@ class CursorLayer {
         done();
     }
 
+    /**
+     * Hides every cursor for one capture. Captures can overlap, so each
+     * conceal is counted and the cursors come back only when every capture
+     * has revealed, or when the newest conceal is older than the limit, which
+     * covers a capture whose process never asked.
+     */
     _conceal() {
-        this._reveal();
-        for (const entry of this._cursors) {
-            entry.cursor.concealed = true;
-            entry.cursor._updateVisibility();
-        }
+        this._concealDepth += 1;
+        if (this._concealTimeout)
+            GLib.source_remove(this._concealTimeout);
         this._concealTimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, CONCEAL_LIMIT_SECONDS, () => {
             this._concealTimeout = 0;
-            this._reveal();
+            this._concealDepth = 0;
+            this._setConcealed(false);
             return GLib.SOURCE_REMOVE;
         });
+        this._setConcealed(true);
     }
 
     _reveal() {
+        if (this._concealDepth === 0)
+            return;
+        this._concealDepth -= 1;
+        if (this._concealDepth > 0)
+            return;
         if (this._concealTimeout) {
             GLib.source_remove(this._concealTimeout);
             this._concealTimeout = 0;
         }
+        this._setConcealed(false);
+    }
+
+    _setConcealed(concealed) {
         for (const entry of this._cursors) {
-            entry.cursor.concealed = false;
+            entry.cursor.concealed = concealed;
             entry.cursor._updateVisibility();
         }
     }
@@ -754,6 +770,7 @@ class CursorLayer {
             GLib.source_remove(this._concealTimeout);
             this._concealTimeout = 0;
         }
+        this._concealDepth = 0;
         for (const entry of this._cursors)
             entry.cursor.destroy();
         this._cursors = [];
