@@ -33,6 +33,7 @@ fn failure(message: impl std::fmt::Display) -> AdapterError {
 
 /// `Some` when this process was started as the renderer.
 pub(crate) fn entry_from_env() -> Option<Result<(), AdapterError>> {
+    super::spawn::mark_renderer_entry();
     let marker = std::env::var(CHILD_MARKER).ok()?;
     if std::env::args().nth(1).as_deref() != Some(CHILD_ARGUMENT) {
         return None;

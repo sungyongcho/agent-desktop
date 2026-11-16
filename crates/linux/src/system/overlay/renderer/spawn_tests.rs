@@ -4,12 +4,27 @@ use std::ffi::OsStr;
 use super::*;
 
 #[test]
-fn only_the_agent_desktop_binary_starts_a_renderer() {
-    assert!(is_renderer_image(Path::new("/usr/local/bin/agent-desktop")));
-    assert!(!is_renderer_image(Path::new("/usr/bin/python3")));
-    assert!(!is_renderer_image(Path::new(
-        "/target/debug/deps/agent_desktop_linux-1234"
-    )));
+fn only_a_binary_that_enters_the_renderer_starts_one_whatever_its_name() {
+    let npm = || {
+        Ok(PathBuf::from(
+            "/lib/node_modules/agent-desktop/bin/agent-desktop-linux-x64",
+        ))
+    };
+    assert_eq!(
+        image_for(true, npm()),
+        Some(PathBuf::from(
+            "/lib/node_modules/agent-desktop/bin/agent-desktop-linux-x64"
+        ))
+    );
+    assert_eq!(image_for(false, npm()), None);
+    assert_eq!(
+        image_for(false, Ok(PathBuf::from("/usr/local/bin/agent-desktop"))),
+        None
+    );
+    assert_eq!(
+        image_for(true, Err(std::io::Error::other("no image"))),
+        None
+    );
 }
 
 #[test]

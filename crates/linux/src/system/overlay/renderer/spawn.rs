@@ -4,14 +4,13 @@ use std::os::fd::BorrowedFd;
 use std::os::unix::process::CommandExt;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
+use std::sync::atomic::{AtomicBool, Ordering};
 
 use agent_desktop_core::INTERACTION_LEASE_FD_ENV;
 use rustix::io::{FdFlags, fcntl_getfd, fcntl_setfd};
 
 use super::child::{CHILD_ARGUMENT, CHILD_MARKER, DISPLAY_ENV, GENERATION};
 
-/// The name of the binary the renderer runs as.
-pub(crate) const IMAGE_NAME: &str = "agent-desktop";
 const INHERITED: [&str; 7] = [
     "DISPLAY",
     "XAUTHORITY",
@@ -23,18 +22,29 @@ const INHERITED: [&str; 7] = [
 ];
 const LOWEST_INHERITED_FD: i32 = 3;
 
-/// Whether `path` is the agent-desktop binary. Under an FFI host the running
-/// image is the host's, which must never be started again as a renderer,
-/// and a test binary must not start one either.
-pub(crate) fn is_renderer_image(path: &Path) -> bool {
-    path.file_name().and_then(|name| name.to_str()) == Some(IMAGE_NAME)
+static RENDERER_ENTRY: AtomicBool = AtomicBool::new(false);
+
+/// Records that this process checked for the renderer argument. The CLI
+/// does so before it parses its own arguments; an FFI host or a test binary
+/// never does, so its image is never started as a renderer. The file name
+/// proves nothing: npm installs the CLI as `agent-desktop-linux-x64` behind
+/// an `agent-desktop` link.
+pub(crate) fn mark_renderer_entry() {
+    RENDERER_ENTRY.store(true, Ordering::Relaxed);
+}
+
+/// The image to start as the renderer: the running binary, once it has
+/// shown that it enters the renderer.
+pub(crate) fn image_for(entered: bool, running: std::io::Result<PathBuf>) -> Option<PathBuf> {
+    entered.then(|| running.ok()).flatten()
 }
 
 /// The running binary when it can start the renderer.
 pub(crate) fn renderer_image() -> Option<PathBuf> {
-    std::env::current_exe()
-        .ok()
-        .filter(|path| is_renderer_image(path))
+    image_for(
+        RENDERER_ENTRY.load(Ordering::Relaxed),
+        std::env::current_exe(),
+    )
 }
 
 /// The command that starts the renderer for `display`.
