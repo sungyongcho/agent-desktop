@@ -66,6 +66,7 @@ fn a_travel_plays_core_motion_from_the_reported_start_to_its_destination() {
     assert_eq!(frames.last(), Some(&json!([418.0, 296.0])));
     assert_eq!(request["frame_ms"], json!(FRAME_MS));
     assert_eq!(request["pointer"], false);
+    assert_eq!(request["drag"], false);
 }
 
 #[test]
@@ -90,7 +91,7 @@ fn a_travel_away_clears_the_caret_and_one_that_stays_put_keeps_it() {
 }
 
 #[test]
-fn a_drag_travels_to_where_it_begins() {
+fn a_drag_travels_to_where_it_begins_and_says_it_is_a_drag() {
     let drag = instruction(700.0, 500.0, false)
         .with_drag_from(Some(Point { x: 120.0, y: 80.0 }))
         .with_phase(CursorPhase::Drag);
@@ -100,6 +101,7 @@ fn a_drag_travels_to_where_it_begins() {
         request["frames"].as_array().and_then(|f| f.last()),
         Some(&json!([120.0, 80.0]))
     );
+    assert_eq!(request["drag"], true);
 }
 
 #[test]

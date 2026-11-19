@@ -76,6 +76,7 @@ fn travel(
     request["frame_ms"] = json!(FRAME_MS);
     request["pointer"] = json!(instruction.is_pointer());
     request["clear_caret"] = json!(instruction.departs_from(Some(&start.point())));
+    request["drag"] = json!(instruction.phase() == CursorPhase::Drag);
 }
 
 fn effect(

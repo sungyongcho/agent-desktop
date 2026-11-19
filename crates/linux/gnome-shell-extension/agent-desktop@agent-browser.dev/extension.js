@@ -174,6 +174,7 @@ function parseRequest(text) {
         parsed.frameMs = frameMs(request.frame_ms);
         parsed.pointer = request.pointer === true;
         parsed.clearCaret = request.clear_caret === true;
+        parsed.drag = request.drag === true;
         break;
     case 'effect':
         parsed.point = point(request.point, 'point');
@@ -323,6 +324,7 @@ class Cursor {
         this._restTimeout = 0;
         this.tip = null;
         this.anchored = false;
+        this.dragging = false;
         this.moves = 0;
         this.hidden = false;
         this.concealed = false;
@@ -477,6 +479,7 @@ class Cursor {
         this.wake();
         this.restyle(request.look);
         this.moves = 0;
+        this.dragging = false;
         this.setLabel(request.label);
         if (!this.tip) {
             const [x, y] = global.get_pointer();
@@ -506,6 +509,7 @@ class Cursor {
         this._showFace();
         this.moves += 1;
         this.anchored = true;
+        this.dragging = request.drag;
         const path = request.frames;
         const at = index => ({x: path[index][0], y: path[index][1]});
         const duration = Math.round((path.length - 1) * request.frameMs);
@@ -558,6 +562,7 @@ class Cursor {
         this.wake();
         this.restyle(request.look);
         this.setLabel(request.label);
+        this.dragging = false;
         this.place(request.point);
         this._reveal();
         const path = request.frames;
@@ -619,7 +624,17 @@ class Cursor {
         }
     }
 
+    /**
+     * Dispatch hides the cursors around every headed command. A hide that
+     * cancels a drag takes the cursor off screen and forgets where it stands,
+     * so the next travel does not set off from the stale grab point. Any other
+     * hide leaves it where it landed and the next travel glides on from there,
+     * as on macOS.
+     */
     hide() {
+        if (!this.dragging)
+            return;
+        this.dragging = false;
         this.hidden = true;
         this.anchored = false;
         this._hideCaret();
