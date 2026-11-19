@@ -55,6 +55,7 @@ fn order(frames: Vec<[f64; 2]>, ticket: Ticket) -> TravelOrder {
         },
         pointer: true,
         clear_caret: false,
+        drag: false,
         ticket,
     }
 }
@@ -198,6 +199,11 @@ fn the_cursor_needs_frames_while_it_plays_and_sleeps_until_it_rests() {
         cursor.next_change(ms(now, 25), frame),
         Some(now + IDLE_REST)
     );
+    let grab = TravelOrder {
+        drag: true,
+        ..order(vec![[1.0, 1.0]], Ticket::default())
+    };
+    cursor.travel(&styled(None), grab, ms(now, 25));
     cursor.hide();
     assert_eq!(cursor.next_change(ms(now, 25), frame), None);
 }

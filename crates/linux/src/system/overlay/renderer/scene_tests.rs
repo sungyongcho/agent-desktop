@@ -61,6 +61,7 @@ fn placed_at(x: f64, y: f64, label: Option<&str>, now: Instant) -> Cursor {
         },
         pointer: false,
         clear_caret: false,
+        drag: false,
         ticket: Ticket::default(),
     };
     cursor.travel(&styled(label), order, now);
@@ -211,6 +212,17 @@ fn a_hidden_or_rested_cursor_shows_nothing_and_a_resting_one_fades() {
         )
         .is_empty()
     );
+    let grab = TravelOrder {
+        path: Frames {
+            frames: vec![[100.0, 100.0]],
+            frame_ms: 10.0,
+        },
+        pointer: false,
+        clear_caret: false,
+        drag: true,
+        ticket: Ticket::default(),
+    };
+    cursor.travel(&styled(None), grab, now);
     cursor.hide();
     assert!(
         compose(

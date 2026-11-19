@@ -67,6 +67,7 @@ pub(crate) enum Request {
         path: Frames,
         pointer: bool,
         clear_caret: bool,
+        drag: bool,
     },
     Effect {
         styled: Styled,
@@ -272,6 +273,7 @@ pub(crate) fn parse_request(request: &Value) -> Result<Request, String> {
             path: frames(request, 1, false)?,
             pointer: request["pointer"] == Value::Bool(true),
             clear_caret: request["clear_caret"] == Value::Bool(true),
+            drag: request["drag"] == Value::Bool(true),
         }),
         Some("effect") => Ok(Request::Effect {
             styled: styled(request)?,

@@ -99,6 +99,7 @@ impl Cursor {
         self.wake(now);
         self.relabel(styled);
         self.motion.moves = 0;
+        self.motion.dragging = false;
         if self.motion.tip.is_none() {
             self.motion.tip = Some(desk.pointer());
         }
@@ -137,6 +138,7 @@ impl Cursor {
         self.motion.pointing = false;
         self.motion.moves += 1;
         self.motion.anchored = true;
+        self.motion.dragging = order.drag;
         let travel = Travel {
             path: order.path,
             started: now,
@@ -172,6 +174,7 @@ impl Cursor {
         self.effect = None;
         self.wake(now);
         self.relabel(styled);
+        self.motion.dragging = false;
         self.motion.tip = Some(point);
         self.label.reveal(now);
         if !path.frames.is_empty() {
@@ -229,7 +232,15 @@ impl Cursor {
         Some(self.presence.woke + IDLE_REST)
     }
 
+    /// Dispatch hides the cursors around every headed command. A hide that
+    /// cancels a drag takes the cursor off screen and drops its anchor, so the
+    /// next travel does not set off from the stale grab point. Any other hide
+    /// leaves it where it landed and the next travel glides on from there, as
+    /// on macOS.
     pub(crate) fn hide(&mut self) {
+        if !std::mem::take(&mut self.motion.dragging) {
+            return;
+        }
         self.presence.hidden = true;
         self.motion.anchored = false;
         self.caret = None;

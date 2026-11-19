@@ -57,7 +57,7 @@ fn styled(agent: Option<&str>) -> Styled {
     }
 }
 
-fn travel(agent: Option<&str>, frames: Vec<[f64; 2]>) -> Request {
+fn moving(agent: Option<&str>, frames: Vec<[f64; 2]>, drag: bool) -> Request {
     Request::Travel {
         styled: styled(agent),
         path: Frames {
@@ -66,7 +66,12 @@ fn travel(agent: Option<&str>, frames: Vec<[f64; 2]>) -> Request {
         },
         pointer: false,
         clear_caret: false,
+        drag,
     }
+}
+
+fn travel(agent: Option<&str>, frames: Vec<[f64; 2]>) -> Request {
+    moving(agent, frames, false)
 }
 
 #[test]
@@ -93,7 +98,7 @@ fn an_unknown_cursor_sets_off_below_left_of_the_destination_on_its_monitor() {
 }
 
 #[test]
-fn an_anchored_cursor_sets_off_from_its_tip_and_a_hidden_one_does_not() {
+fn an_anchored_cursor_sets_off_from_its_tip_through_a_headed_hide_but_not_after_a_cancelled_drag() {
     let now = Instant::now();
     let mut layer = CursorLayer::default();
     layer.update(travel(None, vec![[300.0, 200.0]]), 1, now, &TwoMonitors);
@@ -110,14 +115,75 @@ fn an_anchored_cursor_sets_off_from_its_tip_and_a_hidden_one_does_not() {
         }
     );
     layer.update(Request::Hide(owner(None)), 2, now, &TwoMonitors);
+    assert!(
+        layer
+            .cursors()
+            .all(|(_, cursor)| cursor.presence().is_shown())
+    );
+    assert_eq!(
+        layer.locate(&request, &TwoMonitors),
+        CursorStart {
+            x: 300.0,
+            y: 200.0,
+            moves: 1
+        }
+    );
+    layer.update(
+        moving(None, vec![[400.0, 150.0]], true),
+        3,
+        now,
+        &TwoMonitors,
+    );
+    layer.update(Request::Hide(owner(None)), 4, now, &TwoMonitors);
+    assert!(layer.cursors().all(|(_, cursor)| cursor.presence().hidden));
     assert_eq!(
         layer.locate(&request, &TwoMonitors),
         CursorStart {
             x: 320.0,
             y: 208.0,
-            moves: 1
+            moves: 2
         }
     );
+}
+
+#[test]
+fn a_drag_that_ends_in_its_drop_effect_keeps_its_anchor_through_a_hide() {
+    let now = Instant::now();
+    let mut layer = CursorLayer::default();
+    layer.update(
+        moving(None, vec![[400.0, 150.0]], true),
+        1,
+        now,
+        &TwoMonitors,
+    );
+    layer.update(
+        Request::Effect {
+            styled: styled(None),
+            point: Point { x: 700.0, y: 450.0 },
+            target: None,
+            path: Frames {
+                frames: Vec::new(),
+                frame_ms: 10.0,
+            },
+        },
+        2,
+        now,
+        &TwoMonitors,
+    );
+    layer.update(Request::Hide(owner(None)), 3, now, &TwoMonitors);
+    assert!(
+        layer
+            .cursors()
+            .all(|(_, cursor)| cursor.presence().is_shown())
+    );
+    let start = layer.locate(
+        &LocateRequest {
+            owner: owner(None),
+            destination: Point { x: 900.0, y: 500.0 },
+        },
+        &TwoMonitors,
+    );
+    assert_eq!((start.x, start.y), (700.0, 450.0));
 }
 
 #[test]
@@ -161,8 +227,18 @@ fn disabling_a_session_answers_its_travels_and_removes_its_cursors() {
 fn hide_without_an_agent_reaches_every_cursor_of_the_session() {
     let now = Instant::now();
     let mut layer = CursorLayer::default();
-    layer.update(Request::Enable(styled(Some("a"))), 1, now, &TwoMonitors);
-    layer.update(Request::Enable(styled(Some("b"))), 2, now, &TwoMonitors);
+    layer.update(
+        moving(Some("a"), vec![[10.0, 10.0]], true),
+        1,
+        now,
+        &TwoMonitors,
+    );
+    layer.update(
+        moving(Some("b"), vec![[20.0, 20.0]], true),
+        2,
+        now,
+        &TwoMonitors,
+    );
     layer.update(Request::Hide(owner(Some("a"))), 3, now, &TwoMonitors);
     let hidden: Vec<bool> = layer
         .cursors()

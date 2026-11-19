@@ -131,11 +131,13 @@ impl CursorLayer {
                 path,
                 pointer,
                 clear_caret,
+                drag,
             } => {
                 let order = TravelOrder {
                     path,
                     pointer,
                     clear_caret,
+                    drag,
                     ticket,
                 };
                 return self.owned(&styled, now).travel(&styled, order, now);

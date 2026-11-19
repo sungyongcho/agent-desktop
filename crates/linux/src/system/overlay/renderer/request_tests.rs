@@ -10,13 +10,14 @@ fn look() -> Value {
 fn a_travel_request_is_parsed_with_its_owner_look_and_frames() {
     let request = json!({
         "op": "travel", "session": "s1", "agent": "a1", "look": look(), "label": "Agent",
-        "frames": [[1.0, 2.0], [3.5, -4.0]], "frame_ms": 16.0, "pointer": true,
+        "frames": [[1.0, 2.0], [3.5, -4.0]], "frame_ms": 16.0, "pointer": true, "drag": true,
     });
     let Ok(Request::Travel {
         styled,
         path,
         pointer,
         clear_caret,
+        drag,
     }) = parse_request(&request)
     else {
         panic!("travel parses");
@@ -33,6 +34,7 @@ fn a_travel_request_is_parsed_with_its_owner_look_and_frames() {
     assert_eq!(path.frames, vec![[1.0, 2.0], [3.5, -4.0]]);
     assert!(pointer);
     assert!(!clear_caret);
+    assert!(drag);
 }
 
 #[test]

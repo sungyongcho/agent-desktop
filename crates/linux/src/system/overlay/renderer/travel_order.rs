@@ -9,5 +9,7 @@ pub(crate) struct TravelOrder {
     pub(crate) pointer: bool,
     /// Whether the text caret clears as the travel sets off.
     pub(crate) clear_caret: bool,
+    /// Whether the travel goes to where a drag begins.
+    pub(crate) drag: bool,
     pub(crate) ticket: Ticket,
 }
